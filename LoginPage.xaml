@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SalSoplado_Usuario.LoginPage"
+             BackgroundColor="#d9e3f1">
+
+    <VerticalStackLayout>
+        <Image Source="logo.png" 
+                HeightRequest="100" Margin="0,20,0,20"/>
+        <TableView>
+            <TableRoot>
+                <TableSection Title="Ingrese sus datos" TextColor="Black">
+                    <EntryCell x:Name="UsernameEntry"
+                           Placeholder="Username"
+                           Text="{Binding Username}"/>
+                    <EntryCell x:Name="PasswordEntry"
+                           Placeholder="Contraseña"
+                           Text="{Binding Password}"/>
+                </TableSection>
+            </TableRoot>
+        </TableView>
+        <Button BackgroundColor="#14282f" Text="Ingresar" Scale="1.3" HorizontalOptions="Center" Margin="0,20,0,0"
+            Clicked="OnClickLogin"/>
+
+        <Label HorizontalOptions="Center" 
+               TextColor="Black" 
+               Margin="20">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Registrarse" 
+                  TextDecorations="Underline" 
+                  FontAttributes="Bold"/>
+                </FormattedString>
+            </Label.FormattedText>
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnClickRegistrarse"/>
+            </Label.GestureRecognizers>
+        </Label>
+    </VerticalStackLayout>
+
+</ContentPage>
