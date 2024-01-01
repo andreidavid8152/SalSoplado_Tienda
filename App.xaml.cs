@@ -1,5 +1,4 @@
-﻿using Android.Net;
-using SalSoplado_Usuario.Services;
+﻿using SalSoplado_Usuario.Services;
 
 namespace SalSoplado_Usuario
 {
@@ -17,11 +16,23 @@ namespace SalSoplado_Usuario
             // Construir el proveedor de servicios
             _serviceProvider = services.BuildServiceProvider();
 
-            // Establecer la página principal utilizando el servicio
-            MainPage = new NavigationPage((Page)_serviceProvider.GetService(typeof(LoginPage)))
+            // Revisa si es la primera vez que se inicia la app
+            bool isFirstLaunch = Preferences.Get("IsFirstLaunch", true);
+
+            if (isFirstLaunch)
             {
-                BarBackgroundColor = Color.FromHex("#d9e3f1")
-            };
+                // Si es la primera vez, muestra la pantalla de onboarding
+                MainPage = new OnboardingPage();
+                Preferences.Set("IsFirstLaunch", false);
+            }
+            else
+            {
+                // Si no es la primera vez, muestra la página de login
+                MainPage = new NavigationPage((Page)_serviceProvider.GetService(typeof(LoginPage)))
+                {
+                    BarBackgroundColor = Color.FromHex("#d9e3f1")
+                };
+            }
         }
 
         private void ConfigureServices(IServiceCollection services)

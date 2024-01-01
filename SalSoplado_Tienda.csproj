@@ -57,11 +57,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\anadirproducto_onboarding.png" />
 	  <None Remove="Resources\Images\home.svg" />
 	  <None Remove="Resources\Images\imagenperfil.jpg" />
 	  <None Remove="Resources\Images\local.svg" />
+	  <None Remove="Resources\Images\local_onboarding.png" />
+	  <None Remove="Resources\Images\login_onboarding.png" />
 	  <None Remove="Resources\Images\logo.png" />
 	  <None Remove="Resources\Images\perfil.svg" />
+	  <None Remove="Resources\Images\registro_onboarding.png" />
+	  <None Remove="Resources\Images\vender_onboarding.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -80,6 +85,12 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="MiPerfilPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="OnboardingPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="OnboardingViewModel.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="RegistroPage.xaml">
