@@ -11,6 +11,9 @@ public partial class OnboardingPage : ContentPage
     private void cerrarOnBoarding(object sender, EventArgs e)
     {
         // Establecer la página principal utilizando el servicio
-        Application.Current.MainPage = new LoginPage();
+        Application.Current.MainPage = new NavigationPage(new LoginPage())
+        {
+            BarBackgroundColor = Color.FromHex("#d9e3f1")
+        };
     }
 }
