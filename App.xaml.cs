@@ -39,11 +39,7 @@ namespace SalSoplado_Usuario
         {
             // Registrar APIService como un singleton para que la misma instancia se utilice en toda la app
             services.AddSingleton<APIService>();
-
-            // Registrar tus páginas con dependencias aquí
             services.AddTransient<LoginPage>();
-
-            // Si tienes más servicios, también deberías registrarlos aquí
         }
 
         public static IServiceProvider ServiceProvider => ((App)Current)._serviceProvider;

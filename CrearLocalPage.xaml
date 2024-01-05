@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SalSoplado_Tienda.CrearLocalPage"
+             BackgroundColor="#d9e3f1">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="30">
+
+            <Label Text="Crear Local" FontSize="Large" HorizontalOptions="Center"/>
+
+            <Entry x:Name="entryNombre" Placeholder="Nombre del local"/>
+            <Entry x:Name="entryDescripcion" Placeholder="Descripción"/>
+            <Entry x:Name="entryDireccion" Placeholder="Dirección"/>
+
+            <!-- Imagenes -->
+            <Button x:Name="uploadImageButton" Text="Subir Imagen" Clicked="OnUploadImageButtonClicked"/>
+            <Image x:Name="selectedImage" />
+
+
+            <Button Text="Crear Local" Clicked="OnCrearLocalClicked"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

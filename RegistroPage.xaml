@@ -5,8 +5,13 @@
              BackgroundColor="#d9e3f1">
 
     <VerticalStackLayout>
-        <Image Source="logo.png" 
-                HeightRequest="100" Margin="0,20,0,20"/>
+        
+        <Image Source="logo.png" Aspect="AspectFill" HeightRequest="250" WidthRequest="250" HorizontalOptions="Center" VerticalOptions="Start">
+            <Image.Clip>
+                <!-- Centro y radios ajustados para un tamaño de 250x250 -->
+                <EllipseGeometry Center="125,125" RadiusX="125" RadiusY="125"/>
+            </Image.Clip>
+        </Image>
 
         <TableView>
             <TableRoot>

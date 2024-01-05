@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SalSoplado_Tienda.Models;
 using SalSoplado_Usuario.Models;
 using System;
 using System.Collections.Generic;
@@ -23,6 +24,8 @@ namespace SalSoplado_Usuario.Services
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri(_baseUrl);
         }
+
+        //AUTH
 
         public async Task<bool> Registro(UserRegistration usuario)
         {
@@ -58,6 +61,10 @@ namespace SalSoplado_Usuario.Services
 
         }
 
+
+
+        //USUARIO
+
         public async Task<UserRegistration> GetPerfil(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -79,6 +86,47 @@ namespace SalSoplado_Usuario.Services
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var jsonContent = new StringContent(JsonConvert.SerializeObject(usuario), Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync($"{_baseUrl}Usuarios/editarPerfil", jsonContent);
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                throw new Exception(errorMessage);
+            }
+        }
+
+
+
+        //PROPIETARIO
+
+        public async Task<int> GetCantidadLocales(string token)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await _httpClient.GetAsync($"{_baseUrl}Propietarios/cantidadLocales");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<int>(content);
+            }
+            else
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                throw new Exception(errorMessage);
+            }
+        }
+
+        //LOCALES
+        public async Task<bool> CrearLocal(LocalCreation local, string token)
+        {
+            // Añade el token de autorización en la cabecera de la petición
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Realiza la petición POST al endpoint CrearLocal
+            var response = await _httpClient.PostAsJsonAsync($"{_baseUrl}Locales/CrearLocal", local);
+
             if (response.IsSuccessStatusCode)
             {
                 return true;

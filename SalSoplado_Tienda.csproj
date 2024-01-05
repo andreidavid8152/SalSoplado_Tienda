@@ -14,7 +14,7 @@
 		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
 		<OutputType>Exe</OutputType>
-		<RootNamespace>SalSoplado_Usuario</RootNamespace>
+		<RootNamespace>SalSoplado_Tienda</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
@@ -24,7 +24,7 @@
 		<ApplicationTitle>Tienda</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.salsoplado_usuario</ApplicationId>
+		<ApplicationId>com.companyname.salsoplado_tienda</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -59,6 +59,7 @@
 	<ItemGroup>
 		<None Remove="Resources\Images\anadirproducto_onboarding.png" />
 		<None Remove="Resources\Images\home.svg" />
+		<None Remove="Resources\Images\home_locales.png" />
 		<None Remove="Resources\Images\imagenperfil.jpg" />
 		<None Remove="Resources\Images\local.svg" />
 		<None Remove="Resources\Images\local_onboarding.png" />
@@ -78,6 +79,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="CrearLocalPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="LocalesPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
