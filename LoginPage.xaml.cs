@@ -23,8 +23,10 @@ public partial class LoginPage : ContentPage
         if (!token.Equals(string.Empty))
         {
             // Establecer la AppShell como la nueva página principal
-            Application.Current.MainPage = new AppShell();
+            //Application.Current.MainPage = new AppShell();
         }
+        // Establecer la AppShell como la nueva página principal
+        Application.Current.MainPage = new AppShell();
     }
 
     private async void OnClickLogin(object sender, EventArgs e)

@@ -14,7 +14,13 @@
 
             <!-- Imagenes -->
             <Button x:Name="uploadImageButton" Text="Subir Imagen" Clicked="OnUploadImageButtonClicked"/>
-            <Image x:Name="selectedImage" />
+            <FlexLayout x:Name="imagesContainer" 
+                    Wrap="Wrap" 
+                    JustifyContent="Center" 
+                    AlignItems="Center" 
+                    AlignContent="Center">
+                <!-- Las imágenes se agregarán dinámicamente aquí -->
+            </FlexLayout>
 
 
             <Button Text="Crear Local" Clicked="OnCrearLocalClicked"/>

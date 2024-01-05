@@ -9,6 +9,11 @@ public partial class CrearLocalPage : ContentPage
 {
     private readonly APIService _api;
     private string token = Preferences.Get("UserToken", string.Empty);
+
+    // Lista para almacenar las imágenes seleccionadas
+    private List<ImageSource> selectedImages = new List<ImageSource>();
+    private const int MaxImages = 3; // Número máximo de imágenes permitidas
+
     public CrearLocalPage()
     {
         InitializeComponent();
@@ -17,6 +22,14 @@ public partial class CrearLocalPage : ContentPage
 
     private async void OnCrearLocalClicked(object sender, EventArgs e)
     {
+
+        // Verificar si se han seleccionado 3 imágenes
+        if (selectedImages.Count != MaxImages)
+        {
+            await DisplayAlert("Advertencia", "Debes subir 3 imágenes", "OK");
+            return;
+        }
+
         // Crear un DTO a partir de los datos del formulario
         var localCreationDTO = new LocalCreation
         {
@@ -48,46 +61,98 @@ public partial class CrearLocalPage : ContentPage
 
     private async void OnUploadImageButtonClicked(object sender, EventArgs e)
     {
-        if (await CheckAndRequestStoragePermission())
+        if (selectedImages.Count >= MaxImages)
         {
-            try
-            {
-                var result = await FilePicker.PickAsync(new PickOptions
-                {
-                    PickerTitle = "Por favor selecciona una imagen",
-                    FileTypes = FilePickerFileType.Images
-                });
+            await DisplayAlert("Advertencia", "Ya has seleccionado el máximo de imágenes permitidas", "OK");
+            return;
+        }
 
-                if (result != null)
-                {
-                    var stream = await result.OpenReadAsync();
-                    selectedImage.Source = ImageSource.FromStream(() => stream);
-                }
-            }
-            catch (Exception ex)
+        try
+        {
+            var result = await FilePicker.PickAsync(new PickOptions
             {
-                Debug.WriteLine($"No se pudo seleccionar la imagen: {ex.Message}");
+                PickerTitle = "Por favor selecciona una imagen",
+                FileTypes = FilePickerFileType.Images
+            });
+
+            if (result != null)
+            {
+                var stream = await result.OpenReadAsync();
+                var imageSource = ImageSource.FromStream(() => stream);
+
+                selectedImages.Add(imageSource);
+
+                var newImage = new Image
+                {
+                    Source = imageSource,
+                    Aspect = Aspect.AspectFill,
+                    HeightRequest = 100,
+                    WidthRequest = 100,
+                    Margin = 5,
+                };
+
+                // Agrega el TapGestureRecognizer a la imagen
+                var tapGestureRecognizer = new TapGestureRecognizer();
+                tapGestureRecognizer.Tapped += OnImageTapped; // Aquí asignas el manejador de eventos que ya modificaste.
+                newImage.GestureRecognizers.Add(tapGestureRecognizer);
+
+                imagesContainer.Children.Add(newImage);
             }
         }
-        else
+        catch (Exception ex)
         {
-            // Aquí puedes manejar lo que sucede si no se otorgan los permisos
-            Debug.WriteLine("Permiso de acceso al almacenamiento denegado.");
+            Debug.WriteLine($"No se pudo seleccionar la imagen: {ex.Message}");
         }
     }
 
-    private async Task<bool> CheckAndRequestStoragePermission()
+    private async void OnImageTapped(object sender, EventArgs e)
     {
-        var status = await Permissions.RequestAsync<Permissions.StorageRead>();
-        if (status == PermissionStatus.Granted)
+        // Necesitas identificar qué imagen fue tocada.
+        var imageTapped = sender as Image;
+        int imageIndex = imagesContainer.Children.IndexOf(imageTapped);
+
+        // Si no hay imagen o el índice es incorrecto, no hacer nada.
+        if (imageTapped == null || imageIndex == -1) return;
+
+        // Si ya hay una imagen seleccionada en este índice, preguntar si desea cambiarla.
+        if (selectedImages.Count > imageIndex)
         {
-            // El permiso de almacenamiento ha sido concedido
-            return true;
+            bool answer = await DisplayAlert("Cambiar imagen", "¿Quieres cambiar esta imagen?", "Sí", "No");
+            if (!answer) return; // Si el usuario elige 'No', simplemente regresa.
         }
-        else
+
+        try
         {
-            // El permiso de almacenamiento ha sido denegado o no se ha podido obtener
-            return false;
+            var result = await FilePicker.PickAsync(new PickOptions
+            {
+                PickerTitle = "Por favor selecciona una imagen",
+                FileTypes = FilePickerFileType.Images
+            });
+
+            if (result != null)
+            {
+                var stream = await result.OpenReadAsync();
+                var imageSource = ImageSource.FromStream(() => stream);
+
+                // Reemplaza la imagen actual o agrega una nueva si es que no hay ninguna.
+                if (selectedImages.Count > imageIndex)
+                {
+                    selectedImages[imageIndex] = imageSource; // Reemplaza la imagen existente.
+                }
+                else
+                {
+                    selectedImages.Add(imageSource); // Agrega la nueva imagen.
+                }
+
+                // Actualiza la imagen en la interfaz de usuario.
+                (sender as Image).Source = imageSource;
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"No se pudo seleccionar la imagen: {ex.Message}");
         }
     }
+
+
 }
