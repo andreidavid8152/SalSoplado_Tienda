@@ -18,75 +18,22 @@ public partial class CrearLocalPage : ContentPage
     {
         InitializeComponent();
         _api = App.ServiceProvider.GetService<APIService>();
-        webViewMapa.Navigated += OnWebViewMapNavigated;
 
-        webViewMapa.Navigating += (s, e) =>
-        {
-            // Desactivar el desplazamiento del ScrollView cuando se empieza a navegar en el WebView
-            mainScrollView.IsEnabled = false;
-        };
-
-        webViewMapa.Navigated += (s, e) =>
-        {
-            // Reactivar el desplazamiento del ScrollView una vez completada la navegación en el WebView
-            mainScrollView.IsEnabled = true;
-        };
-
+        Preferences.Set("SavedLatitude", String.Empty);
+        Preferences.Set("SavedLongitude", String.Empty);
     }
 
-    private void OnWebViewMapNavigated(object sender, WebNavigatedEventArgs e)
+    private async void OnCambiarUbicacionClicked(object sender, EventArgs e)
     {
-        var url = e.Url;
-        if (url.Contains("#saveLocation"))
-        {
-            // Extraer la latitud, longitud y dirección de la URL
-            // y asignarlos a los campos correspondientes en tu formulario
-        }
-        else
-        {
-            LoadCurrentLocation();
-        }
-    }
+        var direccionModalPage = new ubicacionPage();
 
-    async void LoadCurrentLocation()
-    {
-        try
+        // Cambia aquí para manejar una cadena en lugar de latitud y longitud
+        direccionModalPage.OnLocationSelected = (address) =>
         {
-            var savedLatitude = Preferences.Get("SavedLatitude", string.Empty);
-            var savedLongitude = Preferences.Get("SavedLongitude", string.Empty);
-            var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            LocationLabel.Text = address; // Actualizar el Label con la dirección
+        };
 
-            if (!string.IsNullOrEmpty(savedLatitude) && !string.IsNullOrEmpty(savedLongitude))
-            {
-                // Si hay coordenadas guardadas, usar esas para inicializar el mapa
-                await webViewMapa.EvaluateJavaScriptAsync($"initMap({savedLatitude}, {savedLongitude})");
-            }
-            else
-            {
-                if (status == PermissionStatus.Granted)
-                {
-                    var location = await Geolocation.GetLastKnownLocationAsync();
-                    if (location != null)
-                    {
-                        await webViewMapa.EvaluateJavaScriptAsync($"initMap({location.Latitude}, {location.Longitude})");
-                    }
-                    else
-                    {
-                        location = await Geolocation.GetLocationAsync(new GeolocationRequest
-                        {
-                            DesiredAccuracy = GeolocationAccuracy.Medium,
-                            Timeout = TimeSpan.FromSeconds(30)
-                        });
-                    }
-                }
-            }
-
-        }
-        catch (Exception ex)
-        {
-            // Manejar excepciones (como usuario negando el permiso)
-            Console.WriteLine(ex.Message);
-        }
+        await Navigation.PushModalAsync(direccionModalPage);
     }
 
     private async void OnCrearLocalClicked(object sender, EventArgs e)

@@ -11,7 +11,7 @@
             <Frame WidthRequest="175" HeightRequest="175"
            HorizontalOptions="Center" VerticalOptions="Center"
            CornerRadius="90"
-           IsClippedToBounds="True">
+           IsClippedToBounds="True" Margin="0,15,0,0">
                 <Image Source="imagenperfil.jpg"
                Aspect="AspectFill"
                WidthRequest="175"

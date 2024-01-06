@@ -15,11 +15,26 @@
             <Entry x:Name="entryDescripcion" Placeholder="Descripción" PlaceholderColor="#3b4151"/>
 
             <!-- Direccion -->
-            <Label Text="Direccion" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-20"/>
-            <WebView x:Name="webViewMapa" Source="ubicacion.html" HeightRequest="325" Margin="0,-2.5,0,0"/>
+            <Label Text="Direccion" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-5"/>
+            
+            <Label x:Name="LocationLabel" Text="Ubicación no establecida"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="Center" />
+            
+            <Button Text="Seleccionar Ubicación" 
+                    Clicked="OnCambiarUbicacionClicked"
+                    BackgroundColor="#14282f"
+                    TextColor="White"
+                    BorderWidth="0"
+                    CornerRadius="5"
+                    Padding="10,5"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Margin="0,-7,0,25"/>
 
             <!-- Imagenes -->
-            <Label Text="Imagenes" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-20"/>
+            <Label Text="Imagenes" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-23"/>
 
 
             <FlexLayout x:Name="imagesContainer" 
