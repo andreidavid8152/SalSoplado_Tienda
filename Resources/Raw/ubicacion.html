@@ -1,0 +1,80 @@
+﻿﻿
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+</head>
+<body style="background-color: #d9e3f1;">
+
+    <div id="map" style="width: 100%; height: 95%"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+
+    <script>
+        // Inicializando opciones del mapa fuera de initMap para que se puedan usar en múltiples instancias
+        var mapOptions = {
+            center: [17.385044, 78.486671], // Esta es una ubicación por defecto
+            zoom: 10
+        };
+
+        var marker;
+        var address;
+
+        function initMap(lat, lng) {
+            // Opciones del mapa
+            var mapOptions = {
+                center: [lat, lng],
+                zoom: 10
+            };
+
+            // Crear y centrar el mapa
+            var map = new L.map('map', mapOptions);
+
+            // Añadir la capa de tiles al mapa
+            var layer = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+            map.addLayer(layer);
+
+            // Añadir un marcador arrastrable al mapa
+            marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+
+            // Obtener la dirección inicial
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    address = data.display_name; // Establecer la dirección inicial
+                })
+                .catch(error => console.error('Error al obtener la dirección:', error));
+
+            // Evento de arrastre del marcador
+            marker.on('dragend', function (event) {
+                var position = event.target.getLatLng();
+                // Centrar el mapa en el marcador después de arrastrarlo
+                map.panTo(position);
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.lat}&lon=${position.lng}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        address = data.display_name; // Guardar la dirección obtenida
+                    })
+                    .catch(error => console.error('Error al obtener la dirección:', error));
+            });
+
+            // Centrar el mapa en el marcador con el máximo nivel de zoom posible
+            map.setView(new L.LatLng(lat, lng), map.getMaxZoom());
+        }
+
+        document.getElementById('saveLocation').onclick = function () {
+            if (address) {
+                var position = marker.getLatLng();
+                location.href = `#saveLocation:${position.lat},${position.lng},${encodeURIComponent(address)}`;
+            } else {
+                console.error('Dirección no disponible');
+            }
+        };
+
+    </script>
+
+
+</body>
+</html>

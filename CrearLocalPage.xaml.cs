@@ -18,6 +18,75 @@ public partial class CrearLocalPage : ContentPage
     {
         InitializeComponent();
         _api = App.ServiceProvider.GetService<APIService>();
+        webViewMapa.Navigated += OnWebViewMapNavigated;
+
+        webViewMapa.Navigating += (s, e) =>
+        {
+            // Desactivar el desplazamiento del ScrollView cuando se empieza a navegar en el WebView
+            mainScrollView.IsEnabled = false;
+        };
+
+        webViewMapa.Navigated += (s, e) =>
+        {
+            // Reactivar el desplazamiento del ScrollView una vez completada la navegación en el WebView
+            mainScrollView.IsEnabled = true;
+        };
+
+    }
+
+    private void OnWebViewMapNavigated(object sender, WebNavigatedEventArgs e)
+    {
+        var url = e.Url;
+        if (url.Contains("#saveLocation"))
+        {
+            // Extraer la latitud, longitud y dirección de la URL
+            // y asignarlos a los campos correspondientes en tu formulario
+        }
+        else
+        {
+            LoadCurrentLocation();
+        }
+    }
+
+    async void LoadCurrentLocation()
+    {
+        try
+        {
+            var savedLatitude = Preferences.Get("SavedLatitude", string.Empty);
+            var savedLongitude = Preferences.Get("SavedLongitude", string.Empty);
+            var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+
+            if (!string.IsNullOrEmpty(savedLatitude) && !string.IsNullOrEmpty(savedLongitude))
+            {
+                // Si hay coordenadas guardadas, usar esas para inicializar el mapa
+                await webViewMapa.EvaluateJavaScriptAsync($"initMap({savedLatitude}, {savedLongitude})");
+            }
+            else
+            {
+                if (status == PermissionStatus.Granted)
+                {
+                    var location = await Geolocation.GetLastKnownLocationAsync();
+                    if (location != null)
+                    {
+                        await webViewMapa.EvaluateJavaScriptAsync($"initMap({location.Latitude}, {location.Longitude})");
+                    }
+                    else
+                    {
+                        location = await Geolocation.GetLocationAsync(new GeolocationRequest
+                        {
+                            DesiredAccuracy = GeolocationAccuracy.Medium,
+                            Timeout = TimeSpan.FromSeconds(30)
+                        });
+                    }
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            // Manejar excepciones (como usuario negando el permiso)
+            Console.WriteLine(ex.Message);
+        }
     }
 
     private async void OnCrearLocalClicked(object sender, EventArgs e)
@@ -35,7 +104,7 @@ public partial class CrearLocalPage : ContentPage
         {
             Nombre = entryNombre.Text,
             Descripcion = entryDescripcion.Text,
-            Direccion = entryDireccion.Text,
+            //Direccion = entryDireccion.Text,
             // Aquí debes añadir las imágenes y cualquier otro campo necesario
         };
 

@@ -5,6 +5,11 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalSoplado_Tienda", "SalSoplado_Tienda.csproj", "{94B4DBC7-D233-4762-840F-D1C137B7E7C6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{1F425A02-75AB-41C9-B7EA-642F6F60B1A5}"
+	ProjectSection(SolutionItems) = preProject
+		ubicacion.html = ubicacion.html
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
