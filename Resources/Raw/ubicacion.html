@@ -4,119 +4,80 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://cdn.maptiler.com/maptiler-sdk-js/v1.1.1/maptiler-sdk.umd.min.js"></script>
+    <link href="https://cdn.maptiler.com/maptiler-sdk-js/v1.1.1/maptiler-sdk.css" rel="stylesheet" />
 </head>
 <body style="background-color: #d9e3f1;">
 
-    <h1 id="tituloPagina">Direccion de entrega</h1>
+    <h1 id="tituloPagina">Direccion del local</h1>
 
     <div id="map" style="width: 95%; height: 50%; position: absolute; top: 50%; transform: translateY(-50%);"></div>
 
     <button id="saveLocation" style="position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%); background-color: #000000; color: white;border: 1px solid #ccc; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Guardar</button>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
     <script>
-        // Inicializando opciones del mapa fuera de initMap para que se puedan usar en múltiples instancias
-        var mapOptions = {
-            center: [17.385044, 78.486671], // Esta es una ubicación por defecto
-            zoom: 10
-        };
-
         var marker;
         var address;
 
         function initMap(lat, lng) {
-            // Opciones del mapa
-            var mapOptions = {
-                center: [lat, lng],
-                zoom: 10
-            };
+            maptilersdk.config.apiKey = 'ANpkZKdf3Kz4yWswvrCz'; // Tu API key de MapTiler
 
-            // Crear y centrar el mapa
-            var map = new L.map('map', mapOptions);
-            var btn = document.getElementById('saveLocation');
+            // Inicializar el mapa con MapTiler
+            const map = new maptilersdk.Map({
+                container: 'map',
+                style: maptilersdk.MapStyle.STREETS,
+                center: [lng, lat],
+                zoom: 17
+            });
 
-            function updateButtonState(loading) {
-                if (loading) {
-                    btn.innerHTML = 'Cargando...'; // Cambiar el texto a Cargando...
-                    btn.setAttribute('disabled', '');
-                    btn.style.backgroundColor = '#cccccc'; // Color de fondo gris
-                    btn.style.color = '#666666'; // Color de texto gris oscuro
-                    btn.style.borderColor = '#aaaaaa'; // Color del borde
-                } else {
-                    btn.innerHTML = 'Guardar'; // Restablecer el texto del botón
-                    btn.removeAttribute('disabled');
-                    btn.style.backgroundColor = '#000000'; // Restaurar el color de fondo original
-                    btn.style.color = 'white'; // Restaurar el color de texto original
-                    btn.style.border = '1px solid #ccc'; // Restaurar el color del borde original
-                }
-            }
-
-            // Añadir la capa de tiles al mapa
-            var layer = new L.TileLayer('https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=ANpkZKdf3Kz4yWswvrCz');
-            map.addLayer(layer);
-
-            // Añadir un marcador arrastrable al mapa
-            marker = L.marker([lat, lng], { draggable: true }).addTo(map);
-
-            // Obtener la dirección inicial
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+            // Obtener la dirección inicial usando MapTiler Geocoding API
+            fetch(`https://api.maptiler.com/geocoding/${lng},${lat}.json?key=ANpkZKdf3Kz4yWswvrCz`)
                 .then(response => response.json())
                 .then(data => {
-                    address = data.display_name; // Establecer la dirección inicial
+                    if (data && data.features && data.features.length > 0) {
+                        address = data.features[0].place_name; // Establecer la dirección inicial
+                        console.log('Dirección inicial: ', address);
+                    }
                 })
                 .catch(error => console.error('Error al obtener la dirección:', error));
 
-            // Evento de arrastre del marcador
-            marker.on('dragend', function (event) {
-                var position = event.target.getLatLng();
-                map.panTo(position);
+            // Añadir un marcador arrastrable
+            marker = new maptilersdk.Marker({ draggable: true })
+                .setLngLat([lng, lat])
+                .addTo(map);
 
-                updateButtonState(true); // Activar el estado de cargando
-
-                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.lat}&lon=${position.lng}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        address = data.display_name;
-                        updateButtonState(false); // Desactivar el estado de cargando
-                    })
-                    .catch(error => {
-                        console.error('Error al obtener la dirección:', error);
-                        updateButtonState(false); // Desactivar el estado de cargando en caso de error
-                    });
+            // Evento de arrastre finalizado para el marcador
+            marker.on('drag', function () {
+                var lngLat = marker.getLngLat();
+                map.panTo(lngLat); // Mover el mapa al seguir el marcador
             });
 
-            // Centrar el mapa en el marcador con el máximo nivel de zoom posible
-            map.setView(new L.LatLng(lat, lng), map.getMaxZoom());
+            marker.on('dragend', onDragEnd);
 
-            // Añadir el buscador al mapa
-            var geocoder = new L.Control.Geocoder({
-                geocoder: new L.Control.Geocoder.Nominatim({
-                    geocodingQueryParams: { countrycodes: 'EC' } // Restringe búsquedas a España
-                }),
-                defaultMarkGeocode: false
-            }).on('markgeocode', function (e) {
-                var latlng = e.geocode.center;
-                marker.setLatLng(latlng); // Mueve el marcador a la nueva ubicación
-                map.panTo(latlng); // Centra el mapa en la nueva ubicación
-            }).addTo(map);
 
+            function onDragEnd() {
+                var lngLat = marker.getLngLat();
+                // Usar Geocoding API para obtener la dirección
+                fetch(`https://api.maptiler.com/geocoding/${lngLat.lng},${lngLat.lat}.json?key=ANpkZKdf3Kz4yWswvrCz`)
+                    .then(response => response.json())
+                    .then(data => {
+                        address = data.features[0].place_name; // Actualizar dirección
+                        console.log('Dirección: ', address);
+                    })
+                    .catch(error => console.error('Error al obtener la dirección:', error));
+            }
         }
 
+        // Función para guardar la ubicación
         document.getElementById('saveLocation').onclick = function () {
             if (address) {
-                var position = marker.getLatLng();
+                var position = marker.getLngLat();
                 location.href = `#saveLocation:${position.lat},${position.lng},${encodeURIComponent(address)}`;
             } else {
                 console.error('Dirección no disponible');
             }
         };
-
     </script>
-
 
 </body>
 </html>
