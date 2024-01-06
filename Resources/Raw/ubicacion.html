@@ -5,6 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 </head>
 <body style="background-color: #d9e3f1;">
 
@@ -15,6 +16,7 @@
     <button id="saveLocation" style="position: absolute; bottom: 100px; left: 50%; transform: translateX(-50%); background-color: #000000; color: white;border: 1px solid #ccc; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Guardar</button>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
     <script>
         // Inicializando opciones del mapa fuera de initMap para que se puedan usar en múltiples instancias
@@ -35,9 +37,26 @@
 
             // Crear y centrar el mapa
             var map = new L.map('map', mapOptions);
+            var btn = document.getElementById('saveLocation');
+
+            function updateButtonState(loading) {
+                if (loading) {
+                    btn.innerHTML = 'Cargando...'; // Cambiar el texto a Cargando...
+                    btn.setAttribute('disabled', '');
+                    btn.style.backgroundColor = '#cccccc'; // Color de fondo gris
+                    btn.style.color = '#666666'; // Color de texto gris oscuro
+                    btn.style.borderColor = '#aaaaaa'; // Color del borde
+                } else {
+                    btn.innerHTML = 'Guardar'; // Restablecer el texto del botón
+                    btn.removeAttribute('disabled');
+                    btn.style.backgroundColor = '#000000'; // Restaurar el color de fondo original
+                    btn.style.color = 'white'; // Restaurar el color de texto original
+                    btn.style.border = '1px solid #ccc'; // Restaurar el color del borde original
+                }
+            }
 
             // Añadir la capa de tiles al mapa
-            var layer = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+            var layer = new L.TileLayer('https://api.maptiler.com/maps/streets-v2/256/{z}/{x}/{y}.png?key=ANpkZKdf3Kz4yWswvrCz');
             map.addLayer(layer);
 
             // Añadir un marcador arrastrable al mapa
@@ -54,18 +73,37 @@
             // Evento de arrastre del marcador
             marker.on('dragend', function (event) {
                 var position = event.target.getLatLng();
-                // Centrar el mapa en el marcador después de arrastrarlo
                 map.panTo(position);
+
+                updateButtonState(true); // Activar el estado de cargando
+
                 fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${position.lat}&lon=${position.lng}`)
                     .then(response => response.json())
                     .then(data => {
-                        address = data.display_name; // Guardar la dirección obtenida
+                        address = data.display_name;
+                        updateButtonState(false); // Desactivar el estado de cargando
                     })
-                    .catch(error => console.error('Error al obtener la dirección:', error));
+                    .catch(error => {
+                        console.error('Error al obtener la dirección:', error);
+                        updateButtonState(false); // Desactivar el estado de cargando en caso de error
+                    });
             });
 
             // Centrar el mapa en el marcador con el máximo nivel de zoom posible
             map.setView(new L.LatLng(lat, lng), map.getMaxZoom());
+
+            // Añadir el buscador al mapa
+            var geocoder = new L.Control.Geocoder({
+                geocoder: new L.Control.Geocoder.Nominatim({
+                    geocodingQueryParams: { countrycodes: 'EC' } // Restringe búsquedas a España
+                }),
+                defaultMarkGeocode: false
+            }).on('markgeocode', function (e) {
+                var latlng = e.geocode.center;
+                marker.setLatLng(latlng); // Mueve el marcador a la nueva ubicación
+                map.panTo(latlng); // Centra el mapa en la nueva ubicación
+            }).addTo(map);
+
         }
 
         document.getElementById('saveLocation').onclick = function () {
