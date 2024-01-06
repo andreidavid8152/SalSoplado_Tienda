@@ -6,22 +6,39 @@
     <ScrollView>
         <VerticalStackLayout Spacing="20" Padding="30">
 
-            <Label Text="Crear Local" FontSize="Large" HorizontalOptions="Center"/>
+            <Label Text="CREAR LOCAL" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,-20,0,0"/>
 
-            <Entry x:Name="entryNombre" Placeholder="Nombre del local"/>
-            <Entry x:Name="entryDescripcion" Placeholder="Descripción"/>
-            <Entry x:Name="entryDireccion" Placeholder="Dirección"/>
+            <Label Text="Nombre" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,20,0,-20"/>
+            <Entry x:Name="entryNombre" Placeholder="Nombre del local" PlaceholderColor="#3b4151"/>
+
+            <Label Text="Descripcion" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-20"/>
+            <Entry x:Name="entryDescripcion" Placeholder="Descripción" PlaceholderColor="#3b4151"/>
+
+            <Label Text="Direccion" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-20"/>
+            <Entry x:Name="entryDireccion" Placeholder="Dirección" PlaceholderColor="#3b4151"/>
+
+            <Label Text="Imagenes" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0, 0"/>
 
             <!-- Imagenes -->
-            <Button x:Name="uploadImageButton" Text="Subir Imagen" Clicked="OnUploadImageButtonClicked"/>
+
             <FlexLayout x:Name="imagesContainer" 
-                    Wrap="Wrap" 
-                    JustifyContent="Center" 
-                    AlignItems="Center" 
-                    AlignContent="Center">
-                <!-- Las imágenes se agregarán dinámicamente aquí -->
+                        Wrap="Wrap" 
+                        JustifyContent="Center" 
+                        AlignItems="Center" 
+                        AlignContent="Center">
             </FlexLayout>
 
+            <Button x:Name="uploadImageButton" 
+                    Text="Subir Imagen" 
+                    Clicked="OnUploadImageButtonClicked"
+                    BackgroundColor="#14282f"
+                    TextColor="White"
+                    BorderWidth="0"
+                    CornerRadius="5"
+                    Padding="10,5"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Margin="0,-25,0,25"/>
 
             <Button Text="Crear Local" Clicked="OnCrearLocalClicked"/>
 

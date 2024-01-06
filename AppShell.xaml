@@ -5,7 +5,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SalSoplado_Usuario"
     Shell.FlyoutBehavior="Disabled"
-    Shell.TabBarBackgroundColor="#d9e3f1">
+    Shell.TabBarBackgroundColor="#d9e3f1"
+    Shell.BackgroundColor="#d9e3f1"
+    Shell.ForegroundColor="Black">
 
     <TabBar>
         <Tab Title="Locales" Icon="Images/local.svg">
