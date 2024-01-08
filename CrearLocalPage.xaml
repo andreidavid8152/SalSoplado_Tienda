@@ -15,7 +15,7 @@
             <Entry x:Name="entryDescripcion" Placeholder="Descripción" PlaceholderColor="#3b4151"/>
 
             <!-- Direccion -->
-            <Label Text="Direccion" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-5"/>
+            <Label Text="Direccion" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-13"/>
             
             <Label x:Name="LocationLabel" Text="Ubicación no establecida"
                    FontAttributes="Bold"
@@ -54,7 +54,7 @@
                     Padding="10,5"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
-                    Margin="0,0,0,25"/>
+                    Margin="0,-9,0,25"/>
 
             <Button Text="Crear Local" Clicked="OnCrearLocalClicked"/>
 

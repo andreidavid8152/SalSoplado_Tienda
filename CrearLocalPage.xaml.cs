@@ -2,6 +2,8 @@ using SalSoplado_Tienda.Models;
 using SalSoplado_Usuario;
 using SalSoplado_Usuario.Services;
 using System.Diagnostics;
+using Firebase.Storage;
+using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 
 namespace SalSoplado_Tienda;
 
@@ -39,6 +41,16 @@ public partial class CrearLocalPage : ContentPage
     private async void OnCrearLocalClicked(object sender, EventArgs e)
     {
 
+        var latitud = Preferences.Get("SavedLatitude", "");
+        var longitud = Preferences.Get("SavedLongitude", "");
+
+        //Verificar si la ubicacion ha sido seleccionada
+        if (latitud.Equals("") && longitud.Equals(""))
+        {
+            await DisplayAlert("Advertencia", "Selecciona una ubicacion.", "OK");
+            return;
+        }
+
         // Verificar si se han seleccionado 3 imágenes
         if (selectedImages.Count != MaxImages)
         {
@@ -46,16 +58,17 @@ public partial class CrearLocalPage : ContentPage
             return;
         }
 
+        // Subir imágenes y esperar a que todas se hayan subido
+        var imagenesSubidas = await subirImagenesSeleccionadas();
+
         // Crear un DTO a partir de los datos del formulario
         var localCreationDTO = new LocalCreation
         {
             Nombre = entryNombre.Text,
             Descripcion = entryDescripcion.Text,
-            //Direccion = entryDireccion.Text,
-            // Aquí debes añadir las imágenes y cualquier otro campo necesario
+            Direccion = latitud + ";" + longitud,
+            ImagenesUrls = imagenesSubidas
         };
-
-        // Validar los datos aquí (opcional)
 
         try
         {
@@ -65,7 +78,6 @@ public partial class CrearLocalPage : ContentPage
             {
                 // Manejar el éxito
                 await DisplayAlert("Éxito", "Local creado con éxito", "OK");
-                // Opcional: Navegar a otra página o actualizar la interfaz de usuario
             }
         }
         catch (Exception ex)
@@ -73,6 +85,93 @@ public partial class CrearLocalPage : ContentPage
             // Manejar los errores
             await DisplayAlert("Error", ex.Message, "OK");
         }
+    }
+
+    private async Task<List<String>> subirImagenesSeleccionadas()
+    {
+        List<String> imagenes = new List<String>();
+
+        foreach (var imageSource in selectedImages)
+        {
+            var imageUrl = await SubirImagenAFirebase(imageSource);
+            if (!string.IsNullOrEmpty(imageUrl))
+            {
+                imagenes.Add(imageUrl);
+            }
+        }
+
+        return imagenes;
+    }
+
+    private async Task<string> SubirImagenAFirebase(ImageSource imageSource)
+    {
+        var stream = await ConvertirImageSourceAStream(imageSource);
+        if (stream == null)
+        {
+            return null;
+        }
+
+        var fileName = Guid.NewGuid().ToString() + ".jpg";
+
+        string storageImage;
+        try
+        {
+            storageImage = await new FirebaseStorage("salsoplado.appspot.com")
+                                     .Child("imagenesLocales")
+                                     .Child(fileName)
+                                     .PutAsync(stream);
+        }
+        finally
+        {
+            stream.Dispose();
+        }
+
+        return storageImage;
+    }
+
+
+    private async Task<Stream> ConvertirImageSourceAStream(ImageSource imageSource)
+    {
+        if (imageSource == null)
+        {
+            return null;
+        }
+
+        if (imageSource is FileImageSource fileImageSource)
+        {
+            string filePath = fileImageSource.File;
+            if (File.Exists(filePath))
+            {
+                return new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            }
+        }
+        else if (imageSource is UriImageSource uriImageSource)
+        {
+            var uri = uriImageSource.Uri;
+            if (uri != null && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    var response = await client.GetAsync(uri);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return await response.Content.ReadAsStreamAsync();
+                    }
+                }
+            }
+        }
+        else if (imageSource is StreamImageSource streamImageSource)
+        {
+            var cancellationToken = System.Threading.CancellationToken.None;
+            var streamFunc = streamImageSource.Stream;
+            var stream = await streamFunc(cancellationToken);
+            if (stream != null && stream.CanRead)
+            {
+                return stream;
+            }
+        }
+
+        return null;
     }
 
     private async void OnUploadImageButtonClicked(object sender, EventArgs e)
@@ -93,8 +192,11 @@ public partial class CrearLocalPage : ContentPage
 
             if (result != null)
             {
-                var stream = await result.OpenReadAsync();
-                var imageSource = ImageSource.FromStream(() => stream);
+                ImageSource imageSource = ImageSource.FromStream(() =>
+                {
+                    var stream = result.OpenReadAsync().Result;
+                    return stream;
+                });
 
                 selectedImages.Add(imageSource);
 
@@ -107,9 +209,8 @@ public partial class CrearLocalPage : ContentPage
                     Margin = 5,
                 };
 
-                // Agrega el TapGestureRecognizer a la imagen
                 var tapGestureRecognizer = new TapGestureRecognizer();
-                tapGestureRecognizer.Tapped += OnImageTapped; // Aquí asignas el manejador de eventos que ya modificaste.
+                tapGestureRecognizer.Tapped += OnImageTapped;
                 newImage.GestureRecognizers.Add(tapGestureRecognizer);
 
                 imagesContainer.Children.Add(newImage);

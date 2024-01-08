@@ -23,7 +23,7 @@ namespace SalSoplado_Tienda.Models
         [Required(ErrorMessage = "El campo Direccion es obligatorio.")]
         public string Direccion { get; set; }
 
+        public List<string> ImagenesUrls { get; set; }
 
-        //public List<Imagen> Imagenes { get; set; }
     }
 }
