@@ -1,17 +1,28 @@
+using Microsoft.Maui.Media;
 using SalSoplado_Tienda;
+using SalSoplado_Tienda.Models;
 using SalSoplado_Usuario.Services;
+using System.Collections.ObjectModel;
 
 namespace SalSoplado_Usuario;
 
 public partial class LocalesPage : ContentPage
 {
     private readonly APIService _api;
+    private ObservableCollection<LocalLoad> Locales { get; set; }
     private string token = Preferences.Get("UserToken", string.Empty);
     public LocalesPage()
     {
         InitializeComponent();
         _api = App.ServiceProvider.GetService<APIService>();
-        CargarCantidadLocales();
+        Locales = new ObservableCollection<LocalLoad>();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        CargarCantidadLocales(); // Llama a este método para actualizar la información cada vez que la página aparezca
+        CargarLocales();
     }
 
     private async void CargarCantidadLocales()
@@ -29,6 +40,29 @@ public partial class LocalesPage : ContentPage
             // Maneja la excepción si algo sale mal
             Console.WriteLine(ex.Message);
         }
+    }
+
+    private async void CargarLocales()
+    {
+        try
+        {
+            var locales = await _api.ObtenerLocales(token);
+            Locales.Clear();
+            foreach (var local in locales)
+            {
+                Locales.Add(local);
+            }
+            listaLocales.ItemsSource = Locales; // Asigna los locales a la ListView
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+    private void OnClickShowDetails(object sender, SelectedItemChangedEventArgs e)
+    {
+
     }
 
     private async void OnClickCrearLocal(object sender, EventArgs e)

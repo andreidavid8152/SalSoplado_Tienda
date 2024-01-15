@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Maui.Media;
+using Newtonsoft.Json;
 using SalSoplado_Tienda.Models;
 using SalSoplado_Usuario.Models;
 using System;
@@ -136,6 +137,23 @@ namespace SalSoplado_Usuario.Services
                 var errorMessage = await response.Content.ReadAsStringAsync();
                 throw new Exception(errorMessage);
             }
+        }
+
+        public async Task<List<LocalLoad>> ObtenerLocales(string token)
+        {
+            // Añade el token como header de autorización
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await _httpClient.GetAsync($"{_baseUrl}Locales/ObtenerLocales");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var locales = JsonConvert.DeserializeObject<List<LocalLoad>>(content);
+                return locales;
+            }
+
+            throw new Exception("No se pudo obtener los locales desde la API.");
         }
 
     }

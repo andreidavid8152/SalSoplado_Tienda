@@ -3,7 +3,6 @@ using SalSoplado_Usuario;
 using SalSoplado_Usuario.Services;
 using System.Diagnostics;
 using Firebase.Storage;
-using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 
 namespace SalSoplado_Tienda;
 
@@ -78,6 +77,7 @@ public partial class CrearLocalPage : ContentPage
             {
                 // Manejar el éxito
                 await DisplayAlert("Éxito", "Local creado con éxito", "OK");
+                await Navigation.PopAsync();
             }
         }
         catch (Exception ex)

@@ -43,12 +43,42 @@
                 Text="Crear"
                 HorizontalOptions="Center"
                 VerticalOptions="Start"
-                Margin="0,15,0,-2"
+                Margin="0,15,0,13"
                 WidthRequest="150"
                 Clicked="OnClickCrearLocal"/>
 
 
+        <ListView x:Name="listaLocales" RowHeight="120" Margin="15,5,15,0" ItemSelected="OnClickShowDetails">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        
+                        <Grid>
 
+                            <Frame CornerRadius="30" Padding="15" HasShadow="True" Margin="5" BorderColor="#b7bfcb" BackgroundColor="#b9c9e0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Image Grid.Row="0" Grid.Column="0" Source="{Binding Imagen}" HeightRequest="100" WidthRequest="100" Aspect="AspectFill"/>
+                                    <StackLayout Grid.Row="0" Grid.Column="1" Orientation="Vertical" Padding="10">
+                                        <Label Text="{Binding Nombre}" FontAttributes="Bold" FontSize="18"/>
+                                        <Label Text="{Binding Direccion}" FontSize="16"/>
+                                    </StackLayout>
+                                </Grid>
+                            </Frame>
+
+                        </Grid>
+                        
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
 
     </VerticalStackLayout>
