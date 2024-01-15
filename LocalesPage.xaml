@@ -52,7 +52,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        
+
                         <Grid>
 
                             <Frame CornerRadius="30" Padding="15" HasShadow="True" Margin="5" BorderColor="#b7bfcb" BackgroundColor="#b9c9e0">
@@ -74,7 +74,7 @@
                             </Frame>
 
                         </Grid>
-                        
+
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

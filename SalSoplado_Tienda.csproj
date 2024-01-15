@@ -56,6 +56,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Remove="Resources\Images\add.svg" />
 		<None Remove="Resources\Images\anadirproducto_onboarding.png" />
 		<None Remove="Resources\Images\home.svg" />
 		<None Remove="Resources\Images\home_locales.png" />
@@ -65,7 +66,9 @@
 		<None Remove="Resources\Images\login_onboarding.png" />
 		<None Remove="Resources\Images\logo.png" />
 		<None Remove="Resources\Images\perfil.svg" />
+		<None Remove="Resources\Images\products.svg" />
 		<None Remove="Resources\Images\registro_onboarding.png" />
+		<None Remove="Resources\Images\settings.svg" />
 		<None Remove="Resources\Images\vender_onboarding.png" />
 	</ItemGroup>
 
@@ -79,11 +82,23 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<MauiXaml Update="AddProductoPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="AjustesPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="CrearLocalPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="LocalesPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="LocalPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="LocalShell.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="LoginPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -96,6 +111,12 @@
 		</MauiXaml>
 		<MauiXaml Update="OnboardingViewModel.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="PedidosPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="ProductosPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="RegistroPage.xaml">
 			<Generator>MSBuild:Compile</Generator>

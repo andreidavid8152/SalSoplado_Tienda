@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Shell 
+    x:Class="SalSoplado_Tienda.LocalShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:SalSoplado_Tienda"
+    Shell.FlyoutBehavior="Disabled"
+    Shell.TabBarBackgroundColor="#d9e3f1"
+    Shell.BackgroundColor="#d9e3f1"
+    Shell.ForegroundColor="Black">
+
+    <TabBar>
+        <Tab Title="Home" Icon="Images/home.svg">
+            <ShellContent ContentTemplate="{DataTemplate local:LocalPage}" />
+        </Tab>
+        <Tab Title="Productos" Icon="Images/products.svg">
+            <ShellContent ContentTemplate="{DataTemplate local:ProductosPage}" />
+        </Tab>
+        <Tab Title="Añadir" Icon="Images/add.svg">
+            <ShellContent ContentTemplate="{DataTemplate local:AddProductoPage}" />
+        </Tab>
+        <Tab Title="Pedidos" Icon="Images/pedido.svg">
+            <ShellContent ContentTemplate="{DataTemplate local:PedidosPage}" />
+        </Tab>
+        <Tab Title="Ajustes" Icon="Images/settings.svg">
+            <ShellContent ContentTemplate="{DataTemplate local:AjustesPage}" />
+        </Tab>
+    </TabBar>
+
+</Shell>

@@ -62,7 +62,7 @@ public partial class LocalesPage : ContentPage
 
     private void OnClickShowDetails(object sender, SelectedItemChangedEventArgs e)
     {
-
+        Application.Current.MainPage = new LocalShell();
     }
 
     private async void OnClickCrearLocal(object sender, EventArgs e)
