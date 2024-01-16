@@ -46,7 +46,7 @@ public partial class LocalesPage : ContentPage
     {
         try
         {
-            var locales = await _api.ObtenerLocales(token);
+            var locales = await _api.ObtenerResumenLocales(token);
             Locales.Clear();
             foreach (var local in locales)
             {

@@ -139,12 +139,12 @@ namespace SalSoplado_Usuario.Services
             }
         }
 
-        public async Task<List<LocalLoad>> ObtenerLocales(string token)
+        public async Task<List<LocalLoad>> ObtenerResumenLocales(string token)
         {
             // Añade el token como header de autorización
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _httpClient.GetAsync($"{_baseUrl}Locales/ObtenerLocales");
+            var response = await _httpClient.GetAsync($"{_baseUrl}Locales/ObtenerResumenLocales");
 
             if (response.IsSuccessStatusCode)
             {
@@ -154,6 +154,25 @@ namespace SalSoplado_Usuario.Services
             }
 
             throw new Exception("No se pudo obtener los locales desde la API.");
+        }
+
+        public async Task<LocalDetalle> ObtenerDetalleLocal(int idLocal, string token)
+        {
+            // Añade el token como header de autorización
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Realiza la solicitud GET al endpoint ObtenerDetalleLocal
+            var response = await _httpClient.GetAsync($"{_baseUrl}Locales/ObtenerDetalleLocal/{idLocal}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var detalleLocal = JsonConvert.DeserializeObject<LocalDetalle>(content);
+                return detalleLocal;
+            }
+
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            throw new Exception(errorMessage);
         }
 
     }
