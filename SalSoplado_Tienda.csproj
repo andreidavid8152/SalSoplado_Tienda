@@ -59,6 +59,8 @@
 		<None Remove="Resources\Images\add.svg" />
 		<None Remove="Resources\Images\anadirproducto_onboarding.png" />
 		<None Remove="Resources\Images\category.svg" />
+		<None Remove="Resources\Images\delete.svg" />
+		<None Remove="Resources\Images\edit.svg" />
 		<None Remove="Resources\Images\home.svg" />
 		<None Remove="Resources\Images\home_locales.png" />
 		<None Remove="Resources\Images\imagenperfil.jpg" />

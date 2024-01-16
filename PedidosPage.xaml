@@ -4,9 +4,11 @@
              x:Class="SalSoplado_Tienda.PedidosPage"
              BackgroundColor="#d9e3f1">
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+        <Label Text="Tus Pedidos"
+               FontSize="Large"
+               FontAttributes="Bold"
+               TextColor="Black"
+               HorizontalTextAlignment="Start"
+               VerticalOptions="Start" Margin="17,25,0,0"/>
     </VerticalStackLayout>
 </ContentPage>
