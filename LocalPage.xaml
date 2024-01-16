@@ -4,9 +4,93 @@
              x:Class="SalSoplado_Tienda.LocalPage"
              BackgroundColor="#d9e3f1">
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+
+        <!-- Cabecera local -->
+        <Grid Padding="10"
+          HorizontalOptions="Center"
+          VerticalOptions="Center">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Frame BackgroundColor="#FFD700" 
+               CornerRadius="30" 
+               Padding="20" 
+               Grid.RowSpan="3"
+               HorizontalOptions="FillAndExpand">
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Image Source="logo.png" Aspect="AspectFill" HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,0,0,10">
+                        <Image.Clip>
+                            <!-- Centro y radios ajustados para un tamaño de 100x100 -->
+                            <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50"/>
+                        </Image.Clip>
+                    </Image>
+
+                    <StackLayout Grid.Row="1" 
+                                Margin="0,5,0,0"
+                             HorizontalOptions="Center">
+                        <Label Text="Ristiamte - ITALIA"
+                           FontAttributes="Bold"
+                           HorizontalTextAlignment="Center" Margin="0,0,0,10"/>
+                        <Label Text="🕐 14:00 - 23:00"
+                        HorizontalTextAlignment="Center"/>
+                        <Label Text="📍 La floresta"
+                        HorizontalTextAlignment="Center"/>
+                        <Label Text="📞 098232124"
+                        HorizontalTextAlignment="Center"/>
+                    </StackLayout>
+
+                </Grid>
+            </Frame>
+        </Grid>
+
+
+        <Frame Padding="5" Margin="5" CornerRadius="20" BorderColor="#FFC107" BackgroundColor="#FFF9C4" WidthRequest="150">
+            <StackLayout>
+                <!-- Imagen del Producto con un tamaño ajustado y bordes redondeados -->
+                <Image Source="logo.png" Aspect="AspectFit" HeightRequest="100" Margin="10"/>
+
+                <!-- Nombre del Producto con el mismo estilo de la app -->
+                <Label Text="Banana" FontSize="Small" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="#040a01"/>
+
+                <!-- Precios con colores y fuente alineados al diseño de la app -->
+                <StackLayout Orientation="Horizontal" Spacing="3" HorizontalOptions="Center" Margin="0,4,0,4">
+                    <!-- Precio Anterior con menor énfasis -->
+                    <Label Text="12.00" FontSize="Small" TextDecorations="Strikethrough" TextColor="#333632"/>
+
+                    <!-- Precio Nuevo destacado -->
+                    <Label Text="13.00" FontSize="Small" FontAttributes="Bold" TextColor="Black"/>
+                </StackLayout>
+
+                <Frame CornerRadius="30" Padding="0" HasShadow="True" Margin="2" BorderColor="#77BF1A" WidthRequest="95" BackgroundColor="#BFF678" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Asegúrate de que la imagen se expanda para llenar la columna -->
+                        <Image Source="category.svg" Grid.Column="0" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" Margin="10,1.5,0,0"/>
+                        <!-- Asegúrate de que el label se expanda para llenar la columna -->
+                        <Label Text="Frutas" Grid.Column="1" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="10" Margin="-5,0,0,0"/>
+                    </Grid>
+                </Frame>
+                
+            </StackLayout>
+        </Frame>
+
+
     </VerticalStackLayout>
+
+
 </ContentPage>

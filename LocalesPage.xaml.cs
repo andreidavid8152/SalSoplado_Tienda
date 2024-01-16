@@ -62,6 +62,9 @@ public partial class LocalesPage : ContentPage
 
     private void OnClickShowDetails(object sender, SelectedItemChangedEventArgs e)
     {
+        var selectedLocal = (LocalLoad)e.SelectedItem;
+        SharedData.SelectedLocalId = selectedLocal.Id; // Asumiendo que LocalLoad tiene una propiedad Id
+
         Application.Current.MainPage = new LocalShell();
     }
 
