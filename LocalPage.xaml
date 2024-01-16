@@ -6,53 +6,56 @@
     <VerticalStackLayout>
 
         <!-- Cabecera local -->
-        <Grid Padding="10"
-          HorizontalOptions="Center"
-          VerticalOptions="Center">
+        <Grid Padding="30"
+  HorizontalOptions="Center"
+  VerticalOptions="Center">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <Frame BackgroundColor="#FFD700" 
-               CornerRadius="30" 
-               Padding="20" 
-               Grid.RowSpan="3"
-               HorizontalOptions="FillAndExpand">
+       CornerRadius="30" 
+       Padding="20" 
+       Grid.Row="0"
+                   WidthRequest="325"
+       HorizontalOptions="FillAndExpand">
                 <Grid>
 
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <Image Source="logo.png" Aspect="AspectFill" HeightRequest="100" WidthRequest="100" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image Source="logo.png" Aspect="AspectFill" HeightRequest="100" WidthRequest="100"
+                   HorizontalOptions="Center" VerticalOptions="Center"
+                   Grid.Row="0" Grid.Column="0" Margin="15,0,25,0">
                         <Image.Clip>
-                            <!-- Centro y radios ajustados para un tamaño de 100x100 -->
                             <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50"/>
                         </Image.Clip>
                     </Image>
 
-                    <StackLayout Grid.Row="1" 
-                                Margin="0,5,0,0"
-                             HorizontalOptions="Center">
+                    <StackLayout Grid.Row="0" Grid.Column="1"
+                        HorizontalOptions="Start" VerticalOptions="Center">
                         <Label Text="Ristiamte - ITALIA"
-                           FontAttributes="Bold"
-                           HorizontalTextAlignment="Center" Margin="0,0,0,10"/>
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center" Margin="0,-7,0,7"/>
                         <Label Text="🕐 14:00 - 23:00"
-                        HorizontalTextAlignment="Center"/>
+                       HorizontalTextAlignment="Start" Margin="0,0,0,7"/>
                         <Label Text="📍 La floresta"
-                        HorizontalTextAlignment="Center"/>
+                       HorizontalTextAlignment="Start" Margin="0,0,0,7"/>
                         <Label Text="📞 098232124"
-                        HorizontalTextAlignment="Center"/>
+                       HorizontalTextAlignment="Start" Margin="0,0,0,0"/>
                     </StackLayout>
 
                 </Grid>
             </Frame>
         </Grid>
+
 
 
         <Frame Padding="5" Margin="5" CornerRadius="20" BorderColor="#FFC107" BackgroundColor="#FFF9C4" WidthRequest="150">
@@ -73,7 +76,7 @@
                 </StackLayout>
 
                 <Frame CornerRadius="30" Padding="0" HasShadow="True" Margin="2" BorderColor="#77BF1A" WidthRequest="95" BackgroundColor="#BFF678" HorizontalOptions="Center" VerticalOptions="Center">
-                    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="5">
+                    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
