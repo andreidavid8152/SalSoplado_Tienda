@@ -12,35 +12,75 @@
                    TextColor="Black"
                    HorizontalTextAlignment="Start"/>
 
-            <Label Text="Nombre" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,20,0,-20"/>
-            <Entry Placeholder="Nombre del producto" PlaceholderColor="#3b4151"/>
+            <Grid Padding="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Añade más RowDefinition si necesitas más filas -->
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-            <Label Text="Descripcion" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-20"/>
-            <Editor Placeholder="Descripción del producto" AutoSize="TextChanges" PlaceholderColor="#3b4151"/>
+                <!-- Fila 1 -->
+                <!-- Nombre -->
+                <StackLayout Grid.Row="0" Grid.Column="0" Margin="-20,0,30,0">
+                    <Label Text="Nombre" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,0,0,0"/>
+                    <Entry Placeholder="Nombre del producto" PlaceholderColor="#3b4151" Margin="0,0,0,0"/>
+                </StackLayout>
 
-            <Label Text="Fecha de vencimiento" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-13"/>
-            <DatePicker Format="D" />
+                <!-- Descripcion -->
+                <StackLayout Grid.Row="0" Grid.Column="1" Margin="-20,0,0,50">
+                    <Label Text="Descripcion" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,0,0,0"/>
+                    <Editor Placeholder="Descripción del producto" AutoSize="TextChanges" PlaceholderColor="#3b4151" Margin="0,0,0,0"/>
+                </StackLayout>
 
-            <Label Text="Precio original" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-13"/>
-            <Entry Placeholder="Precio Original" Keyboard="Numeric" PlaceholderColor="#3b4151"/>
+                <!-- Fila 2 -->
+                <!-- Fecha de vencimiento -->
+                <StackLayout Grid.Row="1" Grid.Column="0" Margin="-20,0,30,0">
+                    <Label Text="Fecha de vencimiento" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,0,0,0"/>
+                    <DatePicker Grid.Column="1" Format="D" Margin="0,0,0,0" FontSize="Small"/>
+                </StackLayout>
 
-            <Label Text="Precio descuento" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-13"/>
-            <Entry Placeholder="Precio con Descuento" Keyboard="Numeric" PlaceholderColor="#3b4151"/>
 
-            <Label Text="Categoria" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-13"/>
-            <Picker Title="Selecciona una categoria">
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>Frutas</x:String>
-                        <x:String>Comida</x:String>
-                        <x:String>Flores</x:String>
-                    </x:Array>
-                </Picker.ItemsSource>
-            </Picker>
+                <!-- Precio original -->
+                <StackLayout Grid.Row="1" Grid.Column="1" Margin="-20,0,0,50">
+                    <Label Text="Precio original" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,0,0,0"/>
+                    <Entry Grid.Column="3" Placeholder="Precio Original" Keyboard="Numeric" PlaceholderColor="#3b4151" Margin="0,0,0,0"/>
+                </StackLayout>
+
+
+                <!-- Fila 3 -->
+                <!-- Precio descuento -->
+                <StackLayout Grid.Row="2" Grid.Column="0" Margin="-20,0,30,0">
+                    <Label Text="Precio descuento" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" />
+                    <Entry Grid.Column="1" Placeholder="Precio con Descuento" Keyboard="Numeric" PlaceholderColor="#3b4151" />
+                </StackLayout>
+
+
+                <!-- Categoria -->
+                <StackLayout Grid.Row="2" Grid.Column="1" Margin="-20,0,0,0">
+                    <Label Text="Categoria" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" />
+                    <Picker Grid.Column="3" Title="Selecciona una categoria">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Frutas</x:String>
+                                <x:String>Comida</x:String>
+                                <x:String>Flores</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </StackLayout>
+
+
+
+            </Grid>
 
 
             <!-- Imagenes -->
-            <Label Text="Imagenes" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-23"/>
+            <Label Text="Imagenes" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,5,0,-23"/>
 
             <FlexLayout x:Name="imagesContainer" 
             Wrap="Wrap" 
