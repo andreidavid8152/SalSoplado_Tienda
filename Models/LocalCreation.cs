@@ -14,16 +14,16 @@ namespace SalSoplado_Tienda.Models
         [MinLength(5, ErrorMessage = "El campo Nombre debe tener al menos 5 caracteres.")]
         public string Nombre { get; set; }
 
+        public TimeSpan HoraInicio { get; set; }
 
-        [Required(ErrorMessage = "El campo Descripcion es obligatorio.")]
-        [MinLength(10, ErrorMessage = "El campo Descripcion debe tener al menos 10 caracteres.")]
-        public string Descripcion { get; set; }
+        public TimeSpan HoraFin { get; set; }
 
+        public string Telefono { get; set; }
 
         [Required(ErrorMessage = "El campo Direccion es obligatorio.")]
         public string Direccion { get; set; }
 
-        public List<string> ImagenesUrls { get; set; }
+        public string Logo { get; set; }
 
     }
 }

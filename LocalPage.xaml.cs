@@ -39,7 +39,7 @@ public partial class LocalPage : ContentPage
             var direccionLegible = await GeocodificarDireccion(latitud, longitud);
             localUbicacion.Text = direccionLegible; // Asumiendo que quieres reemplazar el texto existente
 
-            localImagen.Source = local.Imagen;
+            LocalLogo.Source = local.Logo;
         }
         catch (Exception ex)
         {

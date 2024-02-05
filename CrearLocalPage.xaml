@@ -11,17 +11,28 @@
             <Label Text="Nombre" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,20,0,-20"/>
             <Entry x:Name="entryNombre" Placeholder="Nombre del local" PlaceholderColor="#3b4151"/>
 
-            <Label Text="Descripcion" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-20"/>
-            <Entry x:Name="entryDescripcion" Placeholder="Descripción" PlaceholderColor="#3b4151"/>
+            <Label Text="Horario" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-20"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TimePicker x:Name="Inicio" Grid.Column="0"/>
+                <TimePicker x:Name="Fin" Grid.Column="1"/>
+            </Grid>
+
+            <!-- Telefono -->
+            <Label Text="Telefono" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-13"/>
+            <Entry x:Name="entryTelefono" Placeholder="Ingrese su telefono" PlaceholderColor="#3b4151" Keyboard="Telephone"/>
 
             <!-- Direccion -->
             <Label Text="Direccion" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-13"/>
-            
+
             <Label x:Name="LocationLabel" Text="Ubicación no establecida"
                    FontAttributes="Bold"
                    VerticalOptions="Center" 
                    HorizontalOptions="Center" />
-            
+
             <Button Text="Seleccionar Ubicación" 
                     Clicked="OnCambiarUbicacionClicked"
                     BackgroundColor="#14282f"
@@ -34,7 +45,7 @@
                     Margin="0,-7,0,25"/>
 
             <!-- Imagenes -->
-            <Label Text="Imagenes" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-23"/>
+            <Label Text="Logo" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-23"/>
 
 
             <FlexLayout x:Name="imagesContainer" 
@@ -45,7 +56,7 @@
             </FlexLayout>
 
             <Button x:Name="uploadImageButton" 
-                    Text="Subir Imagen" 
+                    Text="Subir Logo" 
                     Clicked="OnUploadImageButtonClicked"
                     BackgroundColor="#14282f"
                     TextColor="White"

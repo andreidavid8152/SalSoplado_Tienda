@@ -15,7 +15,7 @@
         <Frame Padding="5" Margin="0,25,0,0" CornerRadius="20" BorderColor="#FFC107" BackgroundColor="#FFF9C4" WidthRequest="150">
             <StackLayout>
                 <!-- Imagen del Producto con un tamaño ajustado y bordes redondeados -->
-                <Image Source="logo.png" Aspect="AspectFit" HeightRequest="100" Margin="10"/>
+                <Image Source="banana.png" Aspect="AspectFit" HeightRequest="100" Margin="10"/>
 
                 <!-- Nombre del Producto con el mismo estilo de la app -->
                 <Label Text="Banana" FontSize="Small" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="#040a01"/>
@@ -63,7 +63,7 @@
 
             </StackLayout>
         </Frame>
-        
+
 
 
     </VerticalStackLayout>

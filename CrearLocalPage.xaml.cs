@@ -13,7 +13,7 @@ public partial class CrearLocalPage : ContentPage
 
     // Lista para almacenar las imágenes seleccionadas
     private List<ImageSource> selectedImages = new List<ImageSource>();
-    private const int MaxImages = 3; // Número máximo de imágenes permitidas
+    private const int MaxImages = 1; // Número máximo de imágenes permitidas
 
     public CrearLocalPage()
     {
@@ -50,7 +50,7 @@ public partial class CrearLocalPage : ContentPage
             return;
         }
 
-        // Verificar si se han seleccionado 3 imágenes
+        // Verificar si se han seleccionado 1 imágen
         if (selectedImages.Count != MaxImages)
         {
             await DisplayAlert("Advertencia", "Debes subir 3 imágenes", "OK");
@@ -64,9 +64,11 @@ public partial class CrearLocalPage : ContentPage
         var localCreationDTO = new LocalCreation
         {
             Nombre = entryNombre.Text,
-            Descripcion = entryDescripcion.Text,
+            HoraInicio = Inicio.Time,
+            HoraFin = Fin.Time,
+            Telefono = entryTelefono.Text,
             Direccion = latitud + ";" + longitud,
-            ImagenesUrls = imagenesSubidas
+            Logo = imagenesSubidas[0]
         };
 
         try

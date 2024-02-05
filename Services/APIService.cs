@@ -144,7 +144,7 @@ namespace SalSoplado_Usuario.Services
             // Añade el token como header de autorización
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            var response = await _httpClient.GetAsync($"{_baseUrl}Locales/ObtenerResumenLocales");
+            var response = await _httpClient.GetAsync($"{_baseUrl}Locales/ObtenerResumenLocalesPropietario");
 
             if (response.IsSuccessStatusCode)
             {

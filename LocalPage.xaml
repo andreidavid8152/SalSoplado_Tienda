@@ -32,7 +32,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Image x:Name="localImagen" Aspect="AspectFill" HeightRequest="100" WidthRequest="100"
+                    <Image x:Name="LocalLogo" Aspect="AspectFill" HeightRequest="100" WidthRequest="100"
                            HorizontalOptions="Center" VerticalOptions="Center"
                            Grid.Row="0" Grid.Column="0" Margin="15,0,25,0">
                         <Image.Clip>
@@ -44,7 +44,7 @@
                                 HorizontalOptions="Start" VerticalOptions="Center">
                         <Label x:Name="localNombre"
                                FontAttributes="Bold"
-                               HorizontalTextAlignment="Center" Margin="0,-7,0,7"/>
+                               HorizontalTextAlignment="Center" Margin="0,7,0,5"/>
                         <Label Text="🕐 14:00 - 23:00"
                                HorizontalTextAlignment="Start" Margin="0,0,0,7"/>
                         <Label Text="📍 "
@@ -65,7 +65,7 @@
         <Frame Padding="5" Margin="5" CornerRadius="20" BorderColor="#FFC107" BackgroundColor="#FFF9C4" WidthRequest="150">
             <StackLayout>
                 <!-- Imagen del Producto con un tamaño ajustado y bordes redondeados -->
-                <Image Source="logo.png" Aspect="AspectFit" HeightRequest="100" Margin="10"/>
+                <Image Source="banana.png" Aspect="AspectFit" HeightRequest="100" Margin="10"/>
 
                 <!-- Nombre del Producto con el mismo estilo de la app -->
                 <Label Text="Banana" FontSize="Small" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="#040a01"/>

@@ -17,6 +17,6 @@ namespace SalSoplado_Tienda.Models
         [Required(ErrorMessage = "La dirección es requerida.")]
         public string Direccion { get; set; }
 
-        public String Imagen { get; set; }
+        public string Logo { get; set; }
     }
 }

@@ -58,6 +58,7 @@
 	<ItemGroup>
 		<None Remove="Resources\Images\add.svg" />
 		<None Remove="Resources\Images\anadirproducto_onboarding.png" />
+		<None Remove="Resources\Images\banana.png" />
 		<None Remove="Resources\Images\category.svg" />
 		<None Remove="Resources\Images\delete.svg" />
 		<None Remove="Resources\Images\edit.svg" />
