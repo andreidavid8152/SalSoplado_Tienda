@@ -60,6 +60,7 @@
 		<None Remove="Resources\Images\anadirproducto_onboarding.png" />
 		<None Remove="Resources\Images\banana.png" />
 		<None Remove="Resources\Images\category.svg" />
+		<None Remove="Resources\Images\clock.svg" />
 		<None Remove="Resources\Images\delete.svg" />
 		<None Remove="Resources\Images\edit.svg" />
 		<None Remove="Resources\Images\home.svg" />
@@ -67,9 +68,11 @@
 		<None Remove="Resources\Images\imagenperfil.jpg" />
 		<None Remove="Resources\Images\local.svg" />
 		<None Remove="Resources\Images\local_onboarding.png" />
+		<None Remove="Resources\Images\location.svg" />
 		<None Remove="Resources\Images\login_onboarding.png" />
 		<None Remove="Resources\Images\logo.png" />
 		<None Remove="Resources\Images\perfil.svg" />
+		<None Remove="Resources\Images\phone.svg" />
 		<None Remove="Resources\Images\products.svg" />
 		<None Remove="Resources\Images\registro_onboarding.png" />
 		<None Remove="Resources\Images\settings.svg" />

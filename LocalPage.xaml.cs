@@ -37,7 +37,12 @@ public partial class LocalPage : ContentPage
             var longitud = double.Parse(partes[1], CultureInfo.InvariantCulture);
 
             var direccionLegible = await GeocodificarDireccion(latitud, longitud);
+
             localUbicacion.Text = direccionLegible; // Asumiendo que quieres reemplazar el texto existente
+
+            localHorario.Text = $"{local.HoraInicio:hh\\:mm} - {local.HoraFin:hh\\:mm}";
+
+            localTelefono.Text = local.Telefono;
 
             LocalLogo.Source = local.Logo;
         }
