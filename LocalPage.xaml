@@ -73,10 +73,15 @@
 
 
         <CollectionView x:Name="productosCollectionView">
+
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="2" />
+            </CollectionView.ItemsLayout>
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     
-                    <Frame Padding="5" Margin="5" CornerRadius="20" BorderColor="#FFC107" BackgroundColor="#FFF9C4" WidthRequest="150">
+                    <Frame Padding="5" Margin="0,0,0,0" CornerRadius="20" BorderColor="#FFC107" BackgroundColor="#FFF9C4" WidthRequest="150">
                         <StackLayout>
                             <!-- Imagen del Producto con un tamaño ajustado y bordes redondeados -->
                             <Image Source="{Binding Imagen}" Aspect="AspectFit" HeightRequest="100" Margin="10"/>
