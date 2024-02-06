@@ -1,8 +1,10 @@
 using Microsoft.Maui.Media;
+using Newtonsoft.Json;
 using SalSoplado_Tienda;
 using SalSoplado_Tienda.Models;
 using SalSoplado_Usuario.Services;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace SalSoplado_Usuario;
 
@@ -50,6 +52,14 @@ public partial class LocalesPage : ContentPage
             Locales.Clear();
             foreach (var local in locales)
             {
+
+                var partes = local.Direccion.Split(';');
+                var latitud = double.Parse(partes[0], CultureInfo.InvariantCulture);
+                var longitud = double.Parse(partes[1], CultureInfo.InvariantCulture);
+
+                var direccionLegible = await GeocodificarDireccion(latitud, longitud);
+                local.Direccion = direccionLegible;
+
                 Locales.Add(local);
             }
             listaLocales.ItemsSource = Locales; // Asigna los locales a la ListView
@@ -71,5 +81,24 @@ public partial class LocalesPage : ContentPage
     private async void OnClickCrearLocal(object sender, EventArgs e)
     {
         await Navigation.PushAsync(new CrearLocalPage());
+    }
+
+    private async Task<string> GeocodificarDireccion(double latitud, double longitud)
+    {
+        string apiKey = "ANpkZKdf3Kz4yWswvrCz"; // Reemplaza con tu API key real de MapTiler
+        string url = $"https://api.maptiler.com/geocoding/{longitud},{latitud}.json?key={apiKey}";
+        using var client = new HttpClient();
+        var respuesta = await client.GetStringAsync(url);
+        dynamic data = JsonConvert.DeserializeObject(respuesta);
+
+        if (data.features != null && data.features.Count > 0)
+        {
+            // Aquí puedes ajustar para extraer la parte específica de la dirección que prefieras
+            return data.features[2].place_name;
+        }
+        else
+        {
+            return "Dirección no encontrada";
+        }
     }
 }
