@@ -175,5 +175,27 @@ namespace SalSoplado_Usuario.Services
             throw new Exception(errorMessage);
         }
 
+        public async Task<bool> CrearProducto(ProductoCreationDTO producto, string token)
+        {
+            // Añade el token de autorización en la cabecera de la petición
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Realiza la petición POST al endpoint de creación de productos
+            var response = await _httpClient.PostAsJsonAsync("Productos/CrearProducto", producto);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Producto creado exitosamente
+                return true;
+            }
+            else
+            {
+                // Algo salió mal, lee el mensaje de error de la respuesta
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                throw new Exception(errorMessage);
+            }
+        }
+
+
     }
 }

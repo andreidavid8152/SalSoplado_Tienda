@@ -33,5 +33,8 @@ namespace SalSoplado_Tienda.Models
 
         [Required]
         public string Categoria { get; set; }
+
+        [Required]
+        public List<string> ImagenesUrls { get; set; }
     }
 }

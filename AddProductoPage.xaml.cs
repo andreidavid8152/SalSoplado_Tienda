@@ -29,8 +29,9 @@ public partial class AddProductoPage : ContentPage
         // como cadenas vacías para las propiedades de tipo string.
         ProductoCreationDTO productoInput = new ProductoCreationDTO
         {
+            LocalID = SharedData.SelectedLocalId,
             Nombre = nombreEntry.Text ?? string.Empty, // Evita nulos en las cadenas
-            Categoria = categoriaPicker.SelectedItem?.ToString() ?? string.Empty // Maneja el caso nulo
+            Categoria = categoriaPicker.SelectedItem?.ToString() ?? string.Empty, // Maneja el caso nulo
         };
 
         // Usa TryParse para conversiones seguras de los campos numéricos
@@ -72,16 +73,36 @@ public partial class AddProductoPage : ContentPage
             return;
         }
 
-
         // Asumimos que fechaVencimientoPicker siempre tiene una fecha válida,
         // ya que es un control DatePicker.
         productoInput.FechaVencimiento = fechaVencimientoPicker.Date;
 
+        // Subir imágenes y esperar a que todas se hayan subido
+        var imagenesSubidas = await subirImagenesSeleccionadas();
+        productoInput.ImagenesUrls = imagenesSubidas;
+
         // Aquí podrías llamar a IsValid() para validar productoInput si mantienes la lógica de validación
         if (IsValid(productoInput, out List<string> errorMessages))
         {
-            // Lógica para enviar productoInput a tu API
-            // Por ejemplo: await _api.CrearProducto(productoInput);
+
+            try
+            {
+                // Lógica para enviar productoInput a tu API
+                var success = await _api.CrearProducto(productoInput, token);
+
+                if (success)
+                {
+                    // Manejar el éxito
+                    await DisplayAlert("Éxito", "Producto creado con éxito", "OK");
+                    await Navigation.PopAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejar los errores
+                await DisplayAlert("Error", ex.Message, "OK");
+            }
+
         }
         else
         {
