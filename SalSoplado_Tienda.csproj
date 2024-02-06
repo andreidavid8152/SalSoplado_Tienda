@@ -58,7 +58,6 @@
 	<ItemGroup>
 		<None Remove="Resources\Images\add.svg" />
 		<None Remove="Resources\Images\anadirproducto_onboarding.png" />
-		<None Remove="Resources\Images\banana.png" />
 		<None Remove="Resources\Images\category.svg" />
 		<None Remove="Resources\Images\clock.svg" />
 		<None Remove="Resources\Images\delete.svg" />
@@ -97,6 +96,9 @@
 		</MauiXaml>
 		<MauiXaml Update="CrearLocalPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="EditarProductoPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="LocalesPage.xaml">
 			<Generator>MSBuild:Compile</Generator>

@@ -24,10 +24,16 @@ public partial class ProductosPage : ContentPage
         CargarProductos();
     }
 
-    private async void OnEditTapped(object sender, EventArgs e)
+    private async void OnEditTapped(object sender, TappedEventArgs e)
     {
-        await DisplayAlert("Éxito", "Editar", "OK");
+        var producto = e.Parameter as ProductoLocalDetalle; // Asume que tu modelo se llama Producto
+        if (producto != null)
+        {
+            // Aquí puedes pasar el ID o el objeto completo a la página de edición, dependiendo de tu implementación
+            await Navigation.PushAsync(new EditarProductoPage(producto.ID));
+        }
     }
+
 
     private async void OnDeleteTapped(object sender, EventArgs e)
     {

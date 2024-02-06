@@ -54,7 +54,7 @@
                                         <Image Source="edit.svg" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"/>
                                     </Grid>
                                     <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="OnEditTapped"/>
+                                        <TapGestureRecognizer Tapped="OnEditTapped" CommandParameter="{Binding .}"/>
                                     </Frame.GestureRecognizers>
                                 </Frame>
 

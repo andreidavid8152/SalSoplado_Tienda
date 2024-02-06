@@ -35,7 +35,7 @@ public partial class AddProductoPage : ContentPage
         };
 
         // Usa TryParse para conversiones seguras de los campos numéricos
-        if (int.TryParse(cantidadEditor.Text, out int cantidad))
+        if (int.TryParse(cantidadEntry.Text, out int cantidad))
         {
             productoInput.Cantidad = cantidad;
         }
