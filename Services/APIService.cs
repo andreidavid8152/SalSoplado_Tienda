@@ -196,6 +196,29 @@ namespace SalSoplado_Usuario.Services
             }
         }
 
+        public async Task<List<ProductoLocalDetalle>> ObtenerProductosPorLocal(int localId, string token)
+        {
+            // Añade el token como header de autorización
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Realiza la solicitud GET al endpoint ObtenerProductosPorLocal
+            var response = await _httpClient.GetAsync($"Productos/ObtenerProductosPorLocal/{localId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Si la petición es exitosa, deserializa el contenido de la respuesta a una lista de ProductoLocalDetalle
+                var content = await response.Content.ReadAsStringAsync();
+                var productos = JsonConvert.DeserializeObject<List<ProductoLocalDetalle>>(content);
+                return productos;
+            }
+            else
+            {
+                // Si algo sale mal, lee el mensaje de error de la respuesta y lanza una excepción
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                throw new Exception(errorMessage);
+            }
+        }
+
 
     }
 }

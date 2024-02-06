@@ -23,6 +23,7 @@ public partial class LocalPage : ContentPage
         base.OnAppearing();
         LocalId = SharedData.SelectedLocalId;
         CargarLocal();
+        CargarProductos();
     }
 
     private async void CargarLocal()
@@ -51,6 +52,21 @@ public partial class LocalPage : ContentPage
             Console.WriteLine(ex.Message);
         }
     }
+
+
+    private async void CargarProductos()
+    {
+        try
+        {
+            var productos = await _api.ObtenerProductosPorLocal(LocalId, token); // Asume que este método existe en APIService y devuelve una lista de ProductoLocalDetalle
+            productosCollectionView.ItemsSource = productos;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
 
     private async Task<string> GeocodificarDireccion(double latitud, double longitud)
     {

@@ -13,5 +13,6 @@ namespace SalSoplado_Tienda.Models
         public decimal PrecioOriginal { get; set; }
         public decimal PrecioDescuento { get; set; }
         public string Categoria { get; set; }
+        public string Imagen { get; set; }
     }
 }

@@ -65,6 +65,13 @@ public partial class AddProductoPage : ContentPage
             return; // Sale del método si la conversión falla
         }
 
+        // Validación de precios
+        if (productoInput.PrecioDescuento >= productoInput.PrecioOriginal)
+        {
+            await DisplayAlert("Error", "El precio con descuento debe ser menor al precio original.", "OK");
+            return; // Sale del método si la conversión falla
+        }
+
 
         // Verificar si se han seleccionado 3 imagenes
         if (selectedImages.Count != MaxImages)
@@ -94,7 +101,6 @@ public partial class AddProductoPage : ContentPage
                 {
                     // Manejar el éxito
                     await DisplayAlert("Éxito", "Producto creado con éxito", "OK");
-                    await Navigation.PopAsync();
                 }
             }
             catch (Exception ex)
