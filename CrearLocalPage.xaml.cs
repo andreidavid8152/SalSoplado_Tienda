@@ -53,7 +53,7 @@ public partial class CrearLocalPage : ContentPage
         // Verificar si se han seleccionado 1 imágen
         if (selectedImages.Count != MaxImages)
         {
-            await DisplayAlert("Advertencia", "Debes subir 3 imágenes", "OK");
+            await DisplayAlert("Advertencia", "Debes subir el logo", "OK");
             return;
         }
 

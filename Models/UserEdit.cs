@@ -27,6 +27,6 @@ namespace SalSoplado_Usuario.Models
         public string Password { get; set; }
 
 
-        public string Rol { get; } = "U";
+        public string Rol { get; } = "P";
     }
 }

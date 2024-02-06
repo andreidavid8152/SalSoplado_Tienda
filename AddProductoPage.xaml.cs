@@ -1,6 +1,8 @@
 using Firebase.Storage;
+using SalSoplado_Tienda.Models;
 using SalSoplado_Usuario;
 using SalSoplado_Usuario.Services;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
 namespace SalSoplado_Tienda;
@@ -19,6 +21,86 @@ public partial class AddProductoPage : ContentPage
     {
         InitializeComponent();
         _api = App.ServiceProvider.GetService<APIService>();
+    }
+
+    private async void OnClickCrearProducto(object sender, EventArgs e)
+    {
+        // Inicializa el modelo con valores que sabes que no son nulos,
+        // como cadenas vacías para las propiedades de tipo string.
+        ProductoCreationDTO productoInput = new ProductoCreationDTO
+        {
+            Nombre = nombreEntry.Text ?? string.Empty, // Evita nulos en las cadenas
+            Categoria = categoriaPicker.SelectedItem?.ToString() ?? string.Empty // Maneja el caso nulo
+        };
+
+        // Usa TryParse para conversiones seguras de los campos numéricos
+        if (int.TryParse(cantidadEditor.Text, out int cantidad))
+        {
+            productoInput.Cantidad = cantidad;
+        }
+        else
+        {
+            await DisplayAlert("Error", "La cantidad ingresada no es válida.", "OK");
+            return; // Sale del método si la conversión falla
+        }
+
+        if (decimal.TryParse(precioOriginalEntry.Text, out decimal precioOriginal))
+        {
+            productoInput.PrecioOriginal = precioOriginal;
+        }
+        else
+        {
+            await DisplayAlert("Error", "El precio original ingresado no es válido.", "OK");
+            return; // Sale del método si la conversión falla
+        }
+
+        if (decimal.TryParse(precioDescuentoEntry.Text, out decimal precioDescuento))
+        {
+            productoInput.PrecioDescuento = precioDescuento;
+        }
+        else
+        {
+            await DisplayAlert("Error", "El precio de descuento ingresado no es válido.", "OK");
+            return; // Sale del método si la conversión falla
+        }
+
+
+        // Verificar si se han seleccionado 3 imagenes
+        if (selectedImages.Count != MaxImages)
+        {
+            await DisplayAlert("Advertencia", "Debes subir 3 imágenes", "OK");
+            return;
+        }
+
+
+        // Asumimos que fechaVencimientoPicker siempre tiene una fecha válida,
+        // ya que es un control DatePicker.
+        productoInput.FechaVencimiento = fechaVencimientoPicker.Date;
+
+        // Aquí podrías llamar a IsValid() para validar productoInput si mantienes la lógica de validación
+        if (IsValid(productoInput, out List<string> errorMessages))
+        {
+            // Lógica para enviar productoInput a tu API
+            // Por ejemplo: await _api.CrearProducto(productoInput);
+        }
+        else
+        {
+            foreach (var errorMessage in errorMessages)
+            {
+                await DisplayAlert("Error", errorMessage, "OK");
+            }
+        }
+    }
+
+
+    private bool IsValid(ProductoCreationDTO productoInput, out List<string> errorMessages)
+    {
+        var context = new ValidationContext(productoInput, serviceProvider: null, items: null);
+        var validationResults = new List<ValidationResult>();
+        bool isValid = Validator.TryValidateObject(productoInput, context, validationResults, true);
+
+        errorMessages = validationResults.Select(r => r.ErrorMessage).ToList();
+        return isValid;
     }
 
     private async Task<List<String>> subirImagenesSeleccionadas()
