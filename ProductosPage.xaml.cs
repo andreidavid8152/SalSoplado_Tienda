@@ -35,9 +35,35 @@ public partial class ProductosPage : ContentPage
     }
 
 
-    private async void OnDeleteTapped(object sender, EventArgs e)
+    private async void OnDeleteTapped(object sender, TappedEventArgs e)
     {
-        await DisplayAlert("Éxito", "Eliminar", "OK");
+        var producto = e.Parameter as ProductoLocalDetalle;
+
+        if (producto != null)
+        {
+            // Mostrar un diálogo de confirmación antes de eliminar
+            bool confirmDelete = await DisplayAlert("Confirmación", $"¿Estás seguro de que deseas eliminar el producto '{producto.Nombre}'?", "Eliminar", "Cancelar");
+            if (confirmDelete)
+            {
+                try
+                {
+                    var success = await _api.EliminarProducto(producto.ID, token);
+                    if (success)
+                    {
+                        // Mostrar un mensaje de éxito
+                        await DisplayAlert("Éxito", "Producto eliminado correctamente.", "OK");
+
+                        // Refrescar la lista de productos
+                        CargarProductos();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // En caso de error, mostrar un mensaje
+                    await DisplayAlert("Error", $"Ha ocurrido un error al eliminar el producto: {ex.Message}", "OK");
+                }
+            }
+        }
     }
 
     private async void CargarProductos()

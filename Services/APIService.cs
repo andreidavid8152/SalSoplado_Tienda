@@ -266,6 +266,27 @@ namespace SalSoplado_Usuario.Services
             }
         }
 
+        public async Task<bool> EliminarProducto(int productoId, string token)
+        {
+            // Añade el token de autorización en la cabecera de la petición
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Realiza la petición DELETE al endpoint EliminarProducto
+            var response = await _httpClient.DeleteAsync($"Productos/EliminarProducto/{productoId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Producto eliminado exitosamente
+                return true;
+            }
+            else
+            {
+                // Algo salió mal, lee el mensaje de error de la respuesta
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                throw new Exception(errorMessage);
+            }
+        }
+
 
     }
 }

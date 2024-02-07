@@ -66,7 +66,7 @@
                                             <Image Source="delete.svg" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"/>
                                         </Grid>
                                         <Frame.GestureRecognizers>
-                                            <TapGestureRecognizer Tapped="OnDeleteTapped"/>
+                                            <TapGestureRecognizer Tapped="OnDeleteTapped" CommandParameter="{Binding .}"/>
                                         </Frame.GestureRecognizers>
                                     </Frame>
                                 </Grid>
