@@ -11,7 +11,7 @@
 
     <TabBar>
         <Tab Title="Home" Icon="Images/home.svg">
-            <ShellContent ContentTemplate="{DataTemplate local:LocalPage}" />
+            <ShellContent Route="LocalPage" ContentTemplate="{DataTemplate local:LocalPage}" />
         </Tab>
         <Tab Title="Productos" Icon="Images/products.svg">
             <ShellContent ContentTemplate="{DataTemplate local:ProductosPage}" />

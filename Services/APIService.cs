@@ -219,6 +219,29 @@ namespace SalSoplado_Usuario.Services
             }
         }
 
+        public async Task<ProductoDetalleEdit> ObtenerDetalleProducto(int productoId, string token)
+        {
+            // Añade el token como header de autorización
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Realiza la solicitud GET al endpoint ObtenerProductoPorId
+            var response = await _httpClient.GetAsync($"Productos/ObtenerProductoPorId/{productoId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Si la petición es exitosa, deserializa el contenido de la respuesta a ProductoDetalleDTO
+                var content = await response.Content.ReadAsStringAsync();
+                var productoDetalle = JsonConvert.DeserializeObject<ProductoDetalleEdit>(content);
+                return productoDetalle;
+            }
+            else
+            {
+                // Si algo sale mal, lee el mensaje de error de la respuesta y lanza una excepción
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                throw new Exception(errorMessage);
+            }
+        }
+
 
     }
 }

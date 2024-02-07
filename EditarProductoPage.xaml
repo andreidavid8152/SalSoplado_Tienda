@@ -58,7 +58,7 @@
             <!-- Precio oferta -->
             <StackLayout Grid.Row="2" Grid.Column="0" Margin="-20,0,30,0">
                 <Label Text="Precio oferta" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" />
-                <Entry x:Name="precioDescuentoEntry" Grid.Column="1" Keyboard="Numeric"/>
+                <Entry x:Name="precioOfertaEntry" Grid.Column="1" Keyboard="Numeric"/>
             </StackLayout>
 
 
@@ -79,6 +79,28 @@
 
 
         </Grid>
+
+
+        <!-- Imagenes -->
+        <Label Text="Imagenes producto" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="20,5,0,0"/>
+
+        <FlexLayout x:Name="imagesContainer" 
+            Wrap="Wrap" 
+            JustifyContent="Center" 
+            AlignItems="Center" 
+            AlignContent="Center">
+        </FlexLayout>
+
+        <Button x:Name="uploadImageButton" 
+                    Text="Subir Imagen" 
+                    BackgroundColor="#14282f"
+                    TextColor="White"
+                    BorderWidth="0"
+                    CornerRadius="5"
+                    Padding="10,5"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Margin="0,20,0,25"/>
 
 
         <Button Text="Actualizar Producto" Clicked="OnClickActualizarProducto" Margin="0,15,0,13" WidthRequest="150"/>

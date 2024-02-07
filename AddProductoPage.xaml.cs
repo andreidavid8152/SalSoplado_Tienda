@@ -23,6 +23,29 @@ public partial class AddProductoPage : ContentPage
         _api = App.ServiceProvider.GetService<APIService>();
     }
 
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+
+        // Limpia los Entry
+        nombreEntry.Text = string.Empty;
+        cantidadEntry.Text = string.Empty;
+        precioOriginalEntry.Text = string.Empty;
+        precioOfertaEntry.Text = string.Empty;
+
+        // Restablece el Picker a su valor por defecto (por ejemplo, el primer ítem o ninguno)
+        categoriaPicker.SelectedIndex = -1; // Esto hace que no se seleccione ningún ítem
+
+        // Restablece el DatePicker a la fecha actual
+        fechaVencimientoPicker.Date = DateTime.Now;
+
+        // Si tienes más controles que necesitan ser limpiados, añádelos aquí
+
+        // También limpiamos las imágenes seleccionadas y la UI relacionada
+        selectedImages.Clear(); // Limpia la lista de imágenes seleccionadas
+        imagesContainer.Children.Clear(); // Remueve todas las imágenes del contenedor en la UI
+    }
+
     private async void OnClickCrearProducto(object sender, EventArgs e)
     {
         // Inicializa el modelo con valores que sabes que no son nulos,
@@ -55,9 +78,9 @@ public partial class AddProductoPage : ContentPage
             return; // Sale del método si la conversión falla
         }
 
-        if (decimal.TryParse(precioDescuentoEntry.Text, out decimal precioDescuento))
+        if (decimal.TryParse(precioOfertaEntry.Text, out decimal precioDescuento))
         {
-            productoInput.PrecioDescuento = precioDescuento;
+            productoInput.PrecioOferta = precioDescuento;
         }
         else
         {
@@ -66,7 +89,7 @@ public partial class AddProductoPage : ContentPage
         }
 
         // Validación de precios
-        if (productoInput.PrecioDescuento >= productoInput.PrecioOriginal)
+        if (productoInput.PrecioOferta >= productoInput.PrecioOriginal)
         {
             await DisplayAlert("Error", "El precio con descuento debe ser menor al precio original.", "OK");
             return; // Sale del método si la conversión falla
@@ -101,6 +124,9 @@ public partial class AddProductoPage : ContentPage
                 {
                     // Manejar el éxito
                     await DisplayAlert("Éxito", "Producto creado con éxito", "OK");
+
+                    // Navegar a LocalPage
+                    await Shell.Current.GoToAsync("//LocalPage");
                 }
             }
             catch (Exception ex)

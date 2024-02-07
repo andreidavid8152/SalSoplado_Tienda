@@ -95,7 +95,7 @@
                                 <Label Text="{Binding PrecioOriginal, StringFormat='{0:C}'}" FontSize="Small" TextDecorations="Strikethrough" TextColor="#333632"/>
 
                                 <!-- Precio Nuevo destacado -->
-                                <Label Text="{Binding PrecioDescuento, StringFormat='{0:C}'}" FontSize="Small" FontAttributes="Bold" TextColor="Black"/>
+                                <Label Text="{Binding PrecioOferta, StringFormat='{0:C}'}" FontSize="Small" FontAttributes="Bold" TextColor="Black"/>
                             </StackLayout>
 
                             <Frame CornerRadius="30" Padding="0" HasShadow="True" Margin="2" BorderColor="#77BF1A" WidthRequest="95" BackgroundColor="#BFF678" HorizontalOptions="Center" VerticalOptions="Center">

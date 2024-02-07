@@ -57,7 +57,7 @@
                 <!-- Precio oferta -->
                 <StackLayout Grid.Row="2" Grid.Column="0" Margin="-20,0,30,0">
                     <Label Text="Precio oferta" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" />
-                    <Entry x:Name="precioDescuentoEntry" Grid.Column="1" Placeholder="3.50$" Keyboard="Numeric" PlaceholderColor="#3b4151" />
+                    <Entry x:Name="precioOfertaEntry" Grid.Column="1" Placeholder="3.50$" Keyboard="Numeric" PlaceholderColor="#3b4151" />
                 </StackLayout>
 
 
