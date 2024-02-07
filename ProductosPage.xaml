@@ -3,9 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SalSoplado_Tienda.ProductosPage"
              BackgroundColor="#d9e3f1">
-    <VerticalStackLayout>
 
-        <Label Text="Tus productos"
+    <ScrollView>
+        <VerticalStackLayout>
+
+            <Label Text="Tus productos"
                FontSize="Large"
                FontAttributes="Bold"
                TextColor="Black"
@@ -13,69 +15,71 @@
                VerticalOptions="Start" Margin="17,25,0,0"/>
 
 
-        <CollectionView x:Name="productosCollectionView">
+            <CollectionView x:Name="productosCollectionView">
 
-            <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical" Span="2" />
-            </CollectionView.ItemsLayout>
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="2" />
+                </CollectionView.ItemsLayout>
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame Padding="5" Margin="0,25,0,0" CornerRadius="20" BorderColor="#FFC107" BackgroundColor="#FFF9C4" WidthRequest="150">
-                        <StackLayout>
-                            <!-- Imagen del Producto con un tamaño ajustado y bordes redondeados -->
-                            <Image Source="{Binding Imagen}" Aspect="AspectFit" HeightRequest="100" Margin="10"/>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="5" Margin="0,25,0,0" CornerRadius="20" BorderColor="#FFC107" BackgroundColor="#FFF9C4" WidthRequest="150">
+                            <StackLayout>
+                                <!-- Imagen del Producto con un tamaño ajustado y bordes redondeados -->
+                                <Image Source="{Binding Imagen}" Aspect="AspectFit" HeightRequest="100" Margin="10"/>
 
-                            <!-- Nombre del Producto con el mismo estilo de la app -->
-                            <Label Text="{Binding Nombre}" FontSize="Small" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="#040a01"/>
+                                <!-- Nombre del Producto con el mismo estilo de la app -->
+                                <Label Text="{Binding Nombre}" FontSize="Small" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="#040a01"/>
 
-                            <!-- Precios con colores y fuente alineados al diseño de la app -->
-                            <StackLayout Orientation="Horizontal" Spacing="3" HorizontalOptions="Center" Margin="0,4,0,4">
-                                <!-- Precio Anterior con menor énfasis -->
-                                <Label Text="{Binding PrecioOriginal, StringFormat='{0:C}'}" FontSize="Small" TextDecorations="Strikethrough" TextColor="#333632"/>
+                                <!-- Precios con colores y fuente alineados al diseño de la app -->
+                                <StackLayout Orientation="Horizontal" Spacing="3" HorizontalOptions="Center" Margin="0,4,0,4">
+                                    <!-- Precio Anterior con menor énfasis -->
+                                    <Label Text="{Binding PrecioOriginal, StringFormat='{0:C}'}" FontSize="Small" TextDecorations="Strikethrough" TextColor="#333632"/>
 
-                                <!-- Precio Nuevo destacado -->
-                                <Label Text="{Binding PrecioOferta, StringFormat='{0:C}'}" FontSize="Small" FontAttributes="Bold" TextColor="Black"/>
+                                    <!-- Precio Nuevo destacado -->
+                                    <Label Text="{Binding PrecioOferta, StringFormat='{0:C}'}" FontSize="Small" FontAttributes="Bold" TextColor="Black"/>
+                                </StackLayout>
+
+
+                                <!-- Aquí comienza el Grid para los dos frames -->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <!-- Primera columna -->
+                                        <ColumnDefinition Width="*"/>
+                                        <!-- Segunda columna -->
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Primer Frame en la primera columna -->
+                                    <Frame CornerRadius="30" Padding="0" HasShadow="True" Margin="0,5,-10,3" BorderColor="#77BF1A" WidthRequest="50" BackgroundColor="#BFF678" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0">
+                                        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="4">
+                                            <Image Source="edit.svg" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"/>
+                                        </Grid>
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnEditTapped" CommandParameter="{Binding .}"/>
+                                        </Frame.GestureRecognizers>
+                                    </Frame>
+
+                                    <!-- Segundo Frame en la segunda columna -->
+                                    <Frame CornerRadius="30" Padding="0" HasShadow="True" Margin="0,5,10,3" BorderColor="#77BF1A" WidthRequest="50" BackgroundColor="#BFF678" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1">
+                                        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="4">
+                                            <Image Source="delete.svg" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"/>
+                                        </Grid>
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnDeleteTapped"/>
+                                        </Frame.GestureRecognizers>
+                                    </Frame>
+                                </Grid>
+
+
                             </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
 
-                            <!-- Aquí comienza el Grid para los dos frames -->
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <!-- Primera columna -->
-                                    <ColumnDefinition Width="*"/>
-                                    <!-- Segunda columna -->
-                                </Grid.ColumnDefinitions>
+        </VerticalStackLayout>
+    </ScrollView>
 
-                                <!-- Primer Frame en la primera columna -->
-                                <Frame CornerRadius="30" Padding="0" HasShadow="True" Margin="0,5,-10,3" BorderColor="#77BF1A" WidthRequest="50" BackgroundColor="#BFF678" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0">
-                                    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="4">
-                                        <Image Source="edit.svg" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"/>
-                                    </Grid>
-                                    <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="OnEditTapped" CommandParameter="{Binding .}"/>
-                                    </Frame.GestureRecognizers>
-                                </Frame>
-
-                                <!-- Segundo Frame en la segunda columna -->
-                                <Frame CornerRadius="30" Padding="0" HasShadow="True" Margin="0,5,10,3" BorderColor="#77BF1A" WidthRequest="50" BackgroundColor="#BFF678" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="1">
-                                    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="4">
-                                        <Image Source="delete.svg" Grid.Column="0" HorizontalOptions="Center" VerticalOptions="CenterAndExpand"/>
-                                    </Grid>
-                                    <Frame.GestureRecognizers>
-                                        <TapGestureRecognizer Tapped="OnDeleteTapped"/>
-                                    </Frame.GestureRecognizers>
-                                </Frame>
-                            </Grid>
-
-
-                        </StackLayout>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-
-
-    </VerticalStackLayout>
 </ContentPage>

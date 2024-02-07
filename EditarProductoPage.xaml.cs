@@ -1,6 +1,8 @@
+using Firebase.Storage;
 using SalSoplado_Tienda.Models;
 using SalSoplado_Usuario;
 using SalSoplado_Usuario.Services;
+using System.Diagnostics;
 
 namespace SalSoplado_Tienda;
 
@@ -10,6 +12,17 @@ public partial class EditarProductoPage : ContentPage
     private string token = Preferences.Get("UserToken", string.Empty);
     private int LocalId { get; set; }
     private int ProductoId { get; set; }
+
+    // Lista para almacenar las imágenes seleccionadas
+    private List<ImageSource> selectedImages = new List<ImageSource>();
+
+    // Lista para almacenar las URLs de imágenes existentes
+    private List<string> existingImageUrls = new List<string>();
+
+    List<ImageSource> temporaryNewImages = new List<ImageSource>();
+    HashSet<int> imagesToReplaceIndexes = new HashSet<int>();
+
+    private const int MaxImages = 3; // Número máximo de imágenes permitidas
 
     public EditarProductoPage(int idProducto)
     {
@@ -39,6 +52,29 @@ public partial class EditarProductoPage : ContentPage
 
             int categoriaIndex = categoriaPicker.ItemsSource.IndexOf(producto.Categoria);
             categoriaPicker.SelectedIndex = categoriaIndex >= 0 ? categoriaIndex : 0;
+
+            // Cargar y mostrar imágenes existentes
+            foreach (var imageUrl in producto.ImagenesUrls)
+            {
+
+                existingImageUrls.Add(imageUrl);
+
+                var image = new Image
+                {
+                    Source = imageUrl,
+                    Aspect = Aspect.AspectFill,
+                    HeightRequest = 100,
+                    WidthRequest = 100,
+                    Margin = 5
+                };
+
+                // Añadir un gesto de toque para cada imagen para permitir la edición
+                var tapGestureRecognizer = new TapGestureRecognizer();
+                tapGestureRecognizer.Tapped += OnImageTapped;
+                image.GestureRecognizers.Add(tapGestureRecognizer);
+
+                imagesContainer.Children.Add(image);
+            }
         }
         catch (Exception ex)
         {
@@ -50,7 +86,190 @@ public partial class EditarProductoPage : ContentPage
     private async void OnClickActualizarProducto(object sender, EventArgs e)
     {
 
+        // Subir imágenes nuevas y obtener sus URLs
+        var nuevasUrls = await subirImagenesSeleccionadas();
 
+        // Preparar la lista final de URLs para actualizar en la base de datos
+        List<string> urlsFinales = new List<string>();
+
+        // Añadir URLs existentes que no fueron reemplazadas
+        for (int i = 0; i < existingImageUrls.Count; i++)
+        {
+            if (!imagesToReplaceIndexes.Contains(i))
+            {
+                urlsFinales.Add(existingImageUrls[i]);
+            }
+        }
+
+        // Añadir nuevas URLs (incluye reemplazos e imágenes completamente nuevas)
+        urlsFinales.AddRange(nuevasUrls);
 
     }
+
+    private async Task<List<String>> subirImagenesSeleccionadas()
+    {
+        List<String> imagenes = new List<String>();
+
+        // Subir solo las imágenes nuevas o las que reemplazan a las existentes
+        foreach (var imageSource in temporaryNewImages)
+        {
+            var imageUrl = await SubirImagenAFirebase(imageSource);
+            if (!string.IsNullOrEmpty(imageUrl))
+            {
+                imagenes.Add(imageUrl);
+            }
+        }
+
+        return imagenes;
+    }
+
+
+    private async Task<string> SubirImagenAFirebase(ImageSource imageSource)
+    {
+        var stream = await ConvertirImageSourceAStream(imageSource);
+        if (stream == null)
+        {
+            return null;
+        }
+
+        var fileName = Guid.NewGuid().ToString() + ".jpg";
+
+        string storageImage;
+        try
+        {
+            storageImage = await new FirebaseStorage("salsoplado.appspot.com")
+                                     .Child("imagenesProductosEditadas")
+                                     .Child(fileName)
+                                     .PutAsync(stream);
+        }
+        finally
+        {
+            stream.Dispose();
+        }
+
+        return storageImage;
+    }
+
+
+    private async Task<Stream> ConvertirImageSourceAStream(ImageSource imageSource)
+    {
+        if (imageSource == null)
+        {
+            return null;
+        }
+
+        if (imageSource is FileImageSource fileImageSource)
+        {
+            string filePath = fileImageSource.File;
+            if (File.Exists(filePath))
+            {
+                return new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            }
+        }
+        else if (imageSource is UriImageSource uriImageSource)
+        {
+            var uri = uriImageSource.Uri;
+            if (uri != null && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    var response = await client.GetAsync(uri);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return await response.Content.ReadAsStreamAsync();
+                    }
+                }
+            }
+        }
+        else if (imageSource is StreamImageSource streamImageSource)
+        {
+            var cancellationToken = System.Threading.CancellationToken.None;
+            var streamFunc = streamImageSource.Stream;
+            var stream = await streamFunc(cancellationToken);
+            if (stream != null && stream.CanRead)
+            {
+                return stream;
+            }
+        }
+
+        return null;
+    }
+
+    private async void OnUploadImageButtonClicked(object sender, EventArgs e)
+    {
+        // Verifica si se ha alcanzado el límite máximo de imágenes
+        if (imagesContainer.Children.Count >= MaxImages)
+        {
+            await DisplayAlert("Advertencia", $"Ya has seleccionado el máximo de {MaxImages} imágenes permitidas", "OK");
+            return;
+        }
+
+        var result = await FilePicker.PickAsync(new PickOptions
+        {
+            PickerTitle = "Por favor selecciona una imagen",
+            FileTypes = FilePickerFileType.Images,
+        });
+
+        if (result != null)
+        {
+            var imageSource = ImageSource.FromStream(() => result.OpenReadAsync().Result);
+            AgregarImagen(imageSource, false); // Falso indica que es una nueva imagen
+        }
+    }
+
+    private void AgregarImagen(ImageSource source, bool isExisting)
+    {
+        var image = new Image
+        {
+            Source = source,
+            Aspect = Aspect.AspectFill,
+            HeightRequest = 100,
+            WidthRequest = 100,
+            Margin = 5,
+        };
+
+        var tapGestureRecognizer = new TapGestureRecognizer();
+        tapGestureRecognizer.Tapped += OnImageTapped;
+        image.GestureRecognizers.Add(tapGestureRecognizer);
+
+        imagesContainer.Children.Add(image);
+        if (!isExisting)
+        {
+            selectedImages.Add(source); // Solo añade a selectedImages si es una nueva imagen
+        }
+    }
+
+
+    private async void OnImageTapped(object sender, EventArgs e)
+    {
+        var imageTapped = sender as Image;
+        int imageIndex = imagesContainer.Children.IndexOf(imageTapped);
+        bool isExistingImage = imageIndex < existingImageUrls.Count;
+
+        bool answer = await DisplayAlert("Cambiar imagen", "¿Quieres cambiar esta imagen?", "Sí", "No");
+        if (!answer) return;
+
+        var result = await FilePicker.PickAsync(new PickOptions
+        {
+            PickerTitle = "Por favor selecciona una imagen",
+            FileTypes = FilePickerFileType.Images,
+        });
+
+        if (result != null)
+        {
+            var newImageSource = ImageSource.FromStream(() => result.OpenReadAsync().Result);
+            if (isExistingImage)
+            {
+                // Marca la imagen existente para reemplazo
+                imagesToReplaceIndexes.Add(imageIndex);
+            }
+
+            // Almacena la nueva imagen temporalmente
+            temporaryNewImages.Add(newImageSource);
+
+            // Actualiza la imagen en la UI
+            imageTapped.Source = newImageSource;
+        }
+    }
+
 }
