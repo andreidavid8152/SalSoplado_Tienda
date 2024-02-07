@@ -38,6 +38,18 @@ public partial class EditarProductoPage : ContentPage
         CargarProducto();
     }
 
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        // Limpiar las colecciones para asegurar que el estado se reinicia
+        imagesContainer.Children.Clear(); // Esto elimina todas las imágenes previas antes de cargar las nuevas
+        existingImageUrls.Clear();
+        temporaryNewImages.Clear();
+        imagesToReplaceIndexes.Clear();
+        imagesToReplace.Clear();
+    }
+
+
     private async void CargarProducto()
     {
         try
