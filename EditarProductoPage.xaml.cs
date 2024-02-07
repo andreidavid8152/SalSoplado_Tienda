@@ -90,19 +90,23 @@ public partial class EditarProductoPage : ContentPage
         var nuevasUrls = await subirImagenesSeleccionadas();
 
         // Preparar la lista final de URLs para actualizar en la base de datos
-        List<string> urlsFinales = new List<string>();
+        List<string> urlsFinales = new List<string>(existingImageUrls); // Comenzar con las URLs existentes
 
-        // Añadir URLs existentes que no fueron reemplazadas
-        for (int i = 0; i < existingImageUrls.Count; i++)
+        int nuevaUrlIndex = 0; // Índice para las nuevas URLs
+
+        foreach (int index in imagesToReplaceIndexes) // Para cada imagen reemplazada
         {
-            if (!imagesToReplaceIndexes.Contains(i))
+            if (nuevaUrlIndex < nuevasUrls.Count) // Verificar que haya nuevas URLs disponibles
             {
-                urlsFinales.Add(existingImageUrls[i]);
+                urlsFinales[index] = nuevasUrls[nuevaUrlIndex++]; // Reemplazar la URL en la posición correcta
             }
         }
 
-        // Añadir nuevas URLs (incluye reemplazos e imágenes completamente nuevas)
-        urlsFinales.AddRange(nuevasUrls);
+        // Añadir cualquier URL de nueva imagen que no sea un reemplazo al final
+        while (nuevaUrlIndex < nuevasUrls.Count)
+        {
+            urlsFinales.Add(nuevasUrls[nuevaUrlIndex++]);
+        }
 
         ProductoDetalleEdit producto = new ProductoDetalleEdit
         {
@@ -263,28 +267,6 @@ public partial class EditarProductoPage : ContentPage
         }
 
         return null;
-    }
-
-    private async void OnUploadImageButtonClicked(object sender, EventArgs e)
-    {
-        // Verifica si se ha alcanzado el límite máximo de imágenes
-        if (imagesContainer.Children.Count >= MaxImages)
-        {
-            await DisplayAlert("Advertencia", $"Ya has seleccionado el máximo de {MaxImages} imágenes permitidas", "OK");
-            return;
-        }
-
-        var result = await FilePicker.PickAsync(new PickOptions
-        {
-            PickerTitle = "Por favor selecciona una imagen",
-            FileTypes = FilePickerFileType.Images,
-        });
-
-        if (result != null)
-        {
-            var imageSource = ImageSource.FromStream(() => result.OpenReadAsync().Result);
-            AgregarImagen(imageSource, false); // Falso indica que es una nueva imagen
-        }
     }
 
     private void AgregarImagen(ImageSource source, bool isExisting)

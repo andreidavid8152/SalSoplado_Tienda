@@ -91,19 +91,6 @@
             AlignContent="Center">
         </FlexLayout>
 
-        <Button x:Name="uploadImageButton" 
-                    Text="Subir Imagen" 
-                    BackgroundColor="#14282f"
-                    TextColor="White"
-                    BorderWidth="0"
-                    CornerRadius="5"
-                    Clicked="OnUploadImageButtonClicked"
-                    Padding="10,5"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    Margin="0,20,0,25"/>
-
-
         <Button Text="Actualizar Producto" Clicked="OnClickActualizarProducto" Margin="0,15,0,13" WidthRequest="150"/>
 
     </VerticalStackLayout>
