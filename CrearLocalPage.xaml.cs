@@ -12,8 +12,7 @@ public partial class CrearLocalPage : ContentPage
     private string token = Preferences.Get("UserToken", string.Empty);
 
     // Lista para almacenar las imágenes seleccionadas
-    private List<ImageSource> selectedImages = new List<ImageSource>();
-    private const int MaxImages = 1; // Número máximo de imágenes permitidas
+    private ImageSource selectedImage; // Solo una imagen
 
     public CrearLocalPage()
     {
@@ -22,7 +21,27 @@ public partial class CrearLocalPage : ContentPage
 
         Preferences.Set("SavedLatitude", String.Empty);
         Preferences.Set("SavedLongitude", String.Empty);
+        UpdateImageContainer();
     }
+
+    private void UpdateImageContainer()
+    {
+        imagesContainer.Children.Clear(); // Limpia el contenedor de imágenes
+
+        if (selectedImage != null)
+        {
+            var image = new Image
+            {
+                Source = selectedImage,
+                Aspect = Aspect.AspectFill,
+                HeightRequest = 100,
+                WidthRequest = 100,
+                Margin = 5,
+            };
+            imagesContainer.Children.Add(image);
+        }
+    }
+
 
     private async void OnCambiarUbicacionClicked(object sender, EventArgs e)
     {
@@ -50,15 +69,22 @@ public partial class CrearLocalPage : ContentPage
             return;
         }
 
-        // Verificar si se han seleccionado 1 imágen
-        if (selectedImages.Count != MaxImages)
+        // Verificar si se ha seleccionado la imagen
+        if (selectedImage == null)
         {
             await DisplayAlert("Advertencia", "Debes subir el logo", "OK");
             return;
         }
 
-        // Subir imágenes y esperar a que todas se hayan subido
-        var imagenesSubidas = await subirImagenesSeleccionadas();
+        // Subir la imagen seleccionada y obtener la URL
+        var imageUrl = await SubirImagenSeleccionada();
+
+        // Verificar si la imagen se subió correctamente
+        if (string.IsNullOrEmpty(imageUrl))
+        {
+            await DisplayAlert("Error", "Hubo un problema al subir el logo.", "OK");
+            return;
+        }
 
         // Crear un DTO a partir de los datos del formulario
         var localCreationDTO = new LocalCreation
@@ -68,7 +94,7 @@ public partial class CrearLocalPage : ContentPage
             HoraFin = Fin.Time,
             Telefono = entryTelefono.Text,
             Direccion = latitud + ";" + longitud,
-            Logo = imagenesSubidas[0]
+            Logo = imageUrl
         };
 
         try
@@ -89,32 +115,20 @@ public partial class CrearLocalPage : ContentPage
         }
     }
 
-    private async Task<List<String>> subirImagenesSeleccionadas()
+    private async Task<string> SubirImagenSeleccionada()
     {
-        List<String> imagenes = new List<String>();
-
-        foreach (var imageSource in selectedImages)
+        if (selectedImage == null)
         {
-            var imageUrl = await SubirImagenAFirebase(imageSource);
-            if (!string.IsNullOrEmpty(imageUrl))
-            {
-                imagenes.Add(imageUrl);
-            }
+            return null;
         }
 
-        return imagenes;
-    }
-
-    private async Task<string> SubirImagenAFirebase(ImageSource imageSource)
-    {
-        var stream = await ConvertirImageSourceAStream(imageSource);
+        var stream = await ConvertirImageSourceAStream(selectedImage);
         if (stream == null)
         {
             return null;
         }
 
         var fileName = Guid.NewGuid().ToString() + ".jpg";
-
         string storageImage;
         try
         {
@@ -130,7 +144,6 @@ public partial class CrearLocalPage : ContentPage
 
         return storageImage;
     }
-
 
     private async Task<Stream> ConvertirImageSourceAStream(ImageSource imageSource)
     {
@@ -178,12 +191,6 @@ public partial class CrearLocalPage : ContentPage
 
     private async void OnUploadImageButtonClicked(object sender, EventArgs e)
     {
-        if (selectedImages.Count >= MaxImages)
-        {
-            await DisplayAlert("Advertencia", "Ya has seleccionado el máximo de imágenes permitidas", "OK");
-            return;
-        }
-
         try
         {
             var result = await FilePicker.PickAsync(new PickOptions
@@ -194,28 +201,13 @@ public partial class CrearLocalPage : ContentPage
 
             if (result != null)
             {
-                ImageSource imageSource = ImageSource.FromStream(() =>
+                selectedImage = ImageSource.FromStream(() =>
                 {
                     var stream = result.OpenReadAsync().Result;
                     return stream;
                 });
 
-                selectedImages.Add(imageSource);
-
-                var newImage = new Image
-                {
-                    Source = imageSource,
-                    Aspect = Aspect.AspectFill,
-                    HeightRequest = 100,
-                    WidthRequest = 100,
-                    Margin = 5,
-                };
-
-                var tapGestureRecognizer = new TapGestureRecognizer();
-                tapGestureRecognizer.Tapped += OnImageTapped;
-                newImage.GestureRecognizers.Add(tapGestureRecognizer);
-
-                imagesContainer.Children.Add(newImage);
+                UpdateImageContainer(); // Actualiza la UI con la nueva imagen
             }
         }
         catch (Exception ex)
@@ -223,55 +215,4 @@ public partial class CrearLocalPage : ContentPage
             Debug.WriteLine($"No se pudo seleccionar la imagen: {ex.Message}");
         }
     }
-
-    private async void OnImageTapped(object sender, EventArgs e)
-    {
-        // Necesitas identificar qué imagen fue tocada.
-        var imageTapped = sender as Image;
-        int imageIndex = imagesContainer.Children.IndexOf(imageTapped);
-
-        // Si no hay imagen o el índice es incorrecto, no hacer nada.
-        if (imageTapped == null || imageIndex == -1) return;
-
-        // Si ya hay una imagen seleccionada en este índice, preguntar si desea cambiarla.
-        if (selectedImages.Count > imageIndex)
-        {
-            bool answer = await DisplayAlert("Cambiar imagen", "¿Quieres cambiar esta imagen?", "Sí", "No");
-            if (!answer) return; // Si el usuario elige 'No', simplemente regresa.
-        }
-
-        try
-        {
-            var result = await FilePicker.PickAsync(new PickOptions
-            {
-                PickerTitle = "Por favor selecciona una imagen",
-                FileTypes = FilePickerFileType.Images
-            });
-
-            if (result != null)
-            {
-                var stream = await result.OpenReadAsync();
-                var imageSource = ImageSource.FromStream(() => stream);
-
-                // Reemplaza la imagen actual o agrega una nueva si es que no hay ninguna.
-                if (selectedImages.Count > imageIndex)
-                {
-                    selectedImages[imageIndex] = imageSource; // Reemplaza la imagen existente.
-                }
-                else
-                {
-                    selectedImages.Add(imageSource); // Agrega la nueva imagen.
-                }
-
-                // Actualiza la imagen en la interfaz de usuario.
-                (sender as Image).Source = imageSource;
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"No se pudo seleccionar la imagen: {ex.Message}");
-        }
-    }
-
-
 }
