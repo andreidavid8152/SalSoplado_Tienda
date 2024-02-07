@@ -287,6 +287,29 @@ namespace SalSoplado_Usuario.Services
             }
         }
 
+        public async Task<List<ProductoLocalDetalle>> ObtenerProductosPorCategoria(string categoria, string token)
+        {
+            // Asegúrate de que el token de autorización se incluye en la cabecera de la solicitud
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Realiza la solicitud GET al endpoint, incluyendo la categoría en la URL
+            var response = await _httpClient.GetAsync($"Productos/ObtenerProductosPorCategoria/{categoria}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Si la solicitud es exitosa, lee el contenido de la respuesta
+                var content = await response.Content.ReadAsStringAsync();
+                // Deserializa el contenido de la respuesta en una lista de objetos ProductoLocalDetalle
+                var productos = JsonConvert.DeserializeObject<List<ProductoLocalDetalle>>(content);
+                return productos;
+            }
+            else
+            {
+                // Si hay un problema con la solicitud, lee el mensaje de error de la respuesta
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                throw new Exception(errorMessage);
+            }
+        }
 
     }
 }

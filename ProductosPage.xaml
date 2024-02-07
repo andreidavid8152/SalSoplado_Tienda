@@ -15,6 +15,19 @@
                VerticalOptions="Start" Margin="17,25,0,0"/>
 
 
+            <Picker x:Name="categoriasPicker" Title="Selecciona una categoría" SelectedIndexChanged="OnCategoriaSeleccionadaChanged" WidthRequest="200" HorizontalOptions="Start" Margin="15,10,0,0">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Todos</x:String>
+                        <x:String>Frutas</x:String>
+                        <x:String>Comida</x:String>
+                        <x:String>Flores</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+
+
+
             <CollectionView x:Name="productosCollectionView">
 
                 <CollectionView.ItemsLayout>

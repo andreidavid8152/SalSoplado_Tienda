@@ -16,14 +16,41 @@ public partial class ProductosPage : ContentPage
     {
         InitializeComponent();
         _api = App.ServiceProvider.GetService<APIService>();
+        
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        categoriasPicker.SelectedIndex = 0;
         LocalId = SharedData.SelectedLocalId;
         CargarProductos();
     }
+
+    private async void OnCategoriaSeleccionadaChanged(object sender, EventArgs e)
+    {
+        var categoriaSeleccionada = categoriasPicker.SelectedItem.ToString();
+        if (categoriaSeleccionada == "Todos")
+        {
+            CargarProductos();
+        }
+        else
+        {
+            try
+            {
+                // Llama al método ObtenerProductosPorCategoria del servicio API
+                var productosPorCategoria = await _api.ObtenerProductosPorCategoria(categoriaSeleccionada, token);
+                // Actualiza el origen de datos del CollectionView con los productos filtrados por categoría
+                productosCollectionView.ItemsSource = productosPorCategoria;
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, muestra un mensaje al usuario
+                await DisplayAlert("Error", $"No se pudieron cargar los productos de la categoría '{categoriaSeleccionada}': {ex.Message}", "OK");
+            }
+        }
+    }
+
 
     private async void OnEditTapped(object sender, TappedEventArgs e)
     {
