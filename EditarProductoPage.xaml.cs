@@ -20,6 +20,9 @@ public partial class EditarProductoPage : ContentPage
 
     HashSet<int> imagesToReplaceIndexes = new HashSet<int>();
 
+    private Dictionary<int, string> imagesToReplace = new Dictionary<int, string>();
+
+
 
     public EditarProductoPage(int idProducto)
     {
@@ -149,6 +152,22 @@ public partial class EditarProductoPage : ContentPage
 
         producto.ImagenesUrls = urlsFinales;
 
+        // Antes de actualizar el producto en la base de datos
+        foreach (var imageToReplace in imagesToReplace.Values)
+        {
+            // Extrae el nombre del archivo de la URL
+            var decodedUrl = Uri.UnescapeDataString(imageToReplace);
+            var startIndex = decodedUrl.IndexOf("imagenesProductos/") + "imagenesProductos/".Length;
+            var endIndex = decodedUrl.IndexOf("?", startIndex);
+            var fileName = decodedUrl.Substring(startIndex, endIndex - startIndex);
+
+            // Elimina la imagen original de Firebase Storage
+            await new FirebaseStorage("salsoplado.appspot.com")
+                  .Child("imagenesProductos")
+                  .Child(fileName)
+                  .DeleteAsync();
+        }
+
         try
         {
             // Lógica para enviar productoInput a tu API
@@ -203,7 +222,7 @@ public partial class EditarProductoPage : ContentPage
         try
         {
             storageImage = await new FirebaseStorage("salsoplado.appspot.com")
-                                     .Child("imagenesProductosEditadas")
+                                     .Child("imagenesProductos")
                                      .Child(fileName)
                                      .PutAsync(stream);
         }
@@ -282,9 +301,15 @@ public partial class EditarProductoPage : ContentPage
 
             if (isExistingImage)
             {
+                // Si la imagen existente se va a reemplazar, almacena su URL
+                if (!imagesToReplace.ContainsKey(imageIndex))
+                {
+                    imagesToReplace.Add(imageIndex, existingImageUrls[imageIndex]);
+                }
+
                 if (imagesToReplaceIndexes.Contains(imageIndex))
                 {
-                    // Encuentra la posición correspondiente en temporaryNewImages y actualízala
+                    // Actualiza la nueva imagen en temporaryNewImages
                     int tempIndex = imagesToReplaceIndexes.ToList().IndexOf(imageIndex);
                     if (tempIndex >= 0 && tempIndex < temporaryNewImages.Count)
                     {
@@ -293,22 +318,19 @@ public partial class EditarProductoPage : ContentPage
                 }
                 else
                 {
-                    // Marca la imagen existente para reemplazo
                     imagesToReplaceIndexes.Add(imageIndex);
-                    // Almacena la nueva imagen temporalmente
                     temporaryNewImages.Add(newImageSource);
                 }
             }
             else
             {
-                // Para imágenes nuevas, simplemente añádelas a la lista
                 temporaryNewImages.Add(newImageSource);
             }
 
-            // Actualiza la imagen en la UI
             imageTapped.Source = newImageSource;
         }
     }
+
 
 
 }
