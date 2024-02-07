@@ -13,16 +13,13 @@ public partial class EditarProductoPage : ContentPage
     private int LocalId { get; set; }
     private int ProductoId { get; set; }
 
-    // Lista para almacenar las imágenes seleccionadas
-    private List<ImageSource> selectedImages = new List<ImageSource>();
-
     // Lista para almacenar las URLs de imágenes existentes
     private List<string> existingImageUrls = new List<string>();
 
     List<ImageSource> temporaryNewImages = new List<ImageSource>();
+
     HashSet<int> imagesToReplaceIndexes = new HashSet<int>();
 
-    private const int MaxImages = 3; // Número máximo de imágenes permitidas
 
     public EditarProductoPage(int idProducto)
     {
@@ -100,12 +97,6 @@ public partial class EditarProductoPage : ContentPage
             {
                 urlsFinales[index] = nuevasUrls[nuevaUrlIndex++]; // Reemplazar la URL en la posición correcta
             }
-        }
-
-        // Añadir cualquier URL de nueva imagen que no sea un reemplazo al final
-        while (nuevaUrlIndex < nuevasUrls.Count)
-        {
-            urlsFinales.Add(nuevasUrls[nuevaUrlIndex++]);
         }
 
         ProductoDetalleEdit producto = new ProductoDetalleEdit
@@ -269,28 +260,6 @@ public partial class EditarProductoPage : ContentPage
         return null;
     }
 
-    private void AgregarImagen(ImageSource source, bool isExisting)
-    {
-        var image = new Image
-        {
-            Source = source,
-            Aspect = Aspect.AspectFill,
-            HeightRequest = 100,
-            WidthRequest = 100,
-            Margin = 5,
-        };
-
-        var tapGestureRecognizer = new TapGestureRecognizer();
-        tapGestureRecognizer.Tapped += OnImageTapped;
-        image.GestureRecognizers.Add(tapGestureRecognizer);
-
-        imagesContainer.Children.Add(image);
-        if (!isExisting)
-        {
-            selectedImages.Add(source); // Solo añade a selectedImages si es una nueva imagen
-        }
-    }
-
 
     private async void OnImageTapped(object sender, EventArgs e)
     {
@@ -310,18 +279,36 @@ public partial class EditarProductoPage : ContentPage
         if (result != null)
         {
             var newImageSource = ImageSource.FromStream(() => result.OpenReadAsync().Result);
+
             if (isExistingImage)
             {
-                // Marca la imagen existente para reemplazo
-                imagesToReplaceIndexes.Add(imageIndex);
+                if (imagesToReplaceIndexes.Contains(imageIndex))
+                {
+                    // Encuentra la posición correspondiente en temporaryNewImages y actualízala
+                    int tempIndex = imagesToReplaceIndexes.ToList().IndexOf(imageIndex);
+                    if (tempIndex >= 0 && tempIndex < temporaryNewImages.Count)
+                    {
+                        temporaryNewImages[tempIndex] = newImageSource;
+                    }
+                }
+                else
+                {
+                    // Marca la imagen existente para reemplazo
+                    imagesToReplaceIndexes.Add(imageIndex);
+                    // Almacena la nueva imagen temporalmente
+                    temporaryNewImages.Add(newImageSource);
+                }
             }
-
-            // Almacena la nueva imagen temporalmente
-            temporaryNewImages.Add(newImageSource);
+            else
+            {
+                // Para imágenes nuevas, simplemente añádelas a la lista
+                temporaryNewImages.Add(newImageSource);
+            }
 
             // Actualiza la imagen en la UI
             imageTapped.Source = newImageSource;
         }
     }
+
 
 }
