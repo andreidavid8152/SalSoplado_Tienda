@@ -104,6 +104,76 @@ public partial class EditarProductoPage : ContentPage
         // Añadir nuevas URLs (incluye reemplazos e imágenes completamente nuevas)
         urlsFinales.AddRange(nuevasUrls);
 
+        ProductoDetalleEdit producto = new ProductoDetalleEdit
+        {
+            ID = ProductoId,
+            LocalID = SharedData.SelectedLocalId,
+            Nombre = nombreEntry.Text ?? string.Empty, // Evita nulos en las cadenas
+            Categoria = categoriaPicker.SelectedItem?.ToString() ?? string.Empty, // Maneja el caso nulo
+        };
+
+        // Usa TryParse para conversiones seguras de los campos numéricos
+        if (int.TryParse(cantidadEntry.Text, out int cantidad))
+        {
+            producto.Cantidad = cantidad;
+        }
+        else
+        {
+            await DisplayAlert("Error", "La cantidad ingresada no es válida.", "OK");
+            return; // Sale del método si la conversión falla
+        }
+
+        if (decimal.TryParse(precioOriginalEntry.Text, out decimal precioOriginal))
+        {
+            producto.PrecioOriginal = precioOriginal;
+        }
+        else
+        {
+            await DisplayAlert("Error", "El precio original ingresado no es válido.", "OK");
+            return; // Sale del método si la conversión falla
+        }
+
+        if (decimal.TryParse(precioOfertaEntry.Text, out decimal precioDescuento))
+        {
+            producto.PrecioOferta = precioDescuento;
+        }
+        else
+        {
+            await DisplayAlert("Error", "El precio de descuento ingresado no es válido.", "OK");
+            return; // Sale del método si la conversión falla
+        }
+
+        // Validación de precios
+        if (producto.PrecioOferta >= producto.PrecioOriginal)
+        {
+            await DisplayAlert("Error", "El precio con descuento debe ser menor al precio original.", "OK");
+            return; // Sale del método si la conversión falla
+        }
+
+        producto.FechaVencimiento = fechaVencimientoPicker.Date;
+
+        producto.ImagenesUrls = urlsFinales;
+
+        try
+        {
+            // Lógica para enviar productoInput a tu API
+            var success = await _api.EditarProducto(producto, token);
+
+            if (success)
+            {
+                // Manejar el éxito
+                await DisplayAlert("Éxito", "Producto editado con éxito", "OK");
+
+                // Navegar a LocalPage
+                await Navigation.PopAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            // Manejar los errores
+            await DisplayAlert("Error", ex.Message, "OK");
+        }
+
     }
 
     private async Task<List<String>> subirImagenesSeleccionadas()

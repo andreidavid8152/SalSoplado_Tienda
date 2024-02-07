@@ -242,6 +242,30 @@ namespace SalSoplado_Usuario.Services
             }
         }
 
+        public async Task<bool> EditarProducto(ProductoDetalleEdit productoEdit, string token)
+        {
+            // Añade el token de autorización en la cabecera de la petición
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Serializa el objeto productoEditDTO a JSON
+            var jsonContent = new StringContent(JsonConvert.SerializeObject(productoEdit), Encoding.UTF8, "application/json");
+
+            // Realiza la petición PUT al endpoint EditarProducto
+            var response = await _httpClient.PutAsync($"Productos/EditarProducto/{productoEdit.ID}", jsonContent);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // La edición del producto fue exitosa
+                return true;
+            }
+            else
+            {
+                // Algo salió mal, lee el mensaje de error de la respuesta
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                throw new Exception(errorMessage);
+            }
+        }
+
 
     }
 }

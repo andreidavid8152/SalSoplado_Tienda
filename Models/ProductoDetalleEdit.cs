@@ -9,6 +9,7 @@ namespace SalSoplado_Tienda.Models
 {
     public class ProductoDetalleEdit
     {
+        public int ID { get; set; }
 
         [Required]
         public int LocalID { get; set; }
