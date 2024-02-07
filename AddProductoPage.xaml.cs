@@ -293,51 +293,39 @@ public partial class AddProductoPage : ContentPage
 
     private async void OnImageTapped(object sender, EventArgs e)
     {
-        // Necesitas identificar qué imagen fue tocada.
         var imageTapped = sender as Image;
+        if (imageTapped == null) return;
+
         int imageIndex = imagesContainer.Children.IndexOf(imageTapped);
+        if (imageIndex == -1) return;
 
-        // Si no hay imagen o el índice es incorrecto, no hacer nada.
-        if (imageTapped == null || imageIndex == -1) return;
+        bool answer = await DisplayAlert("Cambiar imagen", "¿Quieres cambiar esta imagen?", "Sí", "No");
+        if (!answer) return;
 
-        // Si ya hay una imagen seleccionada en este índice, preguntar si desea cambiarla.
-        if (selectedImages.Count > imageIndex)
+        var result = await FilePicker.PickAsync(new PickOptions
         {
-            bool answer = await DisplayAlert("Cambiar imagen", "¿Quieres cambiar esta imagen?", "Sí", "No");
-            if (!answer) return; // Si el usuario elige 'No', simplemente regresa.
-        }
+            PickerTitle = "Selecciona una imagen",
+            FileTypes = FilePickerFileType.Images
+        });
 
-        try
+        if (result != null)
         {
-            var result = await FilePicker.PickAsync(new PickOptions
+            var newImageSource = ImageSource.FromFile(result.FullPath);
+
+            // Asegúrate de actualizar la lista de imágenes seleccionadas
+            if (selectedImages.Count > imageIndex)
             {
-                PickerTitle = "Por favor selecciona una imagen",
-                FileTypes = FilePickerFileType.Images
-            });
-
-            if (result != null)
-            {
-                var stream = await result.OpenReadAsync();
-                var imageSource = ImageSource.FromStream(() => stream);
-
-                // Reemplaza la imagen actual o agrega una nueva si es que no hay ninguna.
-                if (selectedImages.Count > imageIndex)
-                {
-                    selectedImages[imageIndex] = imageSource; // Reemplaza la imagen existente.
-                }
-                else
-                {
-                    selectedImages.Add(imageSource); // Agrega la nueva imagen.
-                }
-
-                // Actualiza la imagen en la interfaz de usuario.
-                (sender as Image).Source = imageSource;
+                selectedImages[imageIndex] = newImageSource;
             }
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"No se pudo seleccionar la imagen: {ex.Message}");
+            else
+            {
+                selectedImages.Add(newImageSource);
+            }
+
+            // Actualiza la UI
+            imageTapped.Source = newImageSource;
         }
     }
+
 
 }
