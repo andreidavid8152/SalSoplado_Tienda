@@ -287,13 +287,13 @@ namespace SalSoplado_Usuario.Services
             }
         }
 
-        public async Task<List<ProductoLocalDetalle>> ObtenerProductosPorCategoria(string categoria, string token)
+        public async Task<List<ProductoLocalDetalle>> ObtenerProductosPorCategoriaYLocal(int localId, string categoria, string token)
         {
             // Asegúrate de que el token de autorización se incluye en la cabecera de la solicitud
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Realiza la solicitud GET al endpoint, incluyendo la categoría en la URL
-            var response = await _httpClient.GetAsync($"Productos/ObtenerProductosPorCategoria/{categoria}");
+            // Realiza la solicitud GET al endpoint, incluyendo el localId y la categoría en la URL
+            var response = await _httpClient.GetAsync($"Productos/ObtenerProductosPorCategoriaYLocal/{localId}/{categoria}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -310,6 +310,7 @@ namespace SalSoplado_Usuario.Services
                 throw new Exception(errorMessage);
             }
         }
+
 
     }
 }

@@ -16,7 +16,7 @@ public partial class ProductosPage : ContentPage
     {
         InitializeComponent();
         _api = App.ServiceProvider.GetService<APIService>();
-        
+
     }
 
     protected override void OnAppearing()
@@ -39,14 +39,22 @@ public partial class ProductosPage : ContentPage
             try
             {
                 // Llama al método ObtenerProductosPorCategoria del servicio API
-                var productosPorCategoria = await _api.ObtenerProductosPorCategoria(categoriaSeleccionada, token);
+                var productosPorCategoria = await _api.ObtenerProductosPorCategoriaYLocal(LocalId, categoriaSeleccionada, token);
+
                 // Actualiza el origen de datos del CollectionView con los productos filtrados por categoría
                 productosCollectionView.ItemsSource = productosPorCategoria;
+
+                // Verifica si la lista está vacía
+                if (productosPorCategoria == null || !productosPorCategoria.Any())
+                {
+                    // Muestra un mensaje indicando que no hay productos en esta categoría
+                    await DisplayAlert("Sin resultados", $"No se encontraron productos para la categoría '{categoriaSeleccionada}'.", "OK");
+                }
             }
             catch (Exception ex)
             {
-                // En caso de error, muestra un mensaje al usuario
-                await DisplayAlert("Error", $"No se pudieron cargar los productos de la categoría '{categoriaSeleccionada}': {ex.Message}", "OK");
+                // Si algo sale mal, muestra un mensaje al usuario
+                await DisplayAlert("Error", $"Error al cargar los productos: {ex.Message}", "OK");
             }
         }
     }
@@ -120,6 +128,13 @@ public partial class ProductosPage : ContentPage
         {
             var productos = await _api.ObtenerProductosPorLocal(LocalId, token); // Asume que este método existe en APIService y devuelve una lista de ProductoLocalDetalle
             productosCollectionView.ItemsSource = productos;
+
+            // Verifica si la lista está vacía
+            if (productos == null || !productos.Any())
+            {
+                // Muestra un mensaje indicando que no hay productos en esta categoría
+                await DisplayAlert("Sin resultados", $"No se encontraron productos", "OK");
+            }
         }
         catch (Exception ex)
         {
