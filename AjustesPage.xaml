@@ -5,13 +5,73 @@
              BackgroundColor="#d9e3f1">
     <VerticalStackLayout>
 
-        <Button 
-        Text="Volver"
-        HorizontalOptions="Center"
-        VerticalOptions="Start"
-        Margin="0,15,0,13"
-        WidthRequest="150"
-        Clicked="OnClickVolver"/>
+        <Image x:Name="LocalLogo"
+           Aspect="AspectFill"
+           HorizontalOptions="Center" VerticalOptions="Center"
+           HeightRequest="150" WidthRequest="150"
+           Margin="0,20,0,10">
+
+            <Image.Clip>
+                <EllipseGeometry Center="75,75" RadiusX="75" RadiusY="75"/>
+            </Image.Clip>
+
+        </Image>
+
+        <!-- Botón Guardar -->
+        <Button BackgroundColor="#14282f" Text="Cambiar logo" Margin="0,10,0,0" HeightRequest="43.5" WidthRequest="120"/>
+
+        <Label Text="Nombre" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="20,20,0,0"/>
+        <Entry x:Name="localNombre" Placeholder="Nombre del local" PlaceholderColor="#3b4151" Margin="20,0,0,0" WidthRequest="350" HorizontalOptions="Start"/>
+
+        <Label Text="Horario" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="20,10,0,0"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TimePicker x:Name="Inicio" Grid.Column="0" Margin="20,0,0,0" WidthRequest="150" HorizontalOptions="Start"/>
+            <TimePicker x:Name="Fin" Grid.Column="1" Margin="20,0,0,0" WidthRequest="150" HorizontalOptions="Start"/>
+        </Grid>
+
+        <!-- Telefono -->
+        <Label Text="Telefono" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="20,20,0,0"/>
+        <Entry x:Name="localTelefono" Placeholder="Ingrese su telefono" PlaceholderColor="#3b4151" Keyboard="Telephone" Margin="20,0,0,0" WidthRequest="350" HorizontalOptions="Start"/>
+
+        <!-- Direccion -->
+        <Label Text="Direccion" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="20,20,0,10"/>
+
+        <Label x:Name="localUbicacion" Text="Ubicación no establecida"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center" 
+                   HorizontalOptions="Center" Margin="0,0,0,20"/>
+
+        <Button Text="Seleccionar Ubicación" 
+                    BackgroundColor="#14282f"
+                    TextColor="White"
+                    BorderWidth="0"
+                    CornerRadius="5"
+                    Padding="10,5"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Margin="0,-7,0,25"/>
+
+        
+
+        <HorizontalStackLayout Spacing="2" HorizontalOptions="Center" Margin="0,5,0,0">
+
+            <!-- Botón Guardar -->
+            <Button BackgroundColor="#14282f" Text="Guardar" Margin="0,0,0,0" HeightRequest="43.5" />
+
+            <!-- Botón para volver -->
+            <Button 
+                Text="Volver"
+                HorizontalOptions="Center"
+                VerticalOptions="Start"
+                Margin="10,0,0,0"
+                WidthRequest="100"
+                Clicked="OnClickVolver"/>
+
+        </HorizontalStackLayout>
 
     </VerticalStackLayout>
 </ContentPage>
