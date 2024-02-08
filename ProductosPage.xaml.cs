@@ -22,9 +22,10 @@ public partial class ProductosPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        categoriasPicker.SelectedIndex = 0;
+
         LocalId = SharedData.SelectedLocalId;
-        CargarProductos();
+
+        categoriasPicker.SelectedIndex = 0;
     }
 
     private async void OnCategoriaSeleccionadaChanged(object sender, EventArgs e)
