@@ -20,12 +20,12 @@ namespace SalSoplado_Usuario.Models
 
 
         [Required(ErrorMessage = "El campo Username es obligatorio.")]
-        [MinLength(5, ErrorMessage = "El campo Username debe tener al menos 5 caracteres.")]
+        [MinLength(4, ErrorMessage = "El campo Username debe tener al menos 4 caracteres.")]
         public string Username { get; set; }
 
 
         [Required(ErrorMessage = "El campo Password es obligatorio.")]
-        [MinLength(6, ErrorMessage = "El campo Password debe tener al menos 6 caracteres.")]
+        [MinLength(4, ErrorMessage = "El campo Password debe tener al menos 4 caracteres.")]
         public string Password { get; set; }
 
 

@@ -27,8 +27,19 @@ public partial class LoginPage : ContentPage
         }
     }
 
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+
+        UsernameEntry.Text = null;
+        PasswordEntry.Text = null;
+    }
+
     private async void OnClickLogin(object sender, EventArgs e)
     {
+
+        ButtonLogin.IsEnabled = false;
+
         var userLogin = (Login)this.BindingContext;
         if (IsValid(userLogin, out List<string> errorMessages))
         {
@@ -52,6 +63,10 @@ public partial class LoginPage : ContentPage
                 var errorToast = Toast.Make($"Error: {ex.Message}", ToastDuration.Short);
                 await errorToast.Show();
             }
+            finally
+            {
+                ButtonLogin.IsEnabled = true;
+            }
         }
         else
         {
@@ -61,6 +76,8 @@ public partial class LoginPage : ContentPage
                 var errorToast = Toast.Make(errorMessage, ToastDuration.Short);
                 await errorToast.Show();
             }
+
+            ButtonLogin.IsEnabled = true;
         }
     }
 

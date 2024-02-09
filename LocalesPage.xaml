@@ -4,24 +4,27 @@
              x:Class="SalSoplado_Usuario.LocalesPage"
              BackgroundColor="#d9e3f1">
 
-    <VerticalStackLayout>
+
+    <Grid>
+
+        <VerticalStackLayout>
 
 
-        <!-- Aquí comienza el código para la imagen circular -->
-        <Image Source="home_locales.png"
+            <!-- Aquí comienza el código para la imagen circular -->
+            <Image Source="home_locales.png"
                Aspect="AspectFill"
                HeightRequest="100"
                WidthRequest="100"
                HorizontalOptions="Center"
                VerticalOptions="Center"
                Margin="0,40,0,20">
-            <Image.Clip>
-                <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50"/>
-            </Image.Clip>
-        </Image>
+                <Image.Clip>
+                    <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50"/>
+                </Image.Clip>
+            </Image>
 
 
-        <Label Text="CREA TU LOCAL"
+            <Label Text="CREA TU LOCAL"
                FontSize="Large"
                FontAttributes="Bold"
                TextColor="Black"
@@ -29,7 +32,7 @@
                VerticalOptions="Start"/>
 
 
-        <Label x:Name="localesLabel"
+            <Label x:Name="localesLabel"
                FontSize="Medium"
                FontAttributes="Bold"
                TextColor="Black"
@@ -39,7 +42,7 @@
 
 
 
-        <Button x:Name="crearLocalButton"
+            <Button x:Name="crearLocalButton"
                 Text="Crear"
                 HorizontalOptions="Center"
                 VerticalOptions="Start"
@@ -48,39 +51,57 @@
                 Clicked="OnClickCrearLocal"/>
 
 
-        <ListView x:Name="listaLocales" RowHeight="120" Margin="15,5,15,0" ItemSelected="OnClickShowDetails">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
+            <ListView x:Name="listaLocales" RowHeight="120" Margin="15,5,15,0" ItemSelected="OnClickShowDetails">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
 
-                        <Grid>
+                            <Grid>
 
-                            <Frame CornerRadius="30" Padding="15" HasShadow="True" Margin="5" BorderColor="#b7bfcb" BackgroundColor="#b9c9e0">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
+                                <Frame CornerRadius="30" Padding="15" HasShadow="True" Margin="5" BorderColor="#b7bfcb" BackgroundColor="#b9c9e0">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
 
-                                    <Image Grid.Row="0" Grid.Column="0" Source="{Binding Logo}" HeightRequest="100" WidthRequest="100" Aspect="AspectFit"/>
-                                    <StackLayout Grid.Row="0" Grid.Column="1" Orientation="Vertical" Padding="10">
-                                        <Label Text="{Binding Nombre}" FontAttributes="Bold" FontSize="18"/>
-                                        <Label Text="{Binding Direccion}" FontSize="16"/>
-                                    </StackLayout>
-                                </Grid>
-                            </Frame>
+                                        <Image Grid.Row="0" Grid.Column="0" Source="{Binding Logo}" HeightRequest="100" WidthRequest="100" Aspect="AspectFit"/>
+                                        <StackLayout Grid.Row="0" Grid.Column="1" Orientation="Vertical" Padding="10">
+                                            <Label Text="{Binding Nombre}" FontAttributes="Bold" FontSize="18"/>
+                                            <Label Text="{Binding Direccion}" FontSize="16"/>
+                                        </StackLayout>
+                                    </Grid>
+                                </Frame>
 
-                        </Grid>
+                            </Grid>
 
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
 
-    </VerticalStackLayout>
+        </VerticalStackLayout>
+
+        <!-- Contenedor centrado para el ActivityIndicator y el fondo semitransparente -->
+        <Frame x:Name="loadingFrame"
+                        BackgroundColor="#000000"
+                        Opacity="0.8"
+                        IsVisible="False"
+                        Padding="20"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        WidthRequest="115"
+                        HeightRequest="115"
+                        CornerRadius="10">
+
+            <ActivityIndicator IsRunning="{Binding IsVisible, Source={x:Reference loadingFrame}}"
+                                       Color="Blue" />
+        </Frame>
+
+    </Grid>
 
 </ContentPage>

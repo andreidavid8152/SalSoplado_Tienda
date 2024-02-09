@@ -3,37 +3,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SalSoplado_Tienda.CrearLocalPage"
              BackgroundColor="#d9e3f1">
-    <ScrollView x:Name="mainScrollView">
-        <VerticalStackLayout Spacing="20" Padding="30">
 
-            <Label Text="CREAR LOCAL" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,-20,0,0"/>
+    <Grid>
 
-            <Label Text="Nombre" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,20,0,-20"/>
-            <Entry x:Name="entryNombre" Placeholder="Nombre del local" PlaceholderColor="#3b4151"/>
+        <ScrollView x:Name="mainScrollView">
+            <VerticalStackLayout Spacing="20" Padding="30">
 
-            <Label Text="Horario" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-20"/>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <TimePicker x:Name="Inicio" Grid.Column="0"/>
-                <TimePicker x:Name="Fin" Grid.Column="1"/>
-            </Grid>
+                <Label Text="CREAR LOCAL" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,-20,0,0"/>
 
-            <!-- Telefono -->
-            <Label Text="Telefono" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-13"/>
-            <Entry x:Name="entryTelefono" Placeholder="Ingrese su telefono" PlaceholderColor="#3b4151" Keyboard="Telephone"/>
+                <Label Text="Nombre" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,20,0,-20"/>
+                <Entry x:Name="entryNombre" Placeholder="Nombre del local" PlaceholderColor="#3b4151"/>
 
-            <!-- Direccion -->
-            <Label Text="Direccion" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-13"/>
+                <Label Text="Horario" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-20"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <Label Text="Inicio" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" Margin="5,5,0,0"/>
+                    <TimePicker x:Name="Inicio" Grid.Column="0" Margin="0,15,0,0"/>
 
-            <Label x:Name="LocationLabel" Text="Ubicación no establecida"
+                    <Label Text="Cierre" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" Margin="5,5,0,0" Grid.Column="1"/>
+                    <TimePicker x:Name="Fin" Grid.Column="1" Margin="0,15,0,0"/>
+                </Grid>
+
+                <!-- Telefono -->
+                <Label Text="Telefono" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-13"/>
+                <Entry x:Name="entryTelefono" Placeholder="Ingrese su telefono" PlaceholderColor="#3b4151" Keyboard="Telephone"/>
+
+                <!-- Direccion -->
+                <Label Text="Direccion" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,10,0,-13"/>
+
+                <Label x:Name="LocationLabel" Text="Ubicación no establecida"
                    FontAttributes="Bold"
                    VerticalOptions="Center" 
                    HorizontalOptions="Center" />
 
-            <Button Text="Seleccionar Ubicación" 
+                <Button 
+                    x:Name="ButtonUbicacion"
+                    Text="Seleccionar Ubicación" 
                     Clicked="OnCambiarUbicacionClicked"
                     BackgroundColor="#14282f"
                     TextColor="White"
@@ -44,18 +53,19 @@
                     VerticalOptions="Center"
                     Margin="0,-7,0,25"/>
 
-            <!-- Logo -->
-            <Label Text="Logo" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,-10,0,-23"/>
+                <!-- Logo -->
+                <Label Text="Logo" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,-10,0,-23"/>
 
 
-            <FlexLayout x:Name="imagesContainer" 
+                <FlexLayout x:Name="imagesContainer" 
                         Wrap="Wrap" 
                         JustifyContent="Center" 
                         AlignItems="Center" 
                         AlignContent="Center">
-            </FlexLayout>
+                </FlexLayout>
 
-            <Button x:Name="uploadImageButton" 
+                <Button 
+                    x:Name="ButtonLogo" 
                     Text="Subir Logo" 
                     Clicked="OnUploadImageButtonClicked"
                     BackgroundColor="#14282f"
@@ -67,8 +77,25 @@
                     VerticalOptions="Center"
                     Margin="0,0,0,5"/>
 
-            <Button Text="Crear Local" Clicked="OnCrearLocalClicked" WidthRequest="125"/>
+                <Button x:Name="ButtonCrear" Text="Crear Local" Clicked="OnCrearLocalClicked" WidthRequest="125"/>
 
-        </VerticalStackLayout>
-    </ScrollView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Frame x:Name="loadingFrame"
+                    BackgroundColor="#000000"
+                    Opacity="0.8"
+                    IsVisible="False"
+                    Padding="20"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    WidthRequest="115"
+                    HeightRequest="115"
+                    CornerRadius="10">
+
+            <ActivityIndicator IsRunning="{Binding IsVisible, Source={x:Reference loadingFrame}}"
+                                   Color="Blue" />
+        </Frame>
+    </Grid>
+
 </ContentPage>

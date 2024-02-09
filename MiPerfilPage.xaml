@@ -3,75 +3,94 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SalSoplado_Usuario.MiPerfilPage"
              BackgroundColor="#d9e3f1">
+    <Grid>
 
-    <ScrollView>
-        <VerticalStackLayout Spacing="20" Margin="15, 15, 15, 15">
+        <ScrollView>
+            <VerticalStackLayout Spacing="20" Margin="15, 15, 15, 15">
 
-            <!-- Imagen del perfil redonda y centrada -->
-            <Frame WidthRequest="175" HeightRequest="175"
+                <!-- Imagen del perfil redonda y centrada -->
+                <Frame WidthRequest="175" HeightRequest="175"
            HorizontalOptions="Center" VerticalOptions="Center"
            CornerRadius="90"
            IsClippedToBounds="True" Margin="0,15,0,0">
-                <Image Source="imagenperfil.jpg"
+                    <Image Source="imagenperfil.jpg"
                Aspect="AspectFill"
                WidthRequest="175"
                HeightRequest="175"/>
-            </Frame>
+                </Frame>
 
-            <!-- Aquí agregamos el nombre del usuario debajo de la imagen -->
-            <Label x:Name="Username"
+                <!-- Aquí agregamos el nombre del usuario debajo de la imagen -->
+                <Label x:Name="Username"
            FontAttributes="Bold"
            FontSize="20"
            HorizontalOptions="Center" />
 
-            <!-- Etiqueta y Entrada para el Nombre -->
-            <StackLayout Orientation="Vertical" Margin="30,10">
-                <Label Text="Nombre" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
-                <Entry x:Name="NombreEntry"
+                <!-- Etiqueta y Entrada para el Nombre -->
+                <StackLayout Orientation="Vertical" Margin="30,10">
+                    <Label Text="Nombre" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
+                    <Entry x:Name="NombreEntry"
                Placeholder="Ingresa tu nombre"
                PlaceholderColor="#686767"
                Text="{Binding Nombre}"/>
-            </StackLayout>
+                </StackLayout>
 
-            <!-- Etiqueta y Entrada para el Email -->
-            <StackLayout Orientation="Vertical" Margin="30,10">
-                <Label Text="Email" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
-                <Entry x:Name="EmailEntry"
+                <!-- Etiqueta y Entrada para el Email -->
+                <StackLayout Orientation="Vertical" Margin="30,10">
+                    <Label Text="Email" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
+                    <Entry x:Name="EmailEntry"
                Placeholder="Ingresa un correo"
                PlaceholderColor="#686767"
                Keyboard="Email"
                Text="{Binding Email}"/>
-            </StackLayout>
+                </StackLayout>
 
-            <!-- Etiqueta y Entrada para el Username -->
-            <StackLayout Orientation="Vertical" Margin="30,10">
-                <Label Text="Username" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
-                <Entry x:Name="UsernameEntry"
+                <!-- Etiqueta y Entrada para el Username -->
+                <StackLayout Orientation="Vertical" Margin="30,10">
+                    <Label Text="Username" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
+                    <Entry x:Name="UsernameEntry"
                Placeholder="Ingresa un username"
                PlaceholderColor="#686767"
                Text="{Binding Username}"/>
-            </StackLayout>
+                </StackLayout>
 
-            <!-- Etiqueta y Entrada para la Contraseña -->
-            <StackLayout Orientation="Vertical" Margin="30,0">
-                <Label Text="Contraseña" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
-                <Entry x:Name="PasswordEntry"
+                <!-- Etiqueta y Entrada para la Contraseña -->
+                <StackLayout Orientation="Vertical" Margin="30,0">
+                    <Label Text="Contraseña" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
+                    <Entry x:Name="PasswordEntry"
                        Placeholder="******"
                        PlaceholderColor="#686767"/>
-            </StackLayout>
+                </StackLayout>
 
-            <HorizontalStackLayout Spacing="2" HorizontalOptions="Center">
+                <HorizontalStackLayout Spacing="2" HorizontalOptions="Center">
 
-                <!-- Botón Guardar -->
-                <Button BackgroundColor="#14282f" Text="Guardar" Scale="1.1" Margin="17,10"
+                    <!-- Botón Guardar -->
+                    <Button x:Name="ButtonGuardar" BackgroundColor="#14282f" Text="Guardar" Scale="1.1" Margin="17,10"
                     Clicked="OnClickGuardar"/>
 
-                <!-- Botón Cerrar Sesión -->
-                <Button BackgroundColor="#8B0000" Text="Cerrar Sesión" Scale="1.1" Margin="10,10"
+                    <!-- Botón Cerrar Sesión -->
+                    <Button x:Name="ButtonCerrarSesion" BackgroundColor="#8B0000" Text="Cerrar Sesión" Scale="1.1" Margin="10,10"
                     Clicked="OnClickCerrarSesion"/>
 
-            </HorizontalStackLayout>
-        </VerticalStackLayout>
-    </ScrollView>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Contenedor centrado para el ActivityIndicator y el fondo semitransparente -->
+        <Frame x:Name="loadingFrame"
+                    BackgroundColor="#000000"
+                    Opacity="0.8"
+                    IsVisible="False"
+                    Padding="20"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    WidthRequest="115"
+                    HeightRequest="115"
+                    CornerRadius="10">
+
+            <ActivityIndicator IsRunning="{Binding IsVisible, Source={x:Reference loadingFrame}}"
+                                   Color="Blue" />
+        </Frame>
+
+    </Grid>
 
 </ContentPage>

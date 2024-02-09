@@ -12,19 +12,30 @@
                 <EllipseGeometry Center="125,125" RadiusX="125" RadiusY="125"/>
             </Image.Clip>
         </Image>
-        <TableView>
-            <TableRoot>
-                <TableSection Title="Ingrese sus datos" TextColor="Black">
-                    <EntryCell x:Name="UsernameEntry"
-                           Placeholder="Username"
-                           Text="{Binding Username}"/>
-                    <EntryCell x:Name="PasswordEntry"
-                           Placeholder="Contraseña"
-                           Text="{Binding Password}"/>
-                </TableSection>
-            </TableRoot>
-        </TableView>
-        <Button BackgroundColor="#14282f" Text="Ingresar" Scale="1.3" HorizontalOptions="Center" Margin="0,20,0,0"
+
+        <!-- Entrada para el nombre de usuario -->
+        <Entry x:Name="UsernameEntry"
+               Placeholder="Username"
+               Text="{Binding Username}"
+               HorizontalOptions="FillAndExpand" 
+               WidthRequest="350"
+               PlaceholderColor="#686767"
+               FontSize="17"
+               Margin="0,20,0,20"/>
+
+        <!-- Entrada para la contraseña con IsPassword para ocultar el texto -->
+        <Entry x:Name="PasswordEntry"
+               Placeholder="Contraseña"
+               IsPassword="True"
+               Text="{Binding Password}"
+               HorizontalOptions="FillAndExpand" 
+               WidthRequest="350"
+               PlaceholderColor="#686767"
+               FontSize="17"
+               Margin="0,0,0,20"/>
+
+
+        <Button x:Name="ButtonLogin" BackgroundColor="#14282f" Text="Ingresar" Scale="1.3" HorizontalOptions="Center" Margin="0,20,0,0"
             Clicked="OnClickLogin"/>
 
         <Label HorizontalOptions="Center" 

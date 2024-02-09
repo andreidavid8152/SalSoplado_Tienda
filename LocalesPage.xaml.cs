@@ -46,6 +46,9 @@ public partial class LocalesPage : ContentPage
 
     private async void CargarLocales()
     {
+
+        loadingFrame.IsVisible = true;
+
         try
         {
             var locales = await _api.ObtenerResumenLocales(token);
@@ -63,6 +66,8 @@ public partial class LocalesPage : ContentPage
                 Locales.Add(local);
             }
             listaLocales.ItemsSource = Locales; // Asigna los locales a la ListView
+
+            loadingFrame.IsVisible = false;
         }
         catch (Exception ex)
         {
@@ -80,7 +85,11 @@ public partial class LocalesPage : ContentPage
 
     private async void OnClickCrearLocal(object sender, EventArgs e)
     {
+        crearLocalButton.IsEnabled = false;
+
         await Navigation.PushAsync(new CrearLocalPage());
+
+        crearLocalButton.IsEnabled = true;
     }
 
     private async Task<string> GeocodificarDireccion(double latitud, double longitud)

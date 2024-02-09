@@ -21,7 +21,7 @@ namespace SalSoplado_Usuario.Services
         // Constructor: inicializa el URL base y el cliente HTTP.
         public APIService()
         {
-            _baseUrl = "http://10.0.2.2:5260/api/";
+            _baseUrl = "https://apisalsoplado20240208202806.azurewebsites.net/api/";
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri(_baseUrl);
         }

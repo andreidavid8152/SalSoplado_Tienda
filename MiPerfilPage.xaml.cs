@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using SalSoplado_Usuario.Models;
 using SalSoplado_Usuario.Services;
 using System.ComponentModel.DataAnnotations;
@@ -40,6 +42,14 @@ public partial class MiPerfilPage : ContentPage
 
     private async void OnClickGuardar(object sender, EventArgs e)
     {
+
+        // Activar el ActivityIndicator
+        loadingFrame.IsVisible = true;
+
+        // Deshabilitar botones
+        ButtonGuardar.IsEnabled = false;
+        ButtonCerrarSesion.IsEnabled = false;
+
         try
         {
             var usuario = new UserEdit
@@ -47,7 +57,7 @@ public partial class MiPerfilPage : ContentPage
                 Nombre = NombreEntry.Text,
                 Email = EmailEntry.Text,
                 Username = UsernameEntry.Text,
-                Password = PasswordEntry.Text
+                Password = string.IsNullOrEmpty(PasswordEntry.Text) ? "****" : PasswordEntry.Text
             };
 
             if (IsValid(usuario, out List<string> errorMessages))
@@ -57,25 +67,36 @@ public partial class MiPerfilPage : ContentPage
 
                 if (result)
                 {
-                    await DisplayAlert("Éxito", "Perfil actualizado correctamente.", "OK");
+                    var successToast = Toast.Make("Perfil actualizado correctamente", ToastDuration.Short);
+                    await successToast.Show();
+
                     ResetUI();
                 }
                 else
                 {
-                    await DisplayAlert("Error", "No se pudo actualizar el perfil.", "OK");
+                    var successToast = Toast.Make("No se pudo actualizar el perfil.", ToastDuration.Short);
+                    await successToast.Show();
                 }
             }
             else
             {
                 foreach (var errorMessage in errorMessages)
                 {
-                    await DisplayAlert("Error", errorMessage, "OK");
+                    var successToast = Toast.Make(errorMessage, ToastDuration.Short);
+                    await successToast.Show();
                 }
             }
         }
         catch (Exception ex)
         {
             await DisplayAlert("Error", "Ocurrió un error al actualizar el perfil: " + ex.Message, "OK");
+        }
+        finally
+        {
+            // Volver a habilitar los botones, independientemente del resultado
+            loadingFrame.IsVisible = false;
+            ButtonGuardar.IsEnabled = true;
+            ButtonCerrarSesion.IsEnabled = true;
         }
     }
 
@@ -96,13 +117,33 @@ public partial class MiPerfilPage : ContentPage
 
     private async void OnClickCerrarSesion(object sender, EventArgs e)
     {
-        // Eliminar el token guardado
-        Preferences.Remove("UserToken");
-        // Navegar al usuario a la pantalla de inicio de sesión o a la pantalla principal
-        Application.Current.MainPage = new NavigationPage(new LoginPage())
+        // Deshabilitar botones para evitar múltiples clics
+        ButtonGuardar.IsEnabled = false;
+        ButtonCerrarSesion.IsEnabled = false;
+
+        try
         {
-            BarBackgroundColor = Color.FromHex("#d9e3f1")
-        };
+            // Aquí va tu lógica para cerrar sesión
+            // Por ejemplo, eliminar el token guardado y cualquier otra información relevante
+            Preferences.Remove("UserToken");
+            Preferences.Remove("SavedAddress");
+            Preferences.Remove("SavedLatitude");
+            Preferences.Remove("SavedLongitude");
+
+            // Navegar al usuario a la pantalla de inicio de sesión o a la pantalla principal
+            Application.Current.MainPage = new NavigationPage(new LoginPage())
+            {
+                BarBackgroundColor = Color.FromHex("#d9e3f1")
+            };
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", "Ocurrió un error al cerrar sesión: " + ex.Message, "OK");
+
+            // En caso de error, vuelve a habilitar los botones para permitir que el usuario intente nuevamente
+            ButtonGuardar.IsEnabled = true;
+            ButtonCerrarSesion.IsEnabled = true;
+        }
     }
 
 

@@ -64,7 +64,7 @@
                 <!-- Categoria -->
                 <StackLayout Grid.Row="2" Grid.Column="1" Margin="-20,0,0,0">
                     <Label Text="Categoria" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" />
-                    <Picker x:Name="categoriaPicker" Grid.Column="3" Title="Selecciona una categoria">
+                    <Picker x:Name="categoriaPicker" Grid.Column="3" Title="Selecciona" WidthRequest="150">
                         <Picker.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
                                 <x:String>Frutas</x:String>

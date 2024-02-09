@@ -3,6 +3,8 @@ using SalSoplado_Usuario;
 using SalSoplado_Usuario.Services;
 using System.Diagnostics;
 using Firebase.Storage;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 
 namespace SalSoplado_Tienda;
 
@@ -59,59 +61,103 @@ public partial class CrearLocalPage : ContentPage
     private async void OnCrearLocalClicked(object sender, EventArgs e)
     {
 
-        var latitud = Preferences.Get("SavedLatitude", "");
-        var longitud = Preferences.Get("SavedLongitude", "");
+        ButtonCrear.IsEnabled = false;
+        ButtonUbicacion.IsEnabled = false;
+        ButtonLogo.IsEnabled = false;
 
-        //Verificar si la ubicacion ha sido seleccionada
-        if (latitud.Equals("") && longitud.Equals(""))
-        {
-            await DisplayAlert("Advertencia", "Selecciona una ubicacion.", "OK");
-            return;
-        }
-
-        // Verificar si se ha seleccionado la imagen
-        if (selectedImage == null)
-        {
-            await DisplayAlert("Advertencia", "Debes subir el logo", "OK");
-            return;
-        }
-
-        // Subir la imagen seleccionada y obtener la URL
-        var imageUrl = await SubirImagenSeleccionada();
-
-        // Verificar si la imagen se subió correctamente
-        if (string.IsNullOrEmpty(imageUrl))
-        {
-            await DisplayAlert("Error", "Hubo un problema al subir el logo.", "OK");
-            return;
-        }
-
-        // Crear un DTO a partir de los datos del formulario
-        var localCreationDTO = new LocalCreation
-        {
-            Nombre = entryNombre.Text,
-            HoraInicio = Inicio.Time,
-            HoraFin = Fin.Time,
-            Telefono = entryTelefono.Text,
-            Direccion = latitud + ";" + longitud,
-            Logo = imageUrl
-        };
+        loadingFrame.IsVisible = true;
 
         try
         {
+            // Validación del nombre
+            if (entryNombre.Text == null || entryNombre.Text.Length < 5)
+            {
+                var successToast = Toast.Make("El nombre debe tener al menos 5 caracteres.", ToastDuration.Short);
+                await successToast.Show();
+                return; // Detiene la ejecución si no pasa la validación
+            }
+
+            // Validación de horas
+            if (Inicio.Time >= Fin.Time)
+            {
+                var successToast = Toast.Make("La hora de inicio debe ser menor que la hora de cierre.", ToastDuration.Short);
+                await successToast.Show();
+                return; // Detiene la ejecución si no pasa la validación
+            }
+
+            // Validación del teléfono
+            if (string.IsNullOrWhiteSpace(entryTelefono.Text) || !entryTelefono.Text.StartsWith("09") || entryTelefono.Text.Length != 10)
+            {
+                var successToast = Toast.Make("El numero de telefono debe ser valido.", ToastDuration.Short);
+                await successToast.Show();
+                return; // Detiene la ejecución si no pasa la validación
+            }
+
+            var latitud = Preferences.Get("SavedLatitude", "");
+            var longitud = Preferences.Get("SavedLongitude", "");
+
+            //Verificar si la ubicacion ha sido seleccionada
+            if (latitud.Equals("") && longitud.Equals(""))
+            {
+                var successToast = Toast.Make("Selecciona una ubicacion.", ToastDuration.Short);
+                await successToast.Show();
+                return;
+            }
+
+            // Verificar si se ha seleccionado la imagen
+            if (selectedImage == null)
+            {
+                var successToast = Toast.Make("Debes subir el logo", ToastDuration.Short);
+                await successToast.Show();
+                return;
+            }
+
+            // Subir la imagen seleccionada y obtener la URL
+            var imageUrl = await SubirImagenSeleccionada();
+
+            // Verificar si la imagen se subió correctamente
+            if (string.IsNullOrEmpty(imageUrl))
+            {
+                var successToast = Toast.Make("Hubo un problema al subir el logo.", ToastDuration.Short);
+                await successToast.Show();
+                return;
+            }
+
+            // Crear un DTO a partir de los datos del formulario
+            var localCreationDTO = new LocalCreation
+            {
+                Nombre = entryNombre.Text,
+                HoraInicio = Inicio.Time,
+                HoraFin = Fin.Time,
+                Telefono = entryTelefono.Text,
+                Direccion = latitud + ";" + longitud,
+                Logo = imageUrl
+            };
+
             // Llamar al servicio de API para crear el local
             var success = await _api.CrearLocal(localCreationDTO, token);
             if (success)
             {
                 // Manejar el éxito
-                await DisplayAlert("Éxito", "Local creado con éxito", "OK");
+                var successToast = Toast.Make("Local creado con éxito", ToastDuration.Short);
+                await successToast.Show();
                 await Navigation.PopAsync();
             }
         }
         catch (Exception ex)
         {
             // Manejar los errores
-            await DisplayAlert("Error", ex.Message, "OK");
+            var successToast = Toast.Make($"{ex.Message}", ToastDuration.Short);
+            await successToast.Show();
+        }
+        finally
+        {
+            // Volver a habilitar los botones, independientemente del resultado
+            loadingFrame.IsVisible = false;
+
+            ButtonCrear.IsEnabled = true;
+            ButtonUbicacion.IsEnabled = true;
+            ButtonLogo.IsEnabled = true;
         }
     }
 

@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using SalSoplado_Usuario.Models;
 using SalSoplado_Usuario.Services;
 using System.ComponentModel.DataAnnotations;
@@ -16,6 +18,9 @@ public partial class RegistroPage : ContentPage
 
     private async void OnClickRegistrarse(object sender, EventArgs e)
     {
+
+        ButtonRegistrarse.IsEnabled = false;
+
         var userInput = (UserRegistration)this.BindingContext;
 
         if (IsValid(userInput, out List<string> errorMessages))
@@ -23,22 +28,33 @@ public partial class RegistroPage : ContentPage
             try
             {
                 await _api.Registro(userInput);
-                await DisplayAlert("Éxito", "Registro completado con éxito", "OK");
+
+                var successToast = Toast.Make("Registro completado con éxito", ToastDuration.Short);
+                await successToast.Show();
+
 
                 // Redirigir al usuario a la página de inicio de sesión
                 await Navigation.PopAsync();
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Error", $"Error: {ex.Message}", "OK");
+                var successToast = Toast.Make($"Error: {ex.Message}", ToastDuration.Short);
+                await successToast.Show();
+            }
+            finally
+            {
+                ButtonRegistrarse.IsEnabled = true;
             }
         }
         else
         {
             foreach (var errorMessage in errorMessages)
             {
-                await DisplayAlert("Error", errorMessage, "OK");
+                var successToast = Toast.Make($"{errorMessage}", ToastDuration.Short);
+                await successToast.Show();
             }
+
+            ButtonRegistrarse.IsEnabled = true;
         }
     }
 
