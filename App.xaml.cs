@@ -30,7 +30,8 @@ namespace SalSoplado_Usuario
                 // Si no es la primera vez, muestra la página de login
                 MainPage = new NavigationPage((Page)_serviceProvider.GetService(typeof(LoginPage)))
                 {
-                    BarBackgroundColor = Color.FromHex("#d9e3f1")
+                    BarBackgroundColor = Color.FromHex("#d9e3f1"),
+                    BarTextColor = Color.FromHex("#000000")
                 };
             }
         }
