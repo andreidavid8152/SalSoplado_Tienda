@@ -28,36 +28,50 @@ public partial class ProductosPage : ContentPage
         categoriasPicker.SelectedIndex = 0;
     }
 
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+
+        categoriasPicker.SelectedIndex = -1;
+    }
+
     private async void OnCategoriaSeleccionadaChanged(object sender, EventArgs e)
     {
-        var categoriaSeleccionada = categoriasPicker.SelectedItem.ToString();
-        if (categoriaSeleccionada == "Todos")
+        // Verifica si hay algún elemento seleccionado
+        if (categoriasPicker.SelectedIndex != -1)
         {
-            CargarProductos();
-        }
-        else
-        {
-            try
+
+            var categoriaSeleccionada = categoriasPicker.SelectedItem.ToString();
+            if (categoriaSeleccionada == "Todos")
             {
-                // Llama al método ObtenerProductosPorCategoria del servicio API
-                var productosPorCategoria = await _api.ObtenerProductosPorCategoriaYLocal(LocalId, categoriaSeleccionada, token);
-
-                // Actualiza el origen de datos del CollectionView con los productos filtrados por categoría
-                productosCollectionView.ItemsSource = productosPorCategoria;
-
-                // Verifica si la lista está vacía
-                if (productosPorCategoria == null || !productosPorCategoria.Any())
+                CargarProductos();
+            }
+            else
+            {
+                try
                 {
-                    // Muestra un mensaje indicando que no hay productos en esta categoría
-                    await DisplayAlert("Sin resultados", $"No se encontraron productos para la categoría '{categoriaSeleccionada}'.", "OK");
+                    // Llama al método ObtenerProductosPorCategoria del servicio API
+                    var productosPorCategoria = await _api.ObtenerProductosPorCategoriaYLocal(LocalId, categoriaSeleccionada, token);
+
+                    // Actualiza el origen de datos del CollectionView con los productos filtrados por categoría
+                    productosCollectionView.ItemsSource = productosPorCategoria;
+
+                    // Verifica si la lista está vacía
+                    if (productosPorCategoria == null || !productosPorCategoria.Any())
+                    {
+                        // Muestra un mensaje indicando que no hay productos en esta categoría
+                        await DisplayAlert("Sin resultados", $"No se encontraron productos para la categoría '{categoriaSeleccionada}'.", "OK");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Si algo sale mal, muestra un mensaje al usuario
+                    await DisplayAlert("Error", $"Error al cargar los productos: {ex.Message}", "OK");
                 }
             }
-            catch (Exception ex)
-            {
-                // Si algo sale mal, muestra un mensaje al usuario
-                await DisplayAlert("Error", $"Error al cargar los productos: {ex.Message}", "OK");
-            }
+
         }
+
     }
 
 

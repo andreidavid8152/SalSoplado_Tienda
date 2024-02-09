@@ -11,7 +11,12 @@ public partial class MiPerfilPage : ContentPage
     {
         InitializeComponent();
         _api = App.ServiceProvider.GetService<APIService>();
-        CargarPerfil();
+    }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        CargarPerfil(); // Esto asegura que cada vez que la página aparezca, tu perfil se cargue/recargue.
     }
 
     private async void CargarPerfil()
@@ -53,6 +58,7 @@ public partial class MiPerfilPage : ContentPage
                 if (result)
                 {
                     await DisplayAlert("Éxito", "Perfil actualizado correctamente.", "OK");
+                    ResetUI();
                 }
                 else
                 {
@@ -71,6 +77,21 @@ public partial class MiPerfilPage : ContentPage
         {
             await DisplayAlert("Error", "Ocurrió un error al actualizar el perfil: " + ex.Message, "OK");
         }
+    }
+
+    private void ResetUI()
+    {
+        // Limpia los campos de texto y restablece cualquier estado de UI deseado a sus valores predeterminados
+        PasswordEntry.Text = string.Empty;
+
+        // Asegúrate de desenfocar cualquier Entry activo para eliminar el cursor
+        NombreEntry.Unfocus();
+        EmailEntry.Unfocus();
+        UsernameEntry.Unfocus();
+        PasswordEntry.Unfocus();
+
+        // Restablecer cualquier otro estado de la UI que necesites
+        CargarPerfil();
     }
 
     private async void OnClickCerrarSesion(object sender, EventArgs e)

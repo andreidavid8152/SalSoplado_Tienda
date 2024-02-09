@@ -56,9 +56,8 @@
             <StackLayout Orientation="Vertical" Margin="30,0">
                 <Label Text="Contraseña" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
                 <Entry x:Name="PasswordEntry"
-                       Placeholder="Ingresa una contraseña"
-                       PlaceholderColor="#686767"
-                       Text="******"/>
+                       Placeholder="******"
+                       PlaceholderColor="#686767"/>
             </StackLayout>
 
             <HorizontalStackLayout Spacing="2" HorizontalOptions="Center">
