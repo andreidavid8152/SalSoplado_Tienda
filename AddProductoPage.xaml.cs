@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using Firebase.Storage;
 using SalSoplado_Tienda.Models;
 using SalSoplado_Usuario;
@@ -48,101 +50,137 @@ public partial class AddProductoPage : ContentPage
 
     private async void OnClickCrearProducto(object sender, EventArgs e)
     {
-        // Inicializa el modelo con valores que sabes que no son nulos,
-        // como cadenas vacías para las propiedades de tipo string.
-        ProductoCreationDTO productoInput = new ProductoCreationDTO
-        {
-            LocalID = SharedData.SelectedLocalId,
-            Nombre = nombreEntry.Text ?? string.Empty, // Evita nulos en las cadenas
-            Categoria = categoriaPicker.SelectedItem?.ToString() ?? string.Empty, // Maneja el caso nulo
-        };
+        ButtonCrear.IsEnabled = false;
+        ButtonImagenes.IsEnabled = false;
 
-        // Usa TryParse para conversiones seguras de los campos numéricos
-        if (int.TryParse(cantidadEntry.Text, out int cantidad))
+        loadingFrame.IsVisible = true;
+        try
         {
-            productoInput.Cantidad = cantidad;
-        }
-        else
-        {
-            await DisplayAlert("Error", "La cantidad ingresada no es válida.", "OK");
-            return; // Sale del método si la conversión falla
-        }
-
-        if (decimal.TryParse(precioOriginalEntry.Text, out decimal precioOriginal))
-        {
-            productoInput.PrecioOriginal = precioOriginal;
-        }
-        else
-        {
-            await DisplayAlert("Error", "El precio original ingresado no es válido.", "OK");
-            return; // Sale del método si la conversión falla
-        }
-
-        if (decimal.TryParse(precioOfertaEntry.Text, out decimal precioDescuento))
-        {
-            productoInput.PrecioOferta = precioDescuento;
-        }
-        else
-        {
-            await DisplayAlert("Error", "El precio de descuento ingresado no es válido.", "OK");
-            return; // Sale del método si la conversión falla
-        }
-
-        // Validación de precios
-        if (productoInput.PrecioOferta >= productoInput.PrecioOriginal)
-        {
-            await DisplayAlert("Error", "El precio con descuento debe ser menor al precio original.", "OK");
-            return; // Sale del método si la conversión falla
-        }
-
-
-        // Verificar si se han seleccionado 3 imagenes
-        if (selectedImages.Count != MaxImages)
-        {
-            await DisplayAlert("Advertencia", "Debes subir 3 imágenes", "OK");
-            return;
-        }
-
-        // Asumimos que fechaVencimientoPicker siempre tiene una fecha válida,
-        // ya que es un control DatePicker.
-        productoInput.FechaVencimiento = fechaVencimientoPicker.Date;
-
-        // Subir imágenes y esperar a que todas se hayan subido
-        var imagenesSubidas = await subirImagenesSeleccionadas();
-        productoInput.ImagenesUrls = imagenesSubidas;
-
-        // Aquí podrías llamar a IsValid() para validar productoInput si mantienes la lógica de validación
-        if (IsValid(productoInput, out List<string> errorMessages))
-        {
-
-            try
+            // Inicializa el modelo con valores que sabes que no son nulos,
+            // como cadenas vacías para las propiedades de tipo string.
+            ProductoCreationDTO productoInput = new ProductoCreationDTO
             {
-                // Lógica para enviar productoInput a tu API
-                var success = await _api.CrearProducto(productoInput, token);
+                LocalID = SharedData.SelectedLocalId,
+                Nombre = nombreEntry.Text ?? string.Empty, // Evita nulos en las cadenas
+                Categoria = categoriaPicker.SelectedItem?.ToString() ?? string.Empty, // Maneja el caso nulo
+            };
 
-                if (success)
+            if (string.IsNullOrWhiteSpace(productoInput.Nombre) || productoInput.Nombre.Length > 255)
+            {
+                var nombreInvalidoToast = Toast.Make("El nombre del producto no puede estar vacío.", ToastDuration.Short);
+                await nombreInvalidoToast.Show();
+                return; // Salimos del método si el nombre no es válido
+            }
+
+
+            // Usa TryParse para conversiones seguras de los campos numéricos
+            if (int.TryParse(cantidadEntry.Text, out int cantidad))
+            {
+                productoInput.Cantidad = cantidad;
+            }
+            else
+            {
+                var successToast = Toast.Make("La cantidad ingresada no es válida", ToastDuration.Short);
+                await successToast.Show();
+                return; // Sale del método si la conversión falla
+            }
+
+            if (decimal.TryParse(precioOriginalEntry.Text, out decimal precioOriginal))
+            {
+                productoInput.PrecioOriginal = precioOriginal;
+            }
+            else
+            {
+                var successToast = Toast.Make("El precio original ingresado no es válido.", ToastDuration.Short);
+                await successToast.Show();
+                return; // Sale del método si la conversión falla
+            }
+
+            if (decimal.TryParse(precioOfertaEntry.Text, out decimal precioDescuento))
+            {
+                productoInput.PrecioOferta = precioDescuento;
+            }
+            else
+            {
+                var successToast = Toast.Make("El precio de descuento ingresado no es válido.", ToastDuration.Short);
+                await successToast.Show();
+                return; // Sale del método si la conversión falla
+            }
+
+            // Validación de precios
+            if (productoInput.PrecioOferta >= productoInput.PrecioOriginal)
+            {
+                var successToast = Toast.Make("El precio con descuento debe ser menor al precio original.", ToastDuration.Short);
+                await successToast.Show();
+                return; // Sale del método si la conversión falla
+            }
+
+
+            // Verificar si se han seleccionado 3 imagenes
+            if (selectedImages.Count != MaxImages)
+            {
+                var successToast = Toast.Make("Debes subir 3 imágenes", ToastDuration.Short);
+                await successToast.Show();
+                return;
+            }
+
+            // Asumimos que fechaVencimientoPicker siempre tiene una fecha válida,
+            // ya que es un control DatePicker.
+            productoInput.FechaVencimiento = fechaVencimientoPicker.Date;
+
+            // Subir imágenes y esperar a que todas se hayan subido
+            var imagenesSubidas = await subirImagenesSeleccionadas();
+            productoInput.ImagenesUrls = imagenesSubidas;
+
+            // Aquí podrías llamar a IsValid() para validar productoInput si mantienes la lógica de validación
+            if (IsValid(productoInput, out List<string> errorMessages))
+            {
+
+                try
                 {
-                    // Manejar el éxito
-                    await DisplayAlert("Éxito", "Producto creado con éxito", "OK");
+                    // Lógica para enviar productoInput a tu API
+                    var success = await _api.CrearProducto(productoInput, token);
 
-                    // Navegar a LocalPage
-                    await Shell.Current.GoToAsync("//LocalPage");
+                    if (success)
+                    {
+                        // Manejar el éxito
+                        var successToast = Toast.Make("Producto creado con éxito", ToastDuration.Short);
+                        await successToast.Show();
+
+                        // Navegar a LocalPage
+                        await Shell.Current.GoToAsync("//LocalPage");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Manejar los errores
+                    await DisplayAlert("Error", ex.Message, "OK");
+                }
+
+            }
+            else
+            {
+                foreach (var errorMessage in errorMessages)
+                {
+                    await DisplayAlert("Error", errorMessage, "OK");
                 }
             }
-            catch (Exception ex)
-            {
-                // Manejar los errores
-                await DisplayAlert("Error", ex.Message, "OK");
-            }
+
 
         }
-        else
+        catch (Exception ex)
         {
-            foreach (var errorMessage in errorMessages)
-            {
-                await DisplayAlert("Error", errorMessage, "OK");
-            }
+            // Manejar los errores
+            await DisplayAlert("Error", ex.Message, "OK");
         }
+        finally
+        {
+            loadingFrame.IsVisible = false;
+
+            ButtonCrear.IsEnabled = true;
+            ButtonImagenes.IsEnabled = true;
+        }
+
     }
 
 
@@ -247,7 +285,8 @@ public partial class AddProductoPage : ContentPage
     {
         if (selectedImages.Count >= MaxImages)
         {
-            await DisplayAlert("Advertencia", "Ya has seleccionado el máximo de imágenes permitidas", "OK");
+            var successToast = Toast.Make("Ya has seleccionado el máximo de imágenes permitidas", ToastDuration.Short);
+            await successToast.Show();
             return;
         }
 

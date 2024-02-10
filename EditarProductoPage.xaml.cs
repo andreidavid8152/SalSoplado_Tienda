@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using Firebase.Storage;
 using SalSoplado_Tienda.Models;
 using SalSoplado_Usuario;
@@ -97,98 +99,112 @@ public partial class EditarProductoPage : ContentPage
 
     private async void OnClickActualizarProducto(object sender, EventArgs e)
     {
-
-        // Subir imágenes nuevas y obtener sus URLs
-        var nuevasUrls = await subirImagenesSeleccionadas();
-
-        // Preparar la lista final de URLs para actualizar en la base de datos
-        List<string> urlsFinales = new List<string>(existingImageUrls); // Comenzar con las URLs existentes
-
-        int nuevaUrlIndex = 0; // Índice para las nuevas URLs
-
-        foreach (int index in imagesToReplaceIndexes) // Para cada imagen reemplazada
-        {
-            if (nuevaUrlIndex < nuevasUrls.Count) // Verificar que haya nuevas URLs disponibles
-            {
-                urlsFinales[index] = nuevasUrls[nuevaUrlIndex++]; // Reemplazar la URL en la posición correcta
-            }
-        }
-
-        ProductoDetalleEdit producto = new ProductoDetalleEdit
-        {
-            ID = ProductoId,
-            LocalID = SharedData.SelectedLocalId,
-            Nombre = nombreEntry.Text ?? string.Empty, // Evita nulos en las cadenas
-            Categoria = categoriaPicker.SelectedItem?.ToString() ?? string.Empty, // Maneja el caso nulo
-        };
-
-        // Usa TryParse para conversiones seguras de los campos numéricos
-        if (int.TryParse(cantidadEntry.Text, out int cantidad))
-        {
-            producto.Cantidad = cantidad;
-        }
-        else
-        {
-            await DisplayAlert("Error", "La cantidad ingresada no es válida.", "OK");
-            return; // Sale del método si la conversión falla
-        }
-
-        if (decimal.TryParse(precioOriginalEntry.Text, out decimal precioOriginal))
-        {
-            producto.PrecioOriginal = precioOriginal;
-        }
-        else
-        {
-            await DisplayAlert("Error", "El precio original ingresado no es válido.", "OK");
-            return; // Sale del método si la conversión falla
-        }
-
-        if (decimal.TryParse(precioOfertaEntry.Text, out decimal precioDescuento))
-        {
-            producto.PrecioOferta = precioDescuento;
-        }
-        else
-        {
-            await DisplayAlert("Error", "El precio de descuento ingresado no es válido.", "OK");
-            return; // Sale del método si la conversión falla
-        }
-
-        // Validación de precios
-        if (producto.PrecioOferta >= producto.PrecioOriginal)
-        {
-            await DisplayAlert("Error", "El precio con descuento debe ser menor al precio original.", "OK");
-            return; // Sale del método si la conversión falla
-        }
-
-        producto.FechaVencimiento = fechaVencimientoPicker.Date;
-
-        producto.ImagenesUrls = urlsFinales;
-
-        // Antes de actualizar el producto en la base de datos
-        foreach (var imageToReplace in imagesToReplace.Values)
-        {
-            // Extrae el nombre del archivo de la URL
-            var decodedUrl = Uri.UnescapeDataString(imageToReplace);
-            var startIndex = decodedUrl.IndexOf("imagenesProductos/") + "imagenesProductos/".Length;
-            var endIndex = decodedUrl.IndexOf("?", startIndex);
-            var fileName = decodedUrl.Substring(startIndex, endIndex - startIndex);
-
-            // Elimina la imagen original de Firebase Storage
-            await new FirebaseStorage("salsoplado.appspot.com")
-                  .Child("imagenesProductos")
-                  .Child(fileName)
-                  .DeleteAsync();
-        }
+        ButtonActualizar.IsEnabled = false;
 
         try
         {
+
+            // Subir imágenes nuevas y obtener sus URLs
+            var nuevasUrls = await subirImagenesSeleccionadas();
+
+            // Preparar la lista final de URLs para actualizar en la base de datos
+            List<string> urlsFinales = new List<string>(existingImageUrls); // Comenzar con las URLs existentes
+
+            int nuevaUrlIndex = 0; // Índice para las nuevas URLs
+
+            foreach (int index in imagesToReplaceIndexes) // Para cada imagen reemplazada
+            {
+                if (nuevaUrlIndex < nuevasUrls.Count) // Verificar que haya nuevas URLs disponibles
+                {
+                    urlsFinales[index] = nuevasUrls[nuevaUrlIndex++]; // Reemplazar la URL en la posición correcta
+                }
+            }
+
+            ProductoDetalleEdit producto = new ProductoDetalleEdit
+            {
+                ID = ProductoId,
+                LocalID = SharedData.SelectedLocalId,
+                Nombre = nombreEntry.Text ?? string.Empty, // Evita nulos en las cadenas
+                Categoria = categoriaPicker.SelectedItem?.ToString() ?? string.Empty, // Maneja el caso nulo
+            };
+
+            if (string.IsNullOrWhiteSpace(producto.Nombre) || producto.Nombre.Length > 255)
+            {
+                var nombreInvalidoToast = Toast.Make("El nombre del producto no puede estar vacío.", ToastDuration.Short);
+                await nombreInvalidoToast.Show();
+                return; // Salimos del método si el nombre no es válido
+            }
+
+            // Usa TryParse para conversiones seguras de los campos numéricos
+            if (int.TryParse(cantidadEntry.Text, out int cantidad))
+            {
+                producto.Cantidad = cantidad;
+            }
+            else
+            {
+                var successToast = Toast.Make("La cantidad ingresada no es válida.", ToastDuration.Short);
+                await successToast.Show();
+                return; // Sale del método si la conversión falla
+            }
+
+            if (decimal.TryParse(precioOriginalEntry.Text, out decimal precioOriginal))
+            {
+                producto.PrecioOriginal = precioOriginal;
+            }
+            else
+            {
+                var successToast = Toast.Make("El precio original ingresado no es válido.", ToastDuration.Short);
+                await successToast.Show();
+                return; // Sale del método si la conversión falla
+            }
+
+            if (decimal.TryParse(precioOfertaEntry.Text, out decimal precioDescuento))
+            {
+                producto.PrecioOferta = precioDescuento;
+            }
+            else
+            {
+                var successToast = Toast.Make("El precio de descuento ingresado no es válido.", ToastDuration.Short);
+                await successToast.Show();
+                return; // Sale del método si la conversión falla
+            }
+
+            // Validación de precios
+            if (producto.PrecioOferta >= producto.PrecioOriginal)
+            {
+                var successToast = Toast.Make("El precio con descuento debe ser menor al precio original.", ToastDuration.Short);
+                await successToast.Show();
+                return; // Sale del método si la conversión falla
+            }
+
+            producto.FechaVencimiento = fechaVencimientoPicker.Date;
+
+            producto.ImagenesUrls = urlsFinales;
+
+            // Antes de actualizar el producto en la base de datos
+            foreach (var imageToReplace in imagesToReplace.Values)
+            {
+                // Extrae el nombre del archivo de la URL
+                var decodedUrl = Uri.UnescapeDataString(imageToReplace);
+                var startIndex = decodedUrl.IndexOf("imagenesProductos/") + "imagenesProductos/".Length;
+                var endIndex = decodedUrl.IndexOf("?", startIndex);
+                var fileName = decodedUrl.Substring(startIndex, endIndex - startIndex);
+
+                // Elimina la imagen original de Firebase Storage
+                await new FirebaseStorage("salsoplado.appspot.com")
+                      .Child("imagenesProductos")
+                      .Child(fileName)
+                      .DeleteAsync();
+            }
+
             // Lógica para enviar productoInput a tu API
             var success = await _api.EditarProducto(producto, token);
 
             if (success)
             {
                 // Manejar el éxito
-                await DisplayAlert("Éxito", "Producto editado con éxito", "OK");
+                var successToast = Toast.Make("Producto editado con éxito", ToastDuration.Short);
+                await successToast.Show();
 
                 // Navegar a LocalPage
                 await Navigation.PopAsync();
@@ -199,7 +215,10 @@ public partial class EditarProductoPage : ContentPage
             // Manejar los errores
             await DisplayAlert("Error", ex.Message, "OK");
         }
-
+        finally
+        {
+            ButtonActualizar.IsEnabled = true;
+        }
     }
 
     private async Task<List<String>> subirImagenesSeleccionadas()

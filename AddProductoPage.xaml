@@ -4,93 +4,95 @@
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              x:Class="SalSoplado_Tienda.AddProductoPage"
              BackgroundColor="#d9e3f1">
-    <ScrollView>
-        <VerticalStackLayout Spacing="20" Padding="20">
 
-            <Label Text="Crea un producto"
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout Spacing="20" Padding="20">
+
+                <Label Text="Crea un producto"
                    FontSize="Large"
                    FontAttributes="Bold"
                    TextColor="Black"
                    HorizontalTextAlignment="Start"/>
 
-            <Grid Padding="20">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <!-- Añade más RowDefinition si necesitas más filas -->
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                <Grid Padding="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <!-- Añade más RowDefinition si necesitas más filas -->
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- Fila 1 -->
-                <!-- Nombre -->
-                <StackLayout Grid.Row="0" Grid.Column="0" Margin="-20,0,30,0">
-                    <Label Text="Nombre" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,0,0,0"/>
-                    <Entry Placeholder="Sal Soplado" x:Name="nombreEntry" PlaceholderColor="#3b4151" Margin="0,0,0,0"/>
-                </StackLayout>
+                    <!-- Fila 1 -->
+                    <!-- Nombre -->
+                    <StackLayout Grid.Row="0" Grid.Column="0" Margin="-20,0,30,0">
+                        <Label Text="Nombre" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,0,0,0"/>
+                        <Entry Placeholder="Sal Soplado" x:Name="nombreEntry" PlaceholderColor="#3b4151" Margin="0,0,0,0"/>
+                    </StackLayout>
 
-                <!-- Cantidad -->
-                <StackLayout Grid.Row="0" Grid.Column="1" Margin="-20,0,0,50">
-                    <Label Text="Cantidad" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,0,0,0"/>
-                    <Entry Placeholder="15" x:Name="cantidadEntry" PlaceholderColor="#3b4151" Margin="0,0,0,0" Keyboard="Numeric"/>
-                </StackLayout>
+                    <!-- Cantidad -->
+                    <StackLayout Grid.Row="0" Grid.Column="1" Margin="-20,0,0,50">
+                        <Label Text="Cantidad" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,0,0,0"/>
+                        <Entry Placeholder="15" x:Name="cantidadEntry" PlaceholderColor="#3b4151" Margin="0,0,0,0" Keyboard="Numeric"/>
+                    </StackLayout>
 
-                <!-- Fila 2 -->
-                <!-- Fecha de vencimiento -->
-                <StackLayout Grid.Row="1" Grid.Column="0" Margin="-20,0,30,0">
-                    <Label Text="Fecha de vencimiento" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,0,0,0"/>
-                    <DatePicker x:Name="fechaVencimientoPicker" Grid.Column="1" Format="D" Margin="0,0,0,0" FontSize="Small" MinimumDate="{x:Static system:DateTime.Now}" WidthRequest="185"/>
-                </StackLayout>
-
-
-                <!-- Precio original -->
-                <StackLayout Grid.Row="1" Grid.Column="1" Margin="-20,0,0,50">
-                    <Label Text="Precio original" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,0,0,0"/>
-                    <Entry x:Name="precioOriginalEntry" Grid.Column="3" Placeholder="5$" Keyboard="Numeric" PlaceholderColor="#3b4151" Margin="0,0,0,0"/>
-                </StackLayout>
+                    <!-- Fila 2 -->
+                    <!-- Fecha de vencimiento -->
+                    <StackLayout Grid.Row="1" Grid.Column="0" Margin="-20,0,30,0">
+                        <Label Text="Fecha de vencimiento" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,0,0,0"/>
+                        <DatePicker x:Name="fechaVencimientoPicker" Grid.Column="1" Format="D" Margin="0,0,0,0" FontSize="Small" MinimumDate="{x:Static system:DateTime.Now}" WidthRequest="185"/>
+                    </StackLayout>
 
 
-                <!-- Fila 3 -->
-                <!-- Precio oferta -->
-                <StackLayout Grid.Row="2" Grid.Column="0" Margin="-20,0,30,0">
-                    <Label Text="Precio oferta" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" />
-                    <Entry x:Name="precioOfertaEntry" Grid.Column="1" Placeholder="3.50$" Keyboard="Numeric" PlaceholderColor="#3b4151" />
-                </StackLayout>
+                    <!-- Precio original -->
+                    <StackLayout Grid.Row="1" Grid.Column="1" Margin="-20,0,0,50">
+                        <Label Text="Precio original" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,0,0,0"/>
+                        <Entry x:Name="precioOriginalEntry" Grid.Column="3" Placeholder="5$" Keyboard="Numeric" PlaceholderColor="#3b4151" Margin="0,0,0,0"/>
+                    </StackLayout>
 
 
-                <!-- Categoria -->
-                <StackLayout Grid.Row="2" Grid.Column="1" Margin="-20,0,0,0">
-                    <Label Text="Categoria" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" />
-                    <Picker x:Name="categoriaPicker" Grid.Column="3" Title="Selecciona" WidthRequest="150">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:String}">
-                                <x:String>Frutas</x:String>
-                                <x:String>Comida</x:String>
-                                <x:String>Flores</x:String>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
-                </StackLayout>
+                    <!-- Fila 3 -->
+                    <!-- Precio oferta -->
+                    <StackLayout Grid.Row="2" Grid.Column="0" Margin="-20,0,30,0">
+                        <Label Text="Precio oferta" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" />
+                        <Entry x:Name="precioOfertaEntry" Grid.Column="1" Placeholder="3.50$" Keyboard="Numeric" PlaceholderColor="#3b4151" />
+                    </StackLayout>
+
+
+                    <!-- Categoria -->
+                    <StackLayout Grid.Row="2" Grid.Column="1" Margin="-20,0,0,0">
+                        <Label Text="Categoria" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" />
+                        <Picker x:Name="categoriaPicker" Grid.Column="3" Title="Selecciona" WidthRequest="150">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Frutas</x:String>
+                                    <x:String>Comida</x:String>
+                                    <x:String>Flores</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </StackLayout>
 
 
 
-            </Grid>
+                </Grid>
 
 
-            <!-- Imagenes -->
-            <Label Text="Imagenes producto" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,5,0,-5"/>
+                <!-- Imagenes -->
+                <Label Text="Imagenes producto" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,5,0,-5"/>
 
-            <FlexLayout x:Name="imagesContainer" 
+                <FlexLayout x:Name="imagesContainer" 
             Wrap="Wrap" 
             JustifyContent="Center" 
             AlignItems="Center" 
             AlignContent="Center">
-            </FlexLayout>
+                </FlexLayout>
 
-            <Button x:Name="uploadImageButton" 
+                <Button x:Name="ButtonImagenes" 
                     Text="Subir Imagen" 
                     Clicked="OnUploadImageButtonClicked"
                     BackgroundColor="#14282f"
@@ -102,9 +104,26 @@
                     VerticalOptions="Center"
                     Margin="0,-9,0,10"/>
 
-            <!-- Botón para enviar el formulario -->
-            <Button Text="Crear Producto" Clicked="OnClickCrearProducto" WidthRequest="150"/>
+                <!-- Botón para enviar el formulario -->
+                <Button x:Name="ButtonCrear" Text="Crear Producto" Clicked="OnClickCrearProducto" WidthRequest="150"/>
 
-        </VerticalStackLayout>
-    </ScrollView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Frame x:Name="loadingFrame"
+                BackgroundColor="#000000"
+                Opacity="0.8"
+                IsVisible="False"
+                Padding="20"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                WidthRequest="115"
+                HeightRequest="115"
+                CornerRadius="10">
+
+            <ActivityIndicator IsRunning="{Binding IsVisible, Source={x:Reference loadingFrame}}"
+                               Color="Blue" />
+        </Frame>
+    </Grid>
+
 </ContentPage>

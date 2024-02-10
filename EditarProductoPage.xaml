@@ -91,7 +91,7 @@
             AlignContent="Center">
         </FlexLayout>
 
-        <Button Text="Actualizar Producto" Clicked="OnClickActualizarProducto" Margin="0,15,0,13" WidthRequest="150"/>
+        <Button x:Name="ButtonActualizar" Text="Actualizar Producto" Clicked="OnClickActualizarProducto" Margin="0,15,0,13" WidthRequest="150"/>
 
     </VerticalStackLayout>
 

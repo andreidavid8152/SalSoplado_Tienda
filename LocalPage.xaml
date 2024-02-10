@@ -4,127 +4,144 @@
              x:Class="SalSoplado_Tienda.LocalPage"
              BackgroundColor="#d9e3f1">
 
-    <ScrollView>
-        <VerticalStackLayout>
+    <Grid>
+        <ScrollView>
+            <VerticalStackLayout>
 
-            <!-- Cabecera local -->
-            <Grid Padding="30"
-              HorizontalOptions="Center"
-              VerticalOptions="Center">
+                <!-- Cabecera local -->
+                <Grid Padding="30"
+                  HorizontalOptions="Center"
+                  VerticalOptions="Center">
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                <Frame BackgroundColor="#FFD700" 
-                   CornerRadius="30" 
-                   Padding="20" 
-                   Grid.Row="0"
-                   WidthRequest="325"
-                   HorizontalOptions="FillAndExpand">
+                    <Frame BackgroundColor="#FFD700" 
+                       CornerRadius="30" 
+                       Padding="20" 
+                       Grid.Row="0"
+                       WidthRequest="325"
+                       HorizontalOptions="FillAndExpand">
 
-                    <Grid>
+                        <Grid>
 
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <Image x:Name="LocalLogo" Aspect="AspectFill" HeightRequest="100" WidthRequest="100"
-                           HorizontalOptions="Center" VerticalOptions="Center"
-                           Grid.Row="0" Grid.Column="0" Margin="15,0,25,0">
-                            <Image.Clip>
-                                <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50"/>
-                            </Image.Clip>
-                        </Image>
+                            <Image x:Name="LocalLogo" Aspect="AspectFill" HeightRequest="100" WidthRequest="100"
+                               HorizontalOptions="Center" VerticalOptions="Center"
+                               Grid.Row="0" Grid.Column="0" Margin="15,0,25,0">
+                                <Image.Clip>
+                                    <EllipseGeometry Center="50,50" RadiusX="50" RadiusY="50"/>
+                                </Image.Clip>
+                            </Image>
 
-                        <StackLayout Grid.Row="0" Grid.Column="1"
-                                HorizontalOptions="Start" VerticalOptions="Center">
+                            <StackLayout Grid.Row="0" Grid.Column="1"
+                                    HorizontalOptions="Start" VerticalOptions="Center">
 
-                            <Label x:Name="localNombre"
-                               FontAttributes="Bold"
-                               HorizontalTextAlignment="Center" Margin="0,7,0,5"/>
+                                <Label x:Name="localNombre"
+                                   FontAttributes="Bold"
+                                   HorizontalTextAlignment="Center" Margin="0,7,0,5"/>
 
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="Start" Margin="0,0,0,7">
-                                <Image Source="clock.svg" WidthRequest="15" HeightRequest="15" Margin="0,0,5,0"/>
-                                <Label x:Name="localHorario" HorizontalTextAlignment="Start"/>
-                            </StackLayout>
-
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="Start" Margin="0,0,0,7">
-                                <Image Source="location.svg" WidthRequest="15" HeightRequest="15" Margin="0,0,5,0"/>
-                                <Label x:Name="localUbicacion" HorizontalTextAlignment="Start"/>
-                            </StackLayout>
-
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
-                                <Image Source="phone.svg" WidthRequest="15" HeightRequest="15" Margin="0,0,5,0"/>
-                                <Label x:Name="localTelefono" HorizontalTextAlignment="Start"/>
-                            </StackLayout>
-
-                        </StackLayout>
-
-                    </Grid>
-
-                </Frame>
-
-            </Grid>
-
-
-
-            <CollectionView x:Name="productosCollectionView">
-
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" Span="2" />
-                </CollectionView.ItemsLayout>
-
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-
-                        <Frame Padding="5" Margin="0,0,0,20" CornerRadius="20" BorderColor="#FFC107" BackgroundColor="#FFF9C4" WidthRequest="150">
-                            <StackLayout>
-                                <!-- Imagen del Producto con un tamaño ajustado y bordes redondeados -->
-                                <Image Source="{Binding Imagen}" Aspect="AspectFit" HeightRequest="100" Margin="10"/>
-
-                                <!-- Nombre del Producto con el mismo estilo de la app -->
-                                <Label Text="{Binding Nombre}" FontSize="Small" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="#040a01"/>
-
-                                <!-- Precios con colores y fuente alineados al diseño de la app -->
-                                <StackLayout Orientation="Horizontal" Spacing="3" HorizontalOptions="Center" Margin="0,4,0,4">
-                                    <!-- Precio Anterior con menor énfasis -->
-                                    <Label Text="{Binding PrecioOriginal, StringFormat='{0:C}'}" FontSize="Small" TextDecorations="Strikethrough" TextColor="#333632"/>
-
-                                    <!-- Precio Nuevo destacado -->
-                                    <Label Text="{Binding PrecioOferta, StringFormat='{0:C}'}" FontSize="Small" FontAttributes="Bold" TextColor="Black"/>
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="Start" Margin="0,0,0,7">
+                                    <Image Source="clock.svg" WidthRequest="15" HeightRequest="15" Margin="0,0,5,0"/>
+                                    <Label x:Name="localHorario" HorizontalTextAlignment="Start"/>
                                 </StackLayout>
 
-                                <Frame CornerRadius="30" Padding="0" HasShadow="True" Margin="2" BorderColor="#77BF1A" WidthRequest="95" BackgroundColor="#BFF678" HorizontalOptions="Center" VerticalOptions="Center">
-                                    <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="4">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="Start" Margin="0,0,0,7">
+                                    <Image Source="location.svg" WidthRequest="15" HeightRequest="15" Margin="0,0,5,0"/>
+                                    <Label x:Name="localUbicacion" HorizontalTextAlignment="Start"/>
+                                </StackLayout>
 
-                                        <!-- Asegúrate de que la imagen se expanda para llenar la columna -->
-                                        <Image Source="category.svg" Grid.Column="0" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" Margin="10,1.5,0,0"/>
-                                        <!-- Asegúrate de que el label se expanda para llenar la columna -->
-                                        <Label Text="{Binding Categoria}" Grid.Column="1" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="10" Margin="-5,0,0,0"/>
-                                    </Grid>
-                                </Frame>
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="Start">
+                                    <Image Source="phone.svg" WidthRequest="15" HeightRequest="15" Margin="0,0,5,0"/>
+                                    <Label x:Name="localTelefono" HorizontalTextAlignment="Start"/>
+                                </StackLayout>
 
                             </StackLayout>
-                        </Frame>
+
+                        </Grid>
+
+                    </Frame>
+
+                </Grid>
 
 
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+
+                <CollectionView x:Name="productosCollectionView">
+
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="2" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+                            <Frame Padding="5" Margin="0,0,0,20" CornerRadius="20" BorderColor="#FFC107" BackgroundColor="#FFF9C4" WidthRequest="150">
+                                <StackLayout>
+                                    <!-- Imagen del Producto con un tamaño ajustado y bordes redondeados -->
+                                    <Image Source="{Binding Imagen}" Aspect="AspectFit" HeightRequest="100" Margin="10"/>
+
+                                    <!-- Nombre del Producto con el mismo estilo de la app -->
+                                    <Label Text="{Binding Nombre}" FontSize="Small" FontAttributes="Bold" HorizontalTextAlignment="Center" TextColor="#040a01"/>
+
+                                    <!-- Precios con colores y fuente alineados al diseño de la app -->
+                                    <StackLayout Orientation="Horizontal" Spacing="3" HorizontalOptions="Center" Margin="0,4,0,4">
+                                        <!-- Precio Anterior con menor énfasis -->
+                                        <Label Text="{Binding PrecioOriginal, StringFormat='{0:C}'}" FontSize="Small" TextDecorations="Strikethrough" TextColor="#333632"/>
+
+                                        <!-- Precio Nuevo destacado -->
+                                        <Label Text="{Binding PrecioOferta, StringFormat='{0:C}'}" FontSize="Small" FontAttributes="Bold" TextColor="Black"/>
+                                    </StackLayout>
+
+                                    <Frame CornerRadius="30" Padding="0" HasShadow="True" Margin="2" BorderColor="#77BF1A" WidthRequest="95" BackgroundColor="#BFF678" HorizontalOptions="Center" VerticalOptions="Center">
+                                        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Asegúrate de que la imagen se expanda para llenar la columna -->
+                                            <Image Source="category.svg" Grid.Column="0" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" Margin="10,1.5,0,0"/>
+                                            <!-- Asegúrate de que el label se expanda para llenar la columna -->
+                                            <Label Text="{Binding Categoria}" Grid.Column="1" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="10" Margin="-5,0,0,0"/>
+                                        </Grid>
+                                    </Frame>
+
+                                </StackLayout>
+                            </Frame>
+
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
 
 
 
-        </VerticalStackLayout>
-    </ScrollView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Frame x:Name="loadingFrame"
+                    BackgroundColor="#000000"
+                    Opacity="0.8"
+                    IsVisible="False"
+                    Padding="20"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    WidthRequest="115"
+                    HeightRequest="115"
+                    CornerRadius="10">
+
+            <ActivityIndicator IsRunning="{Binding IsVisible, Source={x:Reference loadingFrame}}"
+                                   Color="Blue" />
+        </Frame>
+    </Grid>
 
 </ContentPage>

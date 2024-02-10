@@ -28,6 +28,7 @@ public partial class LocalPage : ContentPage
 
     private async void CargarLocal()
     {
+        loadingFrame.IsVisible = true;
         try
         {
             var local = await _api.ObtenerDetalleLocal(LocalId, token);
@@ -64,6 +65,10 @@ public partial class LocalPage : ContentPage
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            loadingFrame.IsVisible = false;
         }
     }
 

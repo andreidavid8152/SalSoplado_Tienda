@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using Firebase.Storage;
 using SalSoplado_Tienda.Models;
 using SalSoplado_Usuario;
@@ -11,6 +13,8 @@ public partial class ProductosPage : ContentPage
     private readonly APIService _api;
     private string token = Preferences.Get("UserToken", string.Empty);
     private int LocalId { get; set; }
+
+    private bool estaPulsado { get; set; }
 
     public ProductosPage()
     {
@@ -37,9 +41,11 @@ public partial class ProductosPage : ContentPage
 
     private async void OnCategoriaSeleccionadaChanged(object sender, EventArgs e)
     {
+
         // Verifica si hay algún elemento seleccionado
         if (categoriasPicker.SelectedIndex != -1)
         {
+            loadingFrame.IsVisible = true;
 
             var categoriaSeleccionada = categoriasPicker.SelectedItem.ToString();
             if (categoriaSeleccionada == "Todos")
@@ -60,13 +66,19 @@ public partial class ProductosPage : ContentPage
                     if (productosPorCategoria == null || !productosPorCategoria.Any())
                     {
                         // Muestra un mensaje indicando que no hay productos en esta categoría
-                        await DisplayAlert("Sin resultados", $"No se encontraron productos para la categoría '{categoriaSeleccionada}'.", "OK");
+                        var successToast = Toast.Make($"No se encontraron productos para la categoría '{categoriaSeleccionada}'.", ToastDuration.Short);
+                        await successToast.Show();
                     }
                 }
                 catch (Exception ex)
                 {
                     // Si algo sale mal, muestra un mensaje al usuario
-                    await DisplayAlert("Error", $"Error al cargar los productos: {ex.Message}", "OK");
+                    var successToast = Toast.Make($"Error al cargar los productos: {ex.Message}", ToastDuration.Short);
+                    await successToast.Show();
+                }
+                finally
+                {
+                    loadingFrame.IsVisible = false;
                 }
             }
 
@@ -77,17 +89,25 @@ public partial class ProductosPage : ContentPage
 
     private async void OnEditTapped(object sender, TappedEventArgs e)
     {
+        if (estaPulsado) return; // Ignora si ya se está procesando otra acción
+
+        estaPulsado = true;
         var producto = e.Parameter as ProductoLocalDetalle; // Asume que tu modelo se llama Producto
         if (producto != null)
         {
             // Aquí puedes pasar el ID o el objeto completo a la página de edición, dependiendo de tu implementación
             await Navigation.PushAsync(new EditarProductoPage(producto.ID));
         }
+        estaPulsado = false;
     }
 
 
     private async void OnDeleteTapped(object sender, TappedEventArgs e)
     {
+        if (estaPulsado) return;
+
+        estaPulsado = true;
+
         var productoEncontrar = e.Parameter as ProductoLocalDetalle;
 
         var producto = await _api.ObtenerDetalleProducto(productoEncontrar.ID, token);
@@ -98,6 +118,7 @@ public partial class ProductosPage : ContentPage
             bool confirmDelete = await DisplayAlert("Confirmación", $"¿Estás seguro de que deseas eliminar el producto '{producto.Nombre}' y todas sus imágenes asociadas?", "Eliminar", "Cancelar");
             if (confirmDelete)
             {
+                loadingFrame.IsVisible = true;
                 try
                 {
                     // Eliminar cada imagen asociada al producto
@@ -121,7 +142,8 @@ public partial class ProductosPage : ContentPage
                     if (success)
                     {
                         // Mostrar un mensaje de éxito
-                        await DisplayAlert("Éxito", "Producto e imágenes asociadas eliminados correctamente.", "OK");
+                        var successToast = Toast.Make("Producto e imágenes asociadas eliminados correctamente.", ToastDuration.Short);
+                        await successToast.Show();
 
                         // Refrescar la lista de productos
                         CargarProductos();
@@ -132,8 +154,13 @@ public partial class ProductosPage : ContentPage
                     // En caso de error, mostrar un mensaje
                     await DisplayAlert("Error", $"Ha ocurrido un error al eliminar el producto o sus imágenes: {ex.Message}", "OK");
                 }
+                finally
+                {
+                    loadingFrame.IsVisible = false;
+                }
             }
         }
+        estaPulsado = false;
     }
 
 
@@ -148,12 +175,17 @@ public partial class ProductosPage : ContentPage
             if (productos == null || !productos.Any())
             {
                 // Muestra un mensaje indicando que no hay productos en esta categoría
-                await DisplayAlert("Sin resultados", $"No se encontraron productos", "OK");
+                var successToast = Toast.Make("No se encontraron productos", ToastDuration.Short);
+                await successToast.Show();
             }
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            loadingFrame.IsVisible = false;
         }
     }
 
