@@ -52,10 +52,11 @@ public partial class LoginPage : ContentPage
                 var successToast = Toast.Make("Inicio de sesión exitoso", ToastDuration.Short);
                 await successToast.Show();
 
+                // Animar la opacidad de la página de login a 0
+                await this.FadeTo(0, 400); // 400 es la duración en milisegundos
+
                 // Establecer la AppShell como la nueva página principal
                 Application.Current.MainPage = new AppShell();
-
-
             }
             catch (Exception ex)
             {
