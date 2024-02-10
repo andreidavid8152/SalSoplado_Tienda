@@ -9,6 +9,8 @@ namespace SalSoplado_Usuario
         {
             InitializeComponent();
 
+            App.Current.UserAppTheme = AppTheme.Light;
+
             // Configurar el contenedor de servicios
             var services = new ServiceCollection();
             ConfigureServices(services);
