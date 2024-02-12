@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SalSoplado_Usuario.LoginPage"
-             BackgroundColor="#d9e3f1">
+             BackgroundColor="#414960">
 
     <VerticalStackLayout>
         <!-- Ajustamos el tamaño y el márgen de la imagen -->
@@ -19,7 +19,8 @@
                Text="{Binding Username}"
                HorizontalOptions="FillAndExpand" 
                WidthRequest="350"
-               PlaceholderColor="#686767"
+               TextColor="#1d1f1d"
+               PlaceholderColor="#1d1f1d"
                FontSize="17"
                Margin="0,20,0,20"/>
 
@@ -27,19 +28,49 @@
         <Entry x:Name="PasswordEntry"
                Placeholder="Contraseña"
                IsPassword="True"
+               Grid.Column="0"
                Text="{Binding Password}"
                HorizontalOptions="FillAndExpand" 
                WidthRequest="350"
-               PlaceholderColor="#686767"
+               TextColor="#1d1f1d"
+               PlaceholderColor="#1d1f1d"
                FontSize="17"
                Margin="0,0,0,20"/>
 
+        <Grid Margin="0,0,0,20">
 
-        <Button x:Name="ButtonLogin" BackgroundColor="#14282f" Text="Ingresar" Scale="1.3" HorizontalOptions="Center" Margin="0,20,0,0"
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <CheckBox x:Name="ShowPasswordCheckBox"
+                      Grid.Column="0"
+                      HorizontalOptions="StartAndExpand"
+                      Color="Black"
+                      VerticalOptions="Center"
+                      Margin="15,0,0,0"
+                      CheckedChanged="OnShowPasswordCheckBoxChanged"/>
+
+            <!-- Label para el Nombre -->
+            <Label Text="Mostrar contraseña"
+               Grid.Column="1"
+               TextColor="#0c0d0c"
+               FontAttributes="Bold"
+               FontSize="15"
+               HorizontalOptions="Start"
+               Margin="-340,10,0,0"/>
+
+        </Grid>
+
+
+
+
+        <Button x:Name="ButtonLogin" BackgroundColor="#14282f" Text="Ingresar" Scale="1.1" HorizontalOptions="Center" Margin="0,20,0,0"
             Clicked="OnClickLogin"/>
 
         <Label HorizontalOptions="Center" 
-               TextColor="Black" 
+               TextColor="GhostWhite" 
                Margin="20">
             <Label.FormattedText>
                 <FormattedString>
@@ -52,6 +83,7 @@
                 <TapGestureRecognizer Tapped="OnClickRegistrarse"/>
             </Label.GestureRecognizers>
         </Label>
+
     </VerticalStackLayout>
 
 </ContentPage>

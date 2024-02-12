@@ -58,6 +58,13 @@ public partial class RegistroPage : ContentPage
         }
     }
 
+    private void OnShowPasswordCheckBoxChanged(object sender, CheckedChangedEventArgs e)
+    {
+        // Invierte el estado de IsPassword basado en si el CheckBox está marcado o no
+        PasswordEntry.IsPassword = !e.Value;
+    }
+
+
     private bool IsValid(UserRegistration userInput, out List<string> errorMessages)
     {
         var context = new ValidationContext(userInput, serviceProvider: null, items: null);

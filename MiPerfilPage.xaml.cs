@@ -133,7 +133,7 @@ public partial class MiPerfilPage : ContentPage
             // Navegar al usuario a la pantalla de inicio de sesión o a la pantalla principal
             Application.Current.MainPage = new NavigationPage(new LoginPage())
             {
-                BarBackgroundColor = Color.FromHex("#d9e3f1"),
+                BarBackgroundColor = Color.FromHex("#414960"),
                 BarTextColor = Color.FromHex("#000000")
             };
         }

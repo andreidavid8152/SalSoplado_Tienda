@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SalSoplado_Usuario.RegistroPage"
-             BackgroundColor="#d9e3f1">
+             BackgroundColor="#414960">
 
     <VerticalStackLayout>
 
@@ -13,49 +13,105 @@
             </Image.Clip>
         </Image>
 
+        <!-- Label para el Nombre -->
+        <Label Text="Nombre"
+               TextColor="#0c0d0c"
+               FontAttributes="Bold"
+               FontSize="17"
+               HorizontalOptions="FillAndExpand"
+               Margin="25,20,0,0"/>
+
         <!-- Entrada para el Nombre -->
         <Entry x:Name="NombreEntry"
-               Placeholder="Nombre"
+               Placeholder="Andrei Flores"
                Text="{Binding Nombre}"
                HorizontalOptions="FillAndExpand"
                WidthRequest="350"
-               PlaceholderColor="#686767"
+               TextColor="#1d1f1d"
+               PlaceholderColor="#1d1f1d"
+               FontSize="15"
+               Margin="0,0,0,20"/>
+
+        <!-- Label para el Nombre -->
+        <Label Text="Email"
+               TextColor="#0c0d0c"
+               FontAttributes="Bold"
                FontSize="17"
-               Margin="0,20,0,20"/>
+               HorizontalOptions="FillAndExpand"
+               Margin="25,0,0,0"/>
 
         <!-- Entrada para el Email -->
         <Entry x:Name="EmailEntry"
-               Placeholder="Email"
+               Placeholder="@andrei@mail.com"
                Keyboard="Email"
                Text="{Binding Email}"
                HorizontalOptions="FillAndExpand" 
                WidthRequest="350"
-               PlaceholderColor="#686767"
-               FontSize="17"
+               TextColor="#1d1f1d"
+               PlaceholderColor="#1d1f1d"
+               FontSize="15"
                Margin="0,0,0,20"/>
+
+        <!-- Label para el Nombre -->
+        <Label Text="Username"
+               TextColor="#0c0d0c"
+               FontAttributes="Bold"
+               FontSize="17"
+               HorizontalOptions="FillAndExpand"
+               Margin="25,0,0,0"/>
 
         <!-- Entrada para el Username -->
         <Entry x:Name="UsernameEntry"
-               Placeholder="Username"
+               Placeholder="@andrei"
                Text="{Binding Username}"
                HorizontalOptions="FillAndExpand" 
                WidthRequest="350"
-               PlaceholderColor="#686767"
-               FontSize="17"
+               TextColor="#1d1f1d"
+               PlaceholderColor="#1d1f1d"
+               FontSize="15"
                Margin="0,0,0,20"/>
 
-        <!-- Entrada para la Contraseña con IsPassword para ocultar el texto -->
-        <Entry x:Name="PasswordEntry"
-               Placeholder="Contraseña"
-               IsPassword="True"
-               Text="{Binding Password}"
-               HorizontalOptions="FillAndExpand" 
-               WidthRequest="350"
-               PlaceholderColor="#686767"
+        <!-- Label para el Nombre -->
+        <Label Text="Password"
+               TextColor="#0c0d0c"
+               FontAttributes="Bold"
                FontSize="17"
-               Margin="0,0,0,20"/>
+               HorizontalOptions="FillAndExpand"
+               Margin="25,0,0,0"/>
 
-        <Button x:Name="ButtonRegistrarse" BackgroundColor="#14282f" Text="Registrarse" Scale="1.3" HorizontalOptions="Center" Margin="0,20,0,0"
+        <!-- Grid para la contraseña y el checkbox -->
+        <Grid Margin="-5,0,0,20">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Entrada para la Contraseña con IsPassword para ocultar el texto -->
+            <Entry x:Name="PasswordEntry"
+                   Grid.Column="0"
+                   Placeholder="*****"
+                   IsPassword="True"
+                   Text="{Binding Password}"
+                   HorizontalOptions="FillAndExpand" 
+                   WidthRequest="250"
+                   TextColor="#1d1f1d"
+                   PlaceholderColor="#1d1f1d"
+                   FontSize="15"/>
+
+            <!-- Checkbox para mostrar/ocultar contraseña -->
+            <CheckBox x:Name="ShowPasswordCheckBox"
+              Grid.Column="1"
+              HorizontalOptions="End"
+              Color="Black"
+              VerticalOptions="Center"
+              Margin="0,0,50,0"
+              CheckedChanged="OnShowPasswordCheckBoxChanged"/>
+            
+        </Grid>
+
+
+        <Button x:Name="ButtonRegistrarse" BackgroundColor="#14282f" Text="Registrarse" Scale="1.1" HorizontalOptions="Center" Margin="0,20,0,0"
             Clicked="OnClickRegistrarse"/>
 
     </VerticalStackLayout>

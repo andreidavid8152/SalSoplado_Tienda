@@ -92,6 +92,12 @@ public partial class LoginPage : ContentPage
         return isValid;
     }
 
+    private void OnShowPasswordCheckBoxChanged(object sender, CheckedChangedEventArgs e)
+    {
+        // Invierte el estado de IsPassword basado en si el CheckBox está marcado o no
+        PasswordEntry.IsPassword = !e.Value;
+    }
+
     private void OnClickRegistrarse(object sender, EventArgs e)
     {
         Navigation.PushAsync(new RegistroPage());
