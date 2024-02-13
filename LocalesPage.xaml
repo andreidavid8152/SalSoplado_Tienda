@@ -59,7 +59,7 @@
 
                             <Grid>
 
-                                <Frame CornerRadius="30" Padding="15" HasShadow="True" Margin="5" BorderColor="#414960" BackgroundColor="#c3d6c7">
+                                <Frame CornerRadius="30" Padding="15" HasShadow="True" Margin="5" BorderColor="#414960" BackgroundColor="#567190">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
