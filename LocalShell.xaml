@@ -5,9 +5,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:SalSoplado_Tienda"
     Shell.FlyoutBehavior="Disabled"
-    Shell.TabBarBackgroundColor="#d9e3f1"
-    Shell.BackgroundColor="#d9e3f1"
-    Shell.ForegroundColor="Black">
+    Shell.TabBarBackgroundColor="#414960"
+    Shell.BackgroundColor="#414960"
+    Shell.ForegroundColor="Black"
+    Shell.TabBarTitleColor="AntiqueWhite"
+    Shell.TabBarForegroundColor="AntiqueWhite">
 
     <TabBar>
         <Tab Title="Home" Icon="Images/home.svg">

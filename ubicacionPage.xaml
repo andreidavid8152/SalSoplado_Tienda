@@ -2,6 +2,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SalSoplado_Tienda.ubicacionPage"
-             BackgroundColor="#d9e3f1">
+             BackgroundColor="#414960">
     <WebView x:Name="webViewMapa" Source="ubicacion.html" />
 </ContentPage>

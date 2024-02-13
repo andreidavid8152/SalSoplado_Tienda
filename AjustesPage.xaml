@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SalSoplado_Tienda.AjustesPage"
-             BackgroundColor="#d9e3f1">
+             BackgroundColor="#414960">
     <VerticalStackLayout>
 
         <Image x:Name="LocalLogo"
@@ -21,7 +21,7 @@
         <Button BackgroundColor="#14282f" Text="Cambiar logo" Margin="0,10,0,0" HeightRequest="43.5" WidthRequest="120"/>
 
         <Label Text="Nombre" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="20,20,0,0"/>
-        <Entry x:Name="localNombre" Placeholder="Nombre del local" PlaceholderColor="#3b4151" Margin="20,0,0,0" WidthRequest="350" HorizontalOptions="Start"/>
+        <Entry x:Name="localNombre" Placeholder="Nombre del local" PlaceholderColor="#1d1f1d" Margin="20,0,0,0" WidthRequest="350" HorizontalOptions="Start"/>
 
         <Label Text="Horario" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="20,10,0,0"/>
         <Grid>
@@ -29,13 +29,13 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TimePicker x:Name="Inicio" Grid.Column="0" Margin="20,0,0,0" WidthRequest="150" HorizontalOptions="Start"/>
-            <TimePicker x:Name="Fin" Grid.Column="1" Margin="20,0,0,0" WidthRequest="150" HorizontalOptions="Start"/>
+            <TimePicker x:Name="Inicio" Grid.Column="0" Margin="20,0,0,0" WidthRequest="150" HorizontalOptions="Start" TextColor="Black"/>
+            <TimePicker x:Name="Fin" Grid.Column="1" Margin="20,0,0,0" WidthRequest="150" HorizontalOptions="Start" TextColor="Black"/>
         </Grid>
 
         <!-- Telefono -->
         <Label Text="Telefono" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="20,20,0,0"/>
-        <Entry x:Name="localTelefono" Placeholder="Ingrese su telefono" PlaceholderColor="#3b4151" Keyboard="Telephone" Margin="20,0,0,0" WidthRequest="350" HorizontalOptions="Start"/>
+        <Entry x:Name="localTelefono" Placeholder="Ingrese su telefono" PlaceholderColor="#1d1f1d" Keyboard="Telephone" Margin="20,0,0,0" WidthRequest="350" HorizontalOptions="Start"/>
 
         <!-- Direccion -->
         <Label Text="Direccion" TextColor="Black" FontSize="Medium" FontAttributes="Bold" HorizontalOptions="Start" Margin="20,20,0,10"/>

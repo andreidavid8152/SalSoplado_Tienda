@@ -2,9 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SalSoplado_Tienda.LocalPage"
-             BackgroundColor="#d9e3f1">
+             BackgroundColor="#414960">
 
     <Grid>
+        
         <ScrollView>
             <VerticalStackLayout>
 
@@ -18,6 +19,7 @@
                     </Grid.RowDefinitions>
 
                     <Frame BackgroundColor="#FFD700" 
+                       BorderColor="#414960"
                        CornerRadius="30" 
                        Padding="20" 
                        Grid.Row="0"

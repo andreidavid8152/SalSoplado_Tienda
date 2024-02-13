@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SalSoplado_Usuario.LocalesPage"
-             BackgroundColor="#d9e3f1">
+             BackgroundColor="#414960">
 
 
     <Grid>
@@ -47,7 +47,8 @@
                 HorizontalOptions="Center"
                 VerticalOptions="Start"
                 Margin="0,15,0,13"
-                WidthRequest="150"
+                FontSize="16.5"
+                WidthRequest="100"
                 Clicked="OnClickCrearLocal"/>
 
 
@@ -58,7 +59,7 @@
 
                             <Grid>
 
-                                <Frame CornerRadius="30" Padding="15" HasShadow="True" Margin="5" BorderColor="#b7bfcb" BackgroundColor="#b9c9e0">
+                                <Frame CornerRadius="30" Padding="15" HasShadow="True" Margin="5" BorderColor="#414960" BackgroundColor="#c3d6c7">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>

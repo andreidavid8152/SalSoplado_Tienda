@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              x:Class="SalSoplado_Tienda.EditarProductoPage"
-             BackgroundColor="#d9e3f1">
+             BackgroundColor="#414960">
 
     <VerticalStackLayout>
 
@@ -43,7 +43,7 @@
             <!-- Fecha de vencimiento -->
             <StackLayout Grid.Row="1" Grid.Column="0" Margin="-20,0,30,0">
                 <Label Text="Fecha de vencimiento" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" Margin="0,0,0,0"/>
-                <DatePicker x:Name="fechaVencimientoPicker" Grid.Column="1" Format="D" Margin="0,0,0,0" FontSize="Small" MinimumDate="{x:Static system:DateTime.Now}" WidthRequest="185"/>
+                <DatePicker x:Name="fechaVencimientoPicker" Grid.Column="1" Format="D" Margin="0,0,0,0" FontSize="Small" MinimumDate="{x:Static system:DateTime.Now}" WidthRequest="185" TextColor="Black"/>
             </StackLayout>
 
 
@@ -64,8 +64,8 @@
 
             <!-- Categoria -->
             <StackLayout Grid.Row="2" Grid.Column="1" Margin="-20,0,0,0">
-                <Label Text="Categoria" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start" />
-                <Picker x:Name="categoriaPicker" Grid.Column="3">
+                <Label Text="Categoria" TextColor="Black" FontSize="Small" FontAttributes="Bold" HorizontalOptions="Start"/>
+                <Picker x:Name="categoriaPicker" Grid.Column="3" TextColor="Black">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
                             <x:String>Frutas</x:String>
@@ -91,7 +91,7 @@
             AlignContent="Center">
         </FlexLayout>
 
-        <Button x:Name="ButtonActualizar" Text="Actualizar Producto" Clicked="OnClickActualizarProducto" Margin="0,15,0,13" WidthRequest="150"/>
+        <Button x:Name="ButtonActualizar" Text="Actualizar Producto" Clicked="OnClickActualizarProducto" Margin="0,45,0,13" WidthRequest="100"/>
 
     </VerticalStackLayout>
 

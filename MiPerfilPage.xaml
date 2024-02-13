@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="SalSoplado_Usuario.MiPerfilPage"
-             BackgroundColor="#d9e3f1">
+             BackgroundColor="#414960">
     <Grid>
 
         <ScrollView>
@@ -30,7 +30,7 @@
                     <Label Text="Nombre" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
                     <Entry x:Name="NombreEntry"
                Placeholder="Ingresa tu nombre"
-               PlaceholderColor="#686767"
+               PlaceholderColor="#0c0d0c"
                Text="{Binding Nombre}"/>
                 </StackLayout>
 
@@ -39,7 +39,7 @@
                     <Label Text="Email" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
                     <Entry x:Name="EmailEntry"
                Placeholder="Ingresa un correo"
-               PlaceholderColor="#686767"
+               PlaceholderColor="#0c0d0c"
                Keyboard="Email"
                Text="{Binding Email}"/>
                 </StackLayout>
@@ -49,7 +49,7 @@
                     <Label Text="Username" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
                     <Entry x:Name="UsernameEntry"
                Placeholder="Ingresa un username"
-               PlaceholderColor="#686767"
+               PlaceholderColor="#0c0d0c"
                Text="{Binding Username}"/>
                 </StackLayout>
 
@@ -58,7 +58,7 @@
                     <Label Text="Contraseña" VerticalOptions="Center" FontAttributes="Bold" FontSize="17"/>
                     <Entry x:Name="PasswordEntry"
                        Placeholder="******"
-                       PlaceholderColor="#686767"/>
+                       PlaceholderColor="#0c0d0c"/>
                 </StackLayout>
 
                 <HorizontalStackLayout Spacing="2" HorizontalOptions="Center">
